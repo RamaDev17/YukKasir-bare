@@ -13,12 +13,15 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import { RNCamera } from 'react-native-camera';
 import useSound from "react-native-use-sound";
 
-export const CreateProduct = ({ navigation }) => {
-    const [id, setId] = useState('')
-    const [nameProduct, setNameProduct] = useState('')
-    const [category, setCategory] = useState('')
-    const [price, setPrice] = useState(0)
-    const [stock, setStock] = useState(0)
+export const UpdateProduct = ({ navigation, route }) => {
+    console.log(route.params);
+    const editData = route.params
+
+    const [id, setId] = useState(editData.id)
+    const [nameProduct, setNameProduct] = useState(editData.nameProduct)
+    const [category, setCategory] = useState(editData.category)
+    const [price, setPrice] = useState(editData.price)
+    const [stock, setStock] = useState(editData.stock)
 
     const [openInput, setOpenInput] = useState(false);
     const [items, setItems] = useState([
@@ -74,16 +77,16 @@ export const CreateProduct = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Header navigation={navigation} name="Tambah Produk" />
+            <Header navigation={navigation} name="Update Produk" />
             {/* Alert */}
             {
                 openAlert ? (
                     <AwesomeAlert
                         show={openAlert}
                         showProgress={false}
-                        title="Tambah Produk"
+                        title="Update Produk"
                         titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                        message="Tambah data produk berhasil !"
+                        message="Update data produk berhasil !"
                         messageStyle={{ fontSize: 20, }}
                         closeOnTouchOutside={true}
                         closeOnHardwareBackPress={false}
@@ -142,20 +145,20 @@ export const CreateProduct = ({ navigation }) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <TextInput
                         value={id}
-                        style={[styles.input, { width: "85%" }]}
-                        inputStyle={[styles.inputStyle]}
+                        style={[styles.input]}
+                        inputStyle={[styles.inputStyle, { opacity: 0.2}]}
                         labelStyle={styles.labelStyle}
-                        placeholderStyle={styles.placeholderStyle}
+                        placeholderStyle={[styles.placeholderStyle,]}
                         textErrorStyle={styles.textErrorStyle}
                         label="Id/Barcode"
                         placeholder="Id/Barcode"
                         placeholderTextColor="gray"
                         focusColor={COLORS.primary}
                         onChangeText={(value) => { setId(value) }}
+                        editable={false}
+                        selectTextOnFocus={false}
+                        showIcon={false}
                     />
-                    <TouchableOpacity onPress={() => setOpen(!open)}>
-                        <Image source={Barcode} style={{ width: 40, height: 40, tintColor: COLORS.primary }} />
-                    </TouchableOpacity>
                 </View>
                 <View style={{ marginTop: 20 }} />
                 <TextInput
@@ -215,7 +218,7 @@ export const CreateProduct = ({ navigation }) => {
             </View>
             <View style={{ marginTop: 40 }} />
             <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
-                {LoadingReducer ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.textButton}>Tambah</Text>}
+                {LoadingReducer ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.textButton}>Update</Text>}
             </TouchableOpacity>
         </View>
     )

@@ -8,6 +8,7 @@ import ProfilePage from "./ProfilePage";
 import LaporanPage from "./LaporanPage";
 import ProductPage from "./ProductPage";
 import { CreateProduct } from "./ProductPage/create";
+import { UpdateProduct } from "./ProductPage/update";
 
 
-export { SplashPage, LoginPage, RegisterPage, HomePage, OnBoardingPage, TransaksiPage, ProfilePage, LaporanPage, ProductPage, CreateProduct }
+export { SplashPage, LoginPage, RegisterPage, HomePage, OnBoardingPage, TransaksiPage, ProfilePage, LaporanPage, ProductPage, CreateProduct, UpdateProduct }

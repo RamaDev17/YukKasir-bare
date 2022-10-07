@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SplashPage, LoginPage, RegisterPage, HomePage, OnBoardingPage, TransaksiPage, ProfilePage, LaporanPage, ProductPage, CreateProduct } from "../pages";
+import { SplashPage, LoginPage, RegisterPage, HomePage, OnBoardingPage, TransaksiPage, ProfilePage, LaporanPage, ProductPage, CreateProduct, UpdateProduct } from "../pages";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BottomBar from "../components/BottomBar";
 import { COLORS } from "../constants";
@@ -44,6 +44,7 @@ const Routes = () => {
                 <Stack.Screen name="TransaksiPage" component={TransaksiPage} options={headerStyle} />
                 <Stack.Screen name="ProductPage" component={ProductPage} options={{headerShown: false}} />
                 <Stack.Screen name="CreateProductPage" component={CreateProduct} options={{headerShown: false}} />
+                <Stack.Screen name="UpdateProductPage" component={UpdateProduct} options={{headerShown: false}} />
             </Stack.Navigator>
         </NavigationContainer>
     )

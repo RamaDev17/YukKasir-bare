@@ -7,6 +7,9 @@ import { ArrowBack, Delete, Edit, Add } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../actions/productActions';
 import { formatNumber } from '../../utils/formatNumber';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../../App';
+import AwesomeAlert from "react-native-awesome-alerts";
 
 // Search animasi
 const headerHeight = 120;
@@ -17,10 +20,9 @@ let focused = false;
 
 const ProductPage = ({ navigation }) => {
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(null);
     const [loading, setLoading] = useState(false)
-
-    const [create, setCreate] = useState(false)
+    const [alertDelete, setAlertDelete] = useState(false)
 
     const onChangeText = useCallback((value) => {
         if (value != '') {
@@ -67,7 +69,7 @@ const ProductPage = ({ navigation }) => {
 
     // get Data Firebase
     const dispatch = useDispatch();
-    const LoadingReducer = useSelector(state => state.ProductReducer.createProductLoading)
+    const LoadingReducer = useSelector(state => state.ProductReducer.getProductLoading)
     const GetProductReducer = useSelector(state => state.ProductReducer.getProductResult)
 
     useEffect(() => {
@@ -79,13 +81,22 @@ const ProductPage = ({ navigation }) => {
         return unsubscribe;
     }, [navigation]);
 
+    useEffect(() => {
+        dispatch(getProducts(searchQuery))
+    }, [searchQuery])
+
+    // delete data
+    const deleteData = (id) => {
+        deleteDoc(doc(db, "products", id))
+    }
+
     return (
         <View style={styles.container}>
             {
                 LoadingReducer ?
                     (
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <ActivityIndicator size="large" color={COLORS.primary}  />
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <ActivityIndicator color={COLORS.primary} />
                         </View>
                     )
                     :
@@ -111,14 +122,45 @@ const ProductPage = ({ navigation }) => {
                                     <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Text style={{ fontWeight: '300', opacity: 0.5 }}>Stock: {formatNumber(GetProductReducer[key].stock)}</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <TouchableOpacity>
+                                            <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", GetProductReducer[key]) }}>
                                                 <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
                                             </TouchableOpacity>
-                                            <TouchableOpacity>
+                                            <TouchableOpacity onPress={() => { setAlertDelete(true) }}>
                                                 <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
+                                    {
+                                        alertDelete ? (
+                                            <AwesomeAlert
+                                                show={alertDelete}
+                                                showProgress={false}
+                                                title="Hapus Produk"
+                                                titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                                                message="Yakin data mau dihapus ?"
+                                                messageStyle={{ fontSize: 20, }}
+                                                closeOnTouchOutside={true}
+                                                closeOnHardwareBackPress={false}
+                                                showConfirmButton={true}
+                                                showCancelButton={true}
+                                                confirmText="Hapus"
+                                                cancelText='Batal'
+                                                confirmButtonColor={COLORS.primary}
+                                                confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                                                cancelButtonColor={COLORS.red}
+                                                cancelButtonTextStyle={{color: COLORS.white, fontSize: 18}}
+                                                contentContainerStyle={{ padding: 20 }}
+                                                onConfirmPressed={() => {
+                                                    deleteDoc(doc(db, "products", GetProductReducer[key].id))
+                                                    navigation.replace("ProductPage")
+                                                }}
+                                                onCancelPressed={() => {
+                                                    setAlertDelete(false)
+                                                }}
+                                            />
+                                        ) :
+                                            <View />
+                                    }
                                 </Animatible.View>
                             ))}
                         </ScrollView>
@@ -135,7 +177,7 @@ const ProductPage = ({ navigation }) => {
                         <SearchBar
                             value={searchQuery}
                             onChangeText={onChangeText}
-                            placeholder="Search"
+                            placeholder="Cari Produk"
                             theme="light"
                             style={{ flex: 8 }}
                         >
@@ -166,6 +208,7 @@ export default ProductPage
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop: 10
     },
     item: {
         padding: 10,
@@ -206,7 +249,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     name: {
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
         color: COLORS.black

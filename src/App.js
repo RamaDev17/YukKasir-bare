@@ -3,6 +3,7 @@ import Routes from './routes'
 import { initializeApp } from 'firebase/app'
 import { Provider as StoreProvider } from 'react-redux';
 import store from './reducer/store';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyB5qSYdUvm1oV0NiKmO3VndKzXBXyU2aW0",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app)
 
 export default function App() {
   return (
