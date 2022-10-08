@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Linking, Text, Dimensions, Image, ActivityIndicator, ScrollView, Modal } from 'react-native';
 import { Barcode, Close, FlashOff, FlashOn } from '../../assets/icons';
 import { COLORS } from '../../constants';
@@ -7,6 +7,8 @@ import SearchBar from 'react-native-platform-searchbar';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import useSound from "react-native-use-sound";
+import { Header } from '../../components/Header';
+import { getData } from '../../utils/localStorage';
 
 const TransaksiPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,9 +16,11 @@ const TransaksiPage = ({ navigation }) => {
   const [loading, setLoading] = useState(false)
   const [scanned, setScanned] = useState(false)
   const [flash, setFlash] = useState(false)
+  const [productLocal, setProductLocal] = useState([])
+  const [productSearch, setProductSearch] = useState([])
 
-  const soundScanner =  "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3";
-  const [play, pause, stop, data] = useSound(soundScanner, {volume: 3});
+  const soundScanner = "soundbarcode.mp3";
+  const [play, pause, stop, data] = useSound(soundScanner, { volume: 3 });
 
   const onChangeText = (value) => {
     if (value != '') {
@@ -29,17 +33,44 @@ const TransaksiPage = ({ navigation }) => {
 
   const handleBarCodeScanned = (value) => {
     play()
-    console.log(data);
     setScanned(true);
-    alert(`Bar code with data ${value.data} has been scanned!`);
+    setSearchQuery(value.data)
   };
 
   const onTorch = () => {
     setFlash(!flash)
   }
 
+  useEffect(() => {
+    getData("products")
+      .then(res => {
+        setProductLocal(res)
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  useEffect(() => {
+    Object.keys(productLocal).map((key, index) => {
+      if (searchQuery == productLocal[key].id || searchQuery == productLocal[key].nameProduct) {
+        const data = productLocal[key]
+        const newDataSearch = {
+          id: data.id,
+          nameProduct: data.nameProduct,
+          category: data.category,
+          price: data.price,
+          stock: data.stock
+        }
+        setProductSearch(newDataSearch)
+        setLoading(false)
+      } else if(searchQuery == '') {
+        setProductSearch([])
+      }
+    })
+  }, [searchQuery])
+
   return (
     <ScrollView style={styles.container}>
+      <Header name="Transaksi" navigation={navigation} />
       <View style={styles.header}>
         <View style={{ flex: 4 }}>
           <SearchBar
@@ -59,7 +90,6 @@ const TransaksiPage = ({ navigation }) => {
           <Image source={Barcode} style={{ height: 50, width: 50, tintColor: COLORS.primary }} resizeMode="cover" />
         </TouchableOpacity>
       </View>
-      <View style={{ marginTop: 20 }} />
       {
         open ? (
           <Modal
@@ -76,10 +106,10 @@ const TransaksiPage = ({ navigation }) => {
               flashMode={flash ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
               reactivate={true}
               reactivateTimeout={1500}
-              cameraStyle={{width, height}}
+              cameraStyle={{ width, height }}
               fadeIn={true}
               showMarker={true}
-              containerStyle={{backgroundColor: COLORS.white}}
+              containerStyle={{ backgroundColor: COLORS.white }}
             />
             {scanned &&
               <TouchableOpacity style={styles.buttonAgain} onPress={() => setOpen(false)}>
@@ -96,6 +126,7 @@ const TransaksiPage = ({ navigation }) => {
           </Modal>
         ) : <View />
       }
+      <Text>{productSearch.nameProduct}</Text>
     </ScrollView>
   )
 }
@@ -112,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: "center",
-    marginTop: 10
+    marginTop: 80
   },
   textHeader: {
     color: COLORS.black,

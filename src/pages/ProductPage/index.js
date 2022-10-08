@@ -4,12 +4,11 @@ import SearchBar from 'react-native-platform-searchbar';
 import * as Animatible from 'react-native-animatable'
 import { COLORS } from '../../constants';
 import { ArrowBack, Delete, Edit, Add } from '../../assets/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../../actions/productActions';
 import { formatNumber } from '../../utils/formatNumber';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../App';
 import AwesomeAlert from "react-native-awesome-alerts";
+import { getData } from '../../utils/localStorage';
 
 // Search animasi
 const headerHeight = 120;
@@ -23,6 +22,7 @@ const ProductPage = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState(null);
     const [loading, setLoading] = useState(false)
     const [alertDelete, setAlertDelete] = useState(false)
+    const [dataProduct, setDataProduct] = useState([])
 
     const onChangeText = useCallback((value) => {
         if (value != '') {
@@ -67,105 +67,109 @@ const ProductPage = ({ navigation }) => {
     };
     // end search animation
 
-    // get Data Firebase
-    const dispatch = useDispatch();
-    const LoadingReducer = useSelector(state => state.ProductReducer.getProductLoading)
-    const GetProductReducer = useSelector(state => state.ProductReducer.getProductResult)
-
+    // get data product
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             // do something
-            dispatch(getProducts());
+            getData('products')
+                .then(res => {
+                    setDataProduct(res)
+                })
+                .catch(err => console.log(err))
         });
 
         return unsubscribe;
     }, [navigation]);
 
+    // search data product
     useEffect(() => {
-        dispatch(getProducts(searchQuery))
+        Object.keys(dataProduct).map((key, index) => {
+            if (searchQuery == dataProduct[key].id || searchQuery == dataProduct[key].nameProduct) {
+                const data = dataProduct[key]
+                const newDataSearch = {
+                    id: data.id,
+                    nameProduct: data.nameProduct,
+                    category: data.category,
+                    price: data.price,
+                    stock: data.stock
+                }
+                setDataProduct([newDataSearch])
+                setLoading(false)
+            } else if (searchQuery == '') {
+                getData('products')
+                    .then(res => {
+                        setDataProduct(res)
+                    })
+                    .catch(err => console.log(err))
+            }
+        })
     }, [searchQuery])
-
-    // delete data
-    const deleteData = (id) => {
-        deleteDoc(doc(db, "products", id))
-    }
 
     return (
         <View style={styles.container}>
-            {
-                LoadingReducer ?
-                    (
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            <ActivityIndicator color={COLORS.primary} />
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingTop: headerHeight, backgroundColor: COLORS.white }}
+                onScroll={onScroll}>
+                {Object.keys(dataProduct).map((key, index) => (
+                    <Animatible.View style={styles.item} key={index} animation="fadeInUp" delay={index * 100} useNativeDriver>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <View>
+                                <Text style={styles.textItemTitle}>{dataProduct[key].nameProduct}</Text>
+                                <Text style={{ fontWeight: '300', opacity: 0.5 }}>{dataProduct[key].id}</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.textItemTitle}>{dataProduct[key].category}</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.textItemTitle}>Rp. {formatNumber(dataProduct[key].price)}</Text>
+                            </View>
                         </View>
-                    )
-                    :
-                    (
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{ paddingTop: headerHeight, backgroundColor: COLORS.white }}
-                            onScroll={onScroll}>
-                            {Object.keys(GetProductReducer).map((key, index) => (
-                                <Animatible.View style={styles.item} key={index} animation="fadeInUp" delay={index * 100} useNativeDriver>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <View>
-                                            <Text style={styles.textItemTitle}>{GetProductReducer[key].nameProduct}</Text>
-                                            <Text style={{ fontWeight: '300', opacity: 0.5 }}>{GetProductReducer[key].id}</Text>
-                                        </View>
-                                        <View>
-                                            <Text style={styles.textItemTitle}>{GetProductReducer[key].category}</Text>
-                                        </View>
-                                        <View>
-                                            <Text style={styles.textItemTitle}>Rp. {formatNumber(GetProductReducer[key].price)}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ fontWeight: '300', opacity: 0.5 }}>Stock: {formatNumber(GetProductReducer[key].stock)}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", GetProductReducer[key]) }}>
-                                                <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => { setAlertDelete(true) }}>
-                                                <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    {
-                                        alertDelete ? (
-                                            <AwesomeAlert
-                                                show={alertDelete}
-                                                showProgress={false}
-                                                title="Hapus Produk"
-                                                titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                                                message="Yakin data mau dihapus ?"
-                                                messageStyle={{ fontSize: 20, }}
-                                                closeOnTouchOutside={true}
-                                                closeOnHardwareBackPress={false}
-                                                showConfirmButton={true}
-                                                showCancelButton={true}
-                                                confirmText="Hapus"
-                                                cancelText='Batal'
-                                                confirmButtonColor={COLORS.primary}
-                                                confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                                                cancelButtonColor={COLORS.red}
-                                                cancelButtonTextStyle={{color: COLORS.white, fontSize: 18}}
-                                                contentContainerStyle={{ padding: 20 }}
-                                                onConfirmPressed={() => {
-                                                    deleteDoc(doc(db, "products", GetProductReducer[key].id))
-                                                    navigation.replace("ProductPage")
-                                                }}
-                                                onCancelPressed={() => {
-                                                    setAlertDelete(false)
-                                                }}
-                                            />
-                                        ) :
-                                            <View />
-                                    }
-                                </Animatible.View>
-                            ))}
-                        </ScrollView>
-                    )
-            }
+                        <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text style={{ fontWeight: '300', opacity: 0.5 }}>Stock: {formatNumber(dataProduct[key].stock)}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", dataProduct[key]) }}>
+                                    <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => { setAlertDelete(true) }}>
+                                    <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        {
+                            alertDelete ? (
+                                <AwesomeAlert
+                                    show={alertDelete}
+                                    showProgress={false}
+                                    title="Hapus Produk"
+                                    titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                                    message="Yakin data mau dihapus ?"
+                                    messageStyle={{ fontSize: 20, }}
+                                    closeOnTouchOutside={true}
+                                    closeOnHardwareBackPress={false}
+                                    showConfirmButton={true}
+                                    showCancelButton={true}
+                                    confirmText="Hapus"
+                                    cancelText='Batal'
+                                    confirmButtonColor={COLORS.primary}
+                                    confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                                    cancelButtonColor={COLORS.red}
+                                    cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                                    contentContainerStyle={{ padding: 20 }}
+                                    onConfirmPressed={() => {
+                                        deleteDoc(doc(db, "products", dataProduct[key].id))
+                                        navigation.replace("ProductPage")
+                                    }}
+                                    onCancelPressed={() => {
+                                        setAlertDelete(false)
+                                    }}
+                                />
+                            ) :
+                                <View />
+                        }
+                    </Animatible.View>
+                ))}
+            </ScrollView>
             <View style={[styles.header]}>
                 <Animated.View
                     style={[styles.searchContainer, { transform: [{ translateY }] }]}>

@@ -6,7 +6,7 @@ import { Header } from "../../../components/Header";
 import { COLORS } from "../../../constants";
 import DropDownPicker from 'react-native-dropdown-picker';
 const { width, height } = Dimensions.get("window");
-import { createProduct } from "../../../actions/productActions";
+import { createProduct, getProducts } from "../../../actions/productActions";
 import { useDispatch, useSelector } from 'react-redux';
 import AwesomeAlert from "react-native-awesome-alerts";
 import QRCodeScanner from "react-native-qrcode-scanner";
@@ -63,6 +63,7 @@ export const UpdateProduct = ({ navigation, route }) => {
                 stock
             }
             dispatch(createProduct(newData))
+            dispatch(getProducts())
         } else {
             Alert.alert('Gagal', 'Form harus diisi semua');
         }

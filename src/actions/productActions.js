@@ -1,6 +1,7 @@
 import { dispatchError, dispatchLoading, dispatchSuccess } from '../utils/dispatch';
 import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, where } from 'firebase/firestore'
 import { db } from '../App';
+import { storeData } from '../utils/localStorage';
 
 export const CREATE_PRODUCT = "CREATE_PRODUCT"
 export const GET_PRODUCT = "GET_PRODUCT"
@@ -59,6 +60,7 @@ export const getProducts = (search) => {
                 newData.push(doc.data())
             });
             dispatchSuccess(dispatch, GET_PRODUCT, newData)
+            storeData('products' , newData);
         }
     }
 }

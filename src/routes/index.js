@@ -41,7 +41,7 @@ const Routes = () => {
                 <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
                 <Stack.Screen name="RegisterPage" component={RegisterPage} options={{ headerShown: false }} />
                 <Stack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false }} />
-                <Stack.Screen name="TransaksiPage" component={TransaksiPage} options={headerStyle} />
+                <Stack.Screen name="TransaksiPage" component={TransaksiPage} options={{ headerShown: false }} />
                 <Stack.Screen name="ProductPage" component={ProductPage} options={{headerShown: false}} />
                 <Stack.Screen name="CreateProductPage" component={CreateProduct} options={{headerShown: false}} />
                 <Stack.Screen name="UpdateProductPage" component={UpdateProduct} options={{headerShown: false}} />
