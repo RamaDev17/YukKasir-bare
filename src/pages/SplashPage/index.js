@@ -7,10 +7,9 @@ import { getData } from '../../utils/localStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../actions/productActions';
 
-
 const SplashPage = ({ navigation }) => {
     const [user, setUser] = useState(false)
-    const [onBoarding, setOnBoarding] = useState(false)
+    const [onBoarding, setOnBoarding] = useState('onBoarding')
 
     const dispatch = useDispatch();
     const GetProductReducer = useSelector(state => state.ProductReducer.getProductResult)
@@ -24,6 +23,8 @@ const SplashPage = ({ navigation }) => {
         getData('onBoarding').then(res => {
             if (res) {
                 setOnBoarding(true)
+            }else {
+                setOnBoarding(false)
             }
         })
 
@@ -31,14 +32,18 @@ const SplashPage = ({ navigation }) => {
     }, [])
 
     useEffect(() => {
-        if (GetProductReducer) {
-            if (user) {
+        if (user) {
+            setTimeout(() => {
                 navigation.replace("BottomTab")
-            } else if (onBoarding) {
+            }, 3000);
+        } else if (onBoarding && onBoarding != 'onBoarding') {
+            setTimeout(() => {
                 navigation.replace("LoginPage")
-            } else {
+            }, 3000);
+        }else if (!onBoarding) {
+            setTimeout(() => {
                 navigation.replace("OnBoardingPage")
-            }
+            }, 3000);
         }
     }, [GetProductReducer])
 

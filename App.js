@@ -12,11 +12,27 @@ import {
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
+import { initializeApp } from "firebase/app";
+import { getAuth } from 'firebase/auth';
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD8Aq3o1EkjJZpESKNcl8o5Og_R8bKI-xk",
+  authDomain: "yukkasir-495c6.firebaseapp.com",
+  databaseURL: "https://yukkasir-495c6-default-rtdb.firebaseio.com",
+  projectId: "yukkasir-495c6",
+  storageBucket: "yukkasir-495c6.appspot.com",
+  messagingSenderId: "377276001181",
+  appId: "1:377276001181:web:0bf10033f32410de9d9d74"
+};
+
+// Initialize Firebase
+export const appFirebase = initializeApp(firebaseConfig, {name: "[DEFAULT]"});
+export const auth = getAuth(appFirebase)
 
 class App extends Component {
-  onSuccess = e => {
-    console.log(e.data);
-  };
 
   render() {
     return (

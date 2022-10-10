@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { View, ScrollView, Text, StyleSheet, Animated, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
 import SearchBar from 'react-native-platform-searchbar';
 import * as Animatible from 'react-native-animatable'
-import { COLORS } from '../../constants';
+import { COLORS, SIZES } from '../../constants';
 import { ArrowBack, Delete, Edit, Add } from '../../assets/icons';
 import { formatNumber } from '../../utils/formatNumber';
 import { deleteDoc, doc } from 'firebase/firestore';
@@ -83,26 +83,37 @@ const ProductPage = ({ navigation }) => {
 
     // search data product
     useEffect(() => {
-        Object.keys(dataProduct).map((key, index) => {
-            if (searchQuery == dataProduct[key].id || searchQuery == dataProduct[key].nameProduct) {
-                const data = dataProduct[key]
-                const newDataSearch = {
-                    id: data.id,
-                    nameProduct: data.nameProduct,
-                    category: data.category,
-                    price: data.price,
-                    stock: data.stock
+        if (searchQuery && dataProduct) {
+            Object.keys(dataProduct).map((key, index) => {
+                console.log(`search ${typeof searchQuery}`);
+                console.log(`data ${typeof dataProduct[key].nameProduct}`);
+                console.log(searchQuery == dataProduct[key].nameProduct);
+                if (searchQuery == dataProduct[key].id || searchQuery == dataProduct[key].nameProduct) {
+                    const data = dataProduct[key]
+                    console.log(data);
+                    const newDataSearch = {
+                        id: data.id,
+                        nameProduct: data.nameProduct,
+                        category: data.category,
+                        price: data.price,
+                        stock: data.stock
+                    }
+                    setDataProduct([newDataSearch])
+                    setLoading(false)
                 }
-                setDataProduct([newDataSearch])
-                setLoading(false)
-            } else if (searchQuery == '') {
-                getData('products')
-                    .then(res => {
+            })
+        }
+        if (searchQuery == '') {
+            getData('products')
+                .then(res => {
+                    if (res) {
                         setDataProduct(res)
-                    })
-                    .catch(err => console.log(err))
-            }
-        })
+                    } else {
+                        setDataProduct(false)
+                    }
+                })
+                .catch(err => console.log(err))
+        }
     }, [searchQuery])
 
     return (
@@ -111,64 +122,70 @@ const ProductPage = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingTop: headerHeight, backgroundColor: COLORS.white }}
                 onScroll={onScroll}>
-                {Object.keys(dataProduct).map((key, index) => (
-                    <Animatible.View style={styles.item} key={index} animation="fadeInUp" delay={index * 100} useNativeDriver>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <View>
-                                <Text style={styles.textItemTitle}>{dataProduct[key].nameProduct}</Text>
-                                <Text style={{ fontWeight: '300', opacity: 0.5 }}>{dataProduct[key].id}</Text>
-                            </View>
-                            <View>
-                                <Text style={styles.textItemTitle}>{dataProduct[key].category}</Text>
-                            </View>
-                            <View>
-                                <Text style={styles.textItemTitle}>Rp. {formatNumber(dataProduct[key].price)}</Text>
-                            </View>
+                {
+                    dataProduct ?
+                        Object.keys(dataProduct).map((key, index) => (
+                            <Animatible.View style={styles.item} key={index} animation="fadeInUp" delay={index * 100} useNativeDriver>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <View>
+                                        <Text style={styles.textItemTitle}>{dataProduct[key].nameProduct}</Text>
+                                        <Text style={{ fontWeight: '300', opacity: 0.5 }}>{dataProduct[key].id}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.textItemTitle}>{dataProduct[key].category}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.textItemTitle}>Rp. {formatNumber(dataProduct[key].price)}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text style={{ fontWeight: '300', opacity: 0.5 }}>Stock: {formatNumber(dataProduct[key].stock)}</Text>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", dataProduct[key]) }}>
+                                            <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { setAlertDelete(true) }}>
+                                            <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                {
+                                    alertDelete ? (
+                                        <AwesomeAlert
+                                            show={alertDelete}
+                                            showProgress={false}
+                                            title="Hapus Produk"
+                                            titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                                            message="Yakin data mau dihapus ?"
+                                            messageStyle={{ fontSize: 20, }}
+                                            closeOnTouchOutside={true}
+                                            closeOnHardwareBackPress={false}
+                                            showConfirmButton={true}
+                                            showCancelButton={true}
+                                            confirmText="Hapus"
+                                            cancelText='Batal'
+                                            confirmButtonColor={COLORS.primary}
+                                            confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                                            cancelButtonColor={COLORS.red}
+                                            cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                                            contentContainerStyle={{ padding: 20 }}
+                                            onConfirmPressed={() => {
+                                                deleteDoc(doc(db, "products", dataProduct[key].id))
+                                                navigation.replace("ProductPage")
+                                            }}
+                                            onCancelPressed={() => {
+                                                setAlertDelete(false)
+                                            }}
+                                        />
+                                    ) :
+                                        <View />
+                                }
+                            </Animatible.View>
+                        )) :
+                        <View style={{ width: SIZES.width, height: SIZES.height / 1.15, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>Data Kosong</Text>
                         </View>
-                        <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text style={{ fontWeight: '300', opacity: 0.5 }}>Stock: {formatNumber(dataProduct[key].stock)}</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", dataProduct[key]) }}>
-                                    <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => { setAlertDelete(true) }}>
-                                    <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        {
-                            alertDelete ? (
-                                <AwesomeAlert
-                                    show={alertDelete}
-                                    showProgress={false}
-                                    title="Hapus Produk"
-                                    titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                                    message="Yakin data mau dihapus ?"
-                                    messageStyle={{ fontSize: 20, }}
-                                    closeOnTouchOutside={true}
-                                    closeOnHardwareBackPress={false}
-                                    showConfirmButton={true}
-                                    showCancelButton={true}
-                                    confirmText="Hapus"
-                                    cancelText='Batal'
-                                    confirmButtonColor={COLORS.primary}
-                                    confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                                    cancelButtonColor={COLORS.red}
-                                    cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                                    contentContainerStyle={{ padding: 20 }}
-                                    onConfirmPressed={() => {
-                                        deleteDoc(doc(db, "products", dataProduct[key].id))
-                                        navigation.replace("ProductPage")
-                                    }}
-                                    onCancelPressed={() => {
-                                        setAlertDelete(false)
-                                    }}
-                                />
-                            ) :
-                                <View />
-                        }
-                    </Animatible.View>
-                ))}
+                }
             </ScrollView>
             <View style={[styles.header]}>
                 <Animated.View

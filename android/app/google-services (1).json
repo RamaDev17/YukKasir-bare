@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "164194360457",
+    "firebase_url": "https://rnyukkasir-default-rtdb.firebaseio.com",
+    "project_id": "rnyukkasir",
+    "storage_bucket": "rnyukkasir.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164194360457:android:baec80c044ec843d24ba58",
+        "android_client_info": {
+          "package_name": "com.yukkasir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164194360457-r6v8kde6nthhlj876h7o8ddak73gqmlj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5we_I20AuEKInkGzgQjUVajFlF0WWXXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164194360457-r6v8kde6nthhlj876h7o8ddak73gqmlj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

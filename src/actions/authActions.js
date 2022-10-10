@@ -2,9 +2,12 @@ import { dispatchError, dispatchLoading, dispatchSuccess } from '../utils/dispat
 import { getDatabase, onValue, ref, set } from 'firebase/database';
 import { storeData } from '../utils/localStorage';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { appFirebase } from '../config/firebase';
 
 export const REGISTER_USER = 'REGISTER_USER';
 export const LOGIN_USER = 'LOGIN_USER';
+
+appFirebase
 
 export const registerUser = (data, password) => {
   return (dispatch) => {

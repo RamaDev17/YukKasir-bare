@@ -11,6 +11,8 @@
 		0C80B921A6F3F58F76C31292 /* libPods-YukKasir.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-YukKasir.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		212422E828F311E400E599E0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 212422E728F311E400E599E0 /* GoogleService-Info.plist */; };
+		212422EA28F311FB00E599E0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 212422E928F311FB00E599E0 /* GoogleService-Info.plist */; };
 		7699B88040F8A987B510C191 /* libPods-YukKasir-YukKasirTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-YukKasir-YukKasirTests.a */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +42,8 @@
 		16032D6DBCB84055B00B1A9A /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../src/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		17C6F78810304D848FC43289 /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../src/assets/fonts/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-YukKasir-YukKasirTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YukKasir-YukKasirTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		212422E728F311E400E599E0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		212422E928F311FB00E599E0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		21AFA3CC28EFC2B400FFA9E0 /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soundbarcode.mp3; sourceTree = "<group>"; };
 		21AFA3CD28EFC2BB00FFA9E0 /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = soundbarcode.mp3; path = ../../../../../Desktop/soundbarcode.mp3; sourceTree = "<group>"; };
 		21B0B7B828EF0EF90010A4F4 /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = soundbarcode.mp3; path = ../../../../../Desktop/soundbarcode.mp3; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 		13B07FAE1A68108700A75B9A /* YukKasir */ = {
 			isa = PBXGroup;
 			children = (
+				212422E928F311FB00E599E0 /* GoogleService-Info.plist */,
 				21AFA3CD28EFC2BB00FFA9E0 /* soundbarcode.mp3 */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -173,6 +178,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				212422E728F311E400E599E0 /* GoogleService-Info.plist */,
 				21B0B7B828EF0EF90010A4F4 /* soundbarcode.mp3 */,
 				13B07FAE1A68108700A75B9A /* YukKasir */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -292,6 +298,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212422E828F311E400E599E0 /* GoogleService-Info.plist in Resources */,
+				212422EA28F311FB00E599E0 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
