@@ -8,26 +8,24 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import useSound from "react-native-use-sound";
 import { Header } from '../../components/Header';
-import { getData } from '../../utils/localStorage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts } from '../../actions/productActions';
 
 const TransaksiPage = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(0);
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [scanned, setScanned] = useState(false)
   const [flash, setFlash] = useState(false)
-  const [productLocal, setProductLocal] = useState([])
   const [productSearch, setProductSearch] = useState([])
+  const [get, setGet] = useState(false)
+  const [searchBarcode, setSearchBarcode] = useState(false)
 
   const soundScanner = "soundbarcode.mp3";
   const [play, pause, stop, data] = useSound(soundScanner, { volume: 3 });
 
   const onChangeText = (value) => {
-    if (value != '') {
-      setLoading(true)
-    } else {
-      setLoading(false)
-    }
+    setLoading(true)
     setSearchQuery(value);
   }
 
@@ -35,38 +33,38 @@ const TransaksiPage = ({ navigation }) => {
     play()
     setScanned(true);
     setSearchQuery(value.data)
+    setOpen(false)
+    setSearchBarcode(true)
   };
 
   const onTorch = () => {
     setFlash(!flash)
   }
 
-  useEffect(() => {
-    getData("products")
-      .then(res => {
-        setProductLocal(res)
-      })
-      .catch(err => console.log(err))
-  }, [])
+  const dispatch = useDispatch();
+  const GetProductReducer = useSelector(state => state.ProductReducer.getProductResult)
+  const LoadingProductReducer = useSelector(state => state.ProductReducer.getProductLoading)
 
   useEffect(() => {
-    Object.keys(productLocal).map((key, index) => {
-      if (searchQuery == productLocal[key].id || searchQuery == productLocal[key].nameProduct) {
-        const data = productLocal[key]
-        const newDataSearch = {
-          id: data.id,
-          nameProduct: data.nameProduct,
-          category: data.category,
-          price: data.price,
-          stock: data.stock
-        }
-        setProductSearch(newDataSearch)
-        setLoading(false)
-      } else if(searchQuery == '') {
-        setProductSearch([])
-      }
-    })
+    if (searchQuery) {
+      dispatch(getProducts(searchQuery, searchBarcode))
+      setGet(true)
+    }
+    if (searchQuery == '') {
+      setProductSearch([])
+      setGet(false)
+      setSearchBarcode(false)
+    }
   }, [searchQuery])
+
+  useEffect(() => {
+    if (get) {
+      setProductSearch(GetProductReducer)
+      setLoading(false)
+    }
+  }, [LoadingProductReducer])
+
+  console.log(productSearch);
 
   return (
     <ScrollView style={styles.container}>
@@ -111,11 +109,6 @@ const TransaksiPage = ({ navigation }) => {
               showMarker={true}
               containerStyle={{ backgroundColor: COLORS.white }}
             />
-            {scanned &&
-              <TouchableOpacity style={styles.buttonAgain} onPress={() => setOpen(false)}>
-                <Text style={{ color: COLORS.white }}>Tutup</Text>
-              </TouchableOpacity>
-            }
 
             <TouchableOpacity style={styles.iconClose} onPress={() => setOpen(!open)}>
               <Image source={Close} resizeMode="cover" style={{ height: 30, width: 30, tintColor: COLORS.white }} />
@@ -126,7 +119,15 @@ const TransaksiPage = ({ navigation }) => {
           </Modal>
         ) : <View />
       }
-      <Text>{productSearch.nameProduct}</Text>
+      {
+        Object.keys(productSearch).map((key, index) => {
+          return (
+            <View key={index}>
+              <Text>{productSearch[key].nameProduct}</Text>
+            </View>
+          )
+        })
+      }
     </ScrollView>
   )
 }

@@ -1,7 +1,9 @@
+import React from 'react';
 import { dispatchError, dispatchLoading, dispatchSuccess } from '../utils/dispatch';
 import { storeData } from '../utils/localStorage';
-import { getDatabase, onValue, ref, set } from "firebase/database";
+import { getDatabase, onValue, orderByChild, orderByValue, ref, set } from "firebase/database";
 import { appFirebase } from '../config/firebase';
+import database from '@react-native-firebase/database'
 
 export const CREATE_PRODUCT = "CREATE_PRODUCT"
 export const GET_PRODUCT = "GET_PRODUCT"
@@ -17,9 +19,9 @@ export const createProduct = (datas) => {
 
         if (datas) {
             const newData = {
-                id: datas.id,
-                nameProduct: datas.nameProduct,
-                category: datas.category,
+                id: datas.id.toLowerCase(),
+                nameProduct: datas.nameProduct.toLowerCase(),
+                category: datas.category.toLowerCase(),
                 price: datas.price,
                 stock: datas.stock
             }
@@ -33,17 +35,41 @@ export const createProduct = (datas) => {
     }
 }
 
-export const getProducts = () => {
+export const getProducts = (search, barcode) => {
     return (dispatch) => {
         // loading
         dispatchLoading(dispatch, GET_PRODUCT);
 
         // get realtime database database
-        const referensi = ref(db, '/products/');
-        onValue(referensi, (snapshot) => {
-            const data = snapshot.val();
-            dispatchSuccess(dispatch, GET_PRODUCT, data)
-            storeData('products', data)
-        })
+        if (search) {
+            database()
+                .ref('products')
+                .orderByChild(barcode ? 'id' : 'nameProduct')
+                .startAt(barcode ? search : search.toLowerCase())
+                .endAt(barcode ? search : search.toLowerCase() + "\uf8ff")
+                .once('value', querySnapsot => {
+                    // hasil
+                    let data = querySnapsot.val();
+                    let dataItem = { ...data };
+                    dispatchSuccess(dispatch, GET_PRODUCT, dataItem);
+                })
+                .catch(err => {
+                    alert(err);
+                });
+        } else {
+            database()
+                .ref('products')
+                .orderByValue()
+                .once('value', querySnapsot => {
+                    // hasil
+                    let data = querySnapsot.val();
+                    let dataItem = { ...data };
+                    dispatchSuccess(dispatch, GET_PRODUCT, dataItem);
+                    storeData('products', dataItem)
+                })
+                .catch(err => {
+                    alert(err);
+                });
+        }
     }
 }

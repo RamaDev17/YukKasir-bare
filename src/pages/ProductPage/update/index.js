@@ -14,7 +14,6 @@ import { RNCamera } from 'react-native-camera';
 import useSound from "react-native-use-sound";
 
 export const UpdateProduct = ({ navigation, route }) => {
-    console.log(route.params);
     const editData = route.params
 
     const [id, setId] = useState(editData.id)
@@ -50,7 +49,6 @@ export const UpdateProduct = ({ navigation, route }) => {
     }
     const dispatch = useDispatch();
 
-    const LoadingReducer = useSelector(state => state.ProductReducer.createProductLoading)
     const CreateProductReducer = useSelector(state => state.ProductReducer.createProductResult)
 
     const onSubmit = () => {
@@ -63,7 +61,7 @@ export const UpdateProduct = ({ navigation, route }) => {
                 stock
             }
             dispatch(createProduct(newData))
-            dispatch(getProducts())
+            setLoading(!loading)
         } else {
             Alert.alert('Gagal', 'Form harus diisi semua');
         }
@@ -75,6 +73,12 @@ export const UpdateProduct = ({ navigation, route }) => {
             setOpenAlert(true)
         }
     }, [CreateProductReducer])
+
+    useEffect(() => {
+        if (loading) {
+            dispatch(getProducts())
+        }
+    }, [loading])
 
     return (
         <View style={styles.container}>
@@ -219,7 +223,7 @@ export const UpdateProduct = ({ navigation, route }) => {
             </View>
             <View style={{ marginTop: 40 }} />
             <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
-                {LoadingReducer ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.textButton}>Update</Text>}
+                {loading ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.textButton}>Update</Text>}
             </TouchableOpacity>
         </View>
     )

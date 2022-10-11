@@ -5,10 +5,12 @@ import * as Animatible from 'react-native-animatable'
 import { COLORS, SIZES } from '../../constants';
 import { ArrowBack, Delete, Edit, Add } from '../../assets/icons';
 import { formatNumber } from '../../utils/formatNumber';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../App';
 import AwesomeAlert from "react-native-awesome-alerts";
 import { getData } from '../../utils/localStorage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts } from '../../actions/productActions';
+import  database  from '@react-native-firebase/database';
+import { uppercaseWord } from '../../utils/uppercaseWord';
 
 // Search animasi
 const headerHeight = 120;
@@ -23,6 +25,7 @@ const ProductPage = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
     const [alertDelete, setAlertDelete] = useState(false)
     const [dataProduct, setDataProduct] = useState([])
+    const [id, setId] = useState('')
 
     const onChangeText = useCallback((value) => {
         if (value != '') {
@@ -67,6 +70,9 @@ const ProductPage = ({ navigation }) => {
     };
     // end search animation
 
+    const dispatch = useDispatch();
+    const GetProductReducer = useSelector(state => state.ProductReducer.getProductResult)
+
     // get data product
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -84,24 +90,8 @@ const ProductPage = ({ navigation }) => {
     // search data product
     useEffect(() => {
         if (searchQuery && dataProduct) {
-            Object.keys(dataProduct).map((key, index) => {
-                console.log(`search ${typeof searchQuery}`);
-                console.log(`data ${typeof dataProduct[key].nameProduct}`);
-                console.log(searchQuery == dataProduct[key].nameProduct);
-                if (searchQuery == dataProduct[key].id || searchQuery == dataProduct[key].nameProduct) {
-                    const data = dataProduct[key]
-                    console.log(data);
-                    const newDataSearch = {
-                        id: data.id,
-                        nameProduct: data.nameProduct,
-                        category: data.category,
-                        price: data.price,
-                        stock: data.stock
-                    }
-                    setDataProduct([newDataSearch])
-                    setLoading(false)
-                }
-            })
+           dispatch(getProducts(searchQuery))
+           setLoading(false)
         }
         if (searchQuery == '') {
             getData('products')
@@ -116,6 +106,12 @@ const ProductPage = ({ navigation }) => {
         }
     }, [searchQuery])
 
+    useEffect(() => {
+        if (GetProductReducer) {
+            setDataProduct(GetProductReducer)
+        }
+    }, [GetProductReducer])
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -128,23 +124,26 @@ const ProductPage = ({ navigation }) => {
                             <Animatible.View style={styles.item} key={index} animation="fadeInUp" delay={index * 100} useNativeDriver>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <View>
-                                        <Text style={styles.textItemTitle}>{dataProduct[key].nameProduct}</Text>
-                                        <Text style={{ fontWeight: '300', opacity: 0.5 }}>{dataProduct[key].id}</Text>
+                                        <Text style={styles.textItemTitle}>{uppercaseWord(dataProduct[key].nameProduct)}</Text>
+                                        <Text style={styles.textOpacity}>{dataProduct[key].id}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.textItemTitle}>{dataProduct[key].category}</Text>
+                                        <Text style={styles.textItemTitle}>{uppercaseWord(dataProduct[key].category)}</Text>
                                     </View>
                                     <View>
                                         <Text style={styles.textItemTitle}>Rp. {formatNumber(dataProduct[key].price)}</Text>
                                     </View>
                                 </View>
                                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text style={{ fontWeight: '300', opacity: 0.5 }}>Stock: {formatNumber(dataProduct[key].stock)}</Text>
+                                    <Text style={styles.textOpacity}>Stock: {formatNumber(dataProduct[key].stock)}</Text>
                                     <View style={{ flexDirection: 'row' }}>
                                         <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", dataProduct[key]) }}>
                                             <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => { setAlertDelete(true) }}>
+                                        <TouchableOpacity onPress={() => { 
+                                            setAlertDelete(true)
+                                            setId(dataProduct[key].id)
+                                        }}>
                                             <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
                                         </TouchableOpacity>
                                     </View>
@@ -169,8 +168,9 @@ const ProductPage = ({ navigation }) => {
                                             cancelButtonColor={COLORS.red}
                                             cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
                                             contentContainerStyle={{ padding: 20 }}
-                                            onConfirmPressed={() => {
-                                                deleteDoc(doc(db, "products", dataProduct[key].id))
+                                            onConfirmPressed={async() => {
+                                                await database().ref(`/products/${id}`).remove();
+                                                dispatch(getProducts())
                                                 navigation.replace("ProductPage")
                                             }}
                                             onCancelPressed={() => {
@@ -200,6 +200,7 @@ const ProductPage = ({ navigation }) => {
                             onChangeText={onChangeText}
                             placeholder="Cari Produk"
                             theme="light"
+                            inputStyle={{color: COLORS.black}}
                             style={{ flex: 8 }}
                         >
                             {loading ? (
@@ -304,4 +305,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         letterSpacing: 1
     },
+    textOpacity: {
+        color: COLORS.black,
+        opacity: 0.5
+    }
 });

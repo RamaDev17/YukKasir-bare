@@ -47,7 +47,6 @@ export const CreateProduct = ({ navigation }) => {
     }
     const dispatch = useDispatch();
 
-    const LoadingReducer = useSelector(state => state.ProductReducer.createProductLoading)
     const CreateProductReducer = useSelector(state => state.ProductReducer.createProductResult)
 
     const onSubmit = () => {
@@ -60,7 +59,7 @@ export const CreateProduct = ({ navigation }) => {
                 stock
             }
             dispatch(createProduct(newData))
-            dispatch(getProducts())
+            setLoading(!loading)
         } else {
             Alert.alert('Gagal', 'Form harus diisi semua');
         }
@@ -72,6 +71,12 @@ export const CreateProduct = ({ navigation }) => {
             setOpenAlert(true)
         }
     }, [CreateProductReducer])
+
+    useEffect(() => {
+        if (loading) {
+            dispatch(getProducts())
+        }
+    }, [loading])
 
     return (
         <View style={styles.container}>
@@ -216,7 +221,7 @@ export const CreateProduct = ({ navigation }) => {
             </View>
             <View style={{ marginTop: 40 }} />
             <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
-                {LoadingReducer ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.textButton}>Tambah</Text>}
+                {loading ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.textButton}>Tambah</Text>}
             </TouchableOpacity>
         </View>
     )

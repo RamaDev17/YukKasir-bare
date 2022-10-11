@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>164194360457-aj4css5argo0he5pd4na9m4lofta6tj3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.164194360457-aj4css5argo0he5pd4na9m4lofta6tj3</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDulYgH1U5jfXDVncz5_QYiCMEn9See04o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>164194360457</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.YukKasir</string>
+	<key>PROJECT_ID</key>
+	<string>rnyukkasir</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rnyukkasir.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:164194360457:ios:44bc7f125f29014b24ba58</string>
+	<key>DATABASE_URL</key>
+	<string>https://rnyukkasir-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
