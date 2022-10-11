@@ -20,6 +20,7 @@ import FlashOff from './flashlight_off_FILL0_wght300_GRAD0_opsz48.png'
 import Edit from './create.png'
 import Add from './add-circle-sharp.png'
 import Delete from './trash.png'
+import Min from './remove-circle.png'
 
 export { 
     Ceklis, 
@@ -43,5 +44,6 @@ export {
     FlashOff,
     Add,
     Edit,
-    Delete
+    Delete,
+    Min
 }

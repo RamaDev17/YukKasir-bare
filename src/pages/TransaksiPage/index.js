@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Linking, Text, Dimensions, Image, ActivityIndicator, ScrollView, Modal } from 'react-native';
-import { Barcode, Close, FlashOff, FlashOn } from '../../assets/icons';
+import { Add, Barcode, Close, Delete, FlashOff, FlashOn, Min } from '../../assets/icons';
 import { COLORS } from '../../constants';
 const { width, height } = Dimensions.get("window");
 import SearchBar from 'react-native-platform-searchbar';
@@ -10,16 +10,21 @@ import useSound from "react-native-use-sound";
 import { Header } from '../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../actions/productActions';
+import { uppercaseWord } from '../../utils/uppercaseWord';
+import { formatNumber } from '../../utils/formatNumber';
 
 const TransaksiPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState(0);
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [scanned, setScanned] = useState(false)
   const [flash, setFlash] = useState(false)
   const [productSearch, setProductSearch] = useState([])
   const [get, setGet] = useState(false)
   const [searchBarcode, setSearchBarcode] = useState(false)
+  // data ketika sudah ditambahkan
+  const [dataAdd, setDataAdd] = useState([])
+  const [dataAsync, setDataAsync] = useState(false)
+  // const [increment, setIncrement]
 
   const soundScanner = "soundbarcode.mp3";
   const [play, pause, stop, data] = useSound(soundScanner, { volume: 3 });
@@ -31,7 +36,6 @@ const TransaksiPage = ({ navigation }) => {
 
   const handleBarCodeScanned = (value) => {
     play()
-    setScanned(true);
     setSearchQuery(value.data)
     setOpen(false)
     setSearchBarcode(true)
@@ -64,7 +68,36 @@ const TransaksiPage = ({ navigation }) => {
     }
   }, [LoadingProductReducer])
 
-  console.log(productSearch);
+  const onAddHandle = (data) => {
+    const newData = {
+      id: data.id,
+      nameProduct: data.nameProduct,
+      count: 1,
+      price: data.price
+    }
+    setDataAdd(value => [newData, ...value])
+    setSearchQuery('')
+  }
+
+  useEffect(() => { }, [dataAsync])
+
+  const onIncrement = (value) => {
+    const newDataCount = {
+      count: value.count + 1
+    }
+    Object.assign(value, newDataCount)
+    setDataAsync(!dataAsync)
+  }
+
+  const onDecrement = (value) => {
+    if (value.count != 1) {
+      const newDataCount = {
+        count: value.count - 1
+      }
+      Object.assign(value, newDataCount)
+      setDataAsync(!dataAsync)
+    }
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -123,16 +156,77 @@ const TransaksiPage = ({ navigation }) => {
         Object.keys(productSearch).map((key, index) => {
           return (
             <View key={index}>
-              <Text>{productSearch[key].nameProduct}</Text>
+              <View style={styles.cardSearch} key={index}>
+                <View>
+                  <Text style={styles.textTitleCard}>{uppercaseWord(productSearch[key].nameProduct)}</Text>
+                  <Text style={styles.textSubTitleCard}>{productSearch[key].id}</Text>
+                  <Text style={styles.textSubTitleCard}>Stock: {productSearch[key].stock}</Text>
+                </View>
+                <View style={{ justifyContent: 'space-between' }}>
+                  <Text style={styles.textTitleCard}>Rp. {formatNumber(productSearch[key].price)}</Text>
+                  <TouchableOpacity style={styles.buttonCard} onPress={() => onAddHandle(productSearch[key])}>
+                    <Text style={styles.textButtonCard}>Tambah</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, marginHorizontal: 20, borderColor: '#BCCEF8' }} />
             </View>
           )
         })
+      }
+      {
+        dataAdd ?
+          dataAdd.map((value, index) => {
+            return (
+              <View style={[styles.cardSearch, { flexDirection: 'column' }]} key={index}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View>
+                    <Text style={styles.textTitleCard}>{uppercaseWord(value.nameProduct)}</Text>
+                    <Text style={styles.textSubTitleCard}>{uppercaseWord(value.id)}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textTitleCard}>Rp. {value.price * value.count}</Text>
+                  </View>
+                </View>
+                <View>
+
+                  <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
+                    <TouchableOpacity onPress={() => {
+                      dataAdd.splice(index,index + 1)
+                      setDataAsync(!dataAsync)
+                    }}>
+                      <Image source={Delete} style={{ width: 22, height: 22, tintColor: COLORS.red }} />
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity onPress={() => { onDecrement(value) }}>
+                        <Image source={Min} style={{ width: 22, height: 22, tintColor: COLORS.primary }} />
+                      </TouchableOpacity>
+                      <Text>    {value.count}    </Text>
+                      <TouchableOpacity onPress={() => { onIncrement(value) }}>
+                        <Image source={Add} style={{ width: 22, height: 22, tintColor: COLORS.primary }} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+              </View>
+            )
+          })
+          :
+          <View />
       }
     </ScrollView>
   )
 }
 
 export default TransaksiPage
+
+const CobaAja = async () => {
+  return await Promise.all(
+
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -144,7 +238,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: "center",
-    marginTop: 80
+    marginTop: 80,
+    paddingVertical: 10
   },
   textHeader: {
     color: COLORS.black,
@@ -159,8 +254,6 @@ const styles = StyleSheet.create({
     left: 10
   },
   textInput: {
-    // paddingHorizontal: 16,
-    // paddingVertical: 8,
     flex: 4
   },
   searchView: {
@@ -198,5 +291,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.primary,
     borderRadius: 50
+  },
+  cardSearch: {
+    margin: 20,
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    shadowColor: COLORS.primary,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  textTitleCard: {
+    fontSize: 16,
+    color: COLORS.black,
+    fontWeight: 'bold',
+  },
+  textSubTitleCard: {
+    fontSize: 12,
+    marginTop: 5,
+    color: COLORS.black,
+    opacity: 0.5
+  },
+  buttonCard: {
+    padding: 7,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5
+  },
+  textButtonCard: {
+    color: COLORS.white,
+    fontSize: 12
   }
 });
