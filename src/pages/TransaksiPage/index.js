@@ -13,6 +13,8 @@ import { getProducts } from '../../actions/productActions';
 import { uppercaseWord } from '../../utils/uppercaseWord';
 import { formatNumber } from '../../utils/formatNumber';
 
+let total = 0
+
 const TransaksiPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState(0);
   const [open, setOpen] = useState(false)
@@ -24,7 +26,7 @@ const TransaksiPage = ({ navigation }) => {
   // data ketika sudah ditambahkan
   const [dataAdd, setDataAdd] = useState([])
   const [dataAsync, setDataAsync] = useState(false)
-  // const [increment, setIncrement]
+  const [amount, setAmount] = useState(0)
 
   const soundScanner = "soundbarcode.mp3";
   const [play, pause, stop, data] = useSound(soundScanner, { volume: 3 });
@@ -68,22 +70,27 @@ const TransaksiPage = ({ navigation }) => {
     }
   }, [LoadingProductReducer])
 
-  const onAddHandle = (data) => {
+  const onAddHandle = (data, count) => {
     const newData = {
       id: data.id,
       nameProduct: data.nameProduct,
       count: 1,
-      price: data.price
+      price: data.price,
+      total: parseInt(data.price) * count
     }
     setDataAdd(value => [newData, ...value])
     setSearchQuery('')
+    setDataAsync(!dataAsync)
   }
 
-  useEffect(() => { }, [dataAsync])
+  useEffect(() => {
+    setAmount(dataAdd.reduce((n, { total }) => n + total, 0))
+  }, [dataAsync])
 
   const onIncrement = (value) => {
     const newDataCount = {
-      count: value.count + 1
+      count: value.count + 1,
+      total: parseInt(value.count + 1) * parseInt(value.price)
     }
     Object.assign(value, newDataCount)
     setDataAsync(!dataAsync)
@@ -92,7 +99,8 @@ const TransaksiPage = ({ navigation }) => {
   const onDecrement = (value) => {
     if (value.count != 1) {
       const newDataCount = {
-        count: value.count - 1
+        count: value.count - 1,
+        total: parseInt(value.count - 1) * parseInt(value.price)
       }
       Object.assign(value, newDataCount)
       setDataAsync(!dataAsync)
@@ -100,138 +108,141 @@ const TransaksiPage = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Header name="Transaksi" navigation={navigation} />
-      <View style={styles.header}>
-        <View style={{ flex: 4 }}>
-          <SearchBar
-            value={searchQuery}
-            onChangeText={onChangeText}
-            placeholder="Search"
-            theme="light"
-            style={styles.searchBar}
-          >
-            {loading ? (
-              <ActivityIndicator style={{ marginRight: 10 }} />
-            ) : <></>}
-          </SearchBar>
+    <View style={{ width, height}}>
+        <Header name="Transaksi" navigation={navigation} />
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <View style={{ flex: 4 }}>
+            <SearchBar
+              value={searchQuery}
+              onChangeText={onChangeText}
+              placeholder="Search"
+              theme="light"
+              style={styles.searchBar}
+            >
+              {loading ? (
+                <ActivityIndicator style={{ marginRight: 10 }} />
+              ) : <></>}
+            </SearchBar>
 
+          </View>
+          <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end' }} onPress={() => { setOpen(!open) }}>
+            <Image source={Barcode} style={{ height: 50, width: 50, tintColor: COLORS.primary }} resizeMode="cover" />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end' }} onPress={() => { setOpen(!open) }}>
-          <Image source={Barcode} style={{ height: 50, width: 50, tintColor: COLORS.primary }} resizeMode="cover" />
-        </TouchableOpacity>
-      </View>
-      {
-        open ? (
-          <Modal
-            animationType='slide'
-            transparent={true}
-            visible={open}
-            onRequestClose={() => {
-              setOpen(!open)
-            }}
-            statusBarTranslucent={true}
-          >
-            <QRCodeScanner
-              onRead={handleBarCodeScanned}
-              flashMode={flash ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
-              reactivate={true}
-              reactivateTimeout={1500}
-              cameraStyle={{ width, height }}
-              fadeIn={true}
-              showMarker={true}
-              containerStyle={{ backgroundColor: COLORS.white }}
-            />
+        {
+          open ? (
+            <Modal
+              animationType='slide'
+              transparent={true}
+              visible={open}
+              onRequestClose={() => {
+                setOpen(!open)
+              }}
+              statusBarTranslucent={true}
+            >
+              <QRCodeScanner
+                onRead={handleBarCodeScanned}
+                flashMode={flash ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
+                reactivate={true}
+                reactivateTimeout={1500}
+                cameraStyle={{ width, height }}
+                fadeIn={true}
+                showMarker={true}
+                containerStyle={{ backgroundColor: COLORS.white }}
+              />
 
-            <TouchableOpacity style={styles.iconClose} onPress={() => setOpen(!open)}>
-              <Image source={Close} resizeMode="cover" style={{ height: 30, width: 30, tintColor: COLORS.white }} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconTorch} onPress={() => onTorch()}>
-              <Image source={flash ? FlashOff : FlashOn} resizeMode="cover" style={{ height: 30, width: 30, tintColor: COLORS.white }} />
-            </TouchableOpacity>
-          </Modal>
-        ) : <View />
-      }
-      {
-        Object.keys(productSearch).map((key, index) => {
-          return (
-            <View key={index}>
-              <View style={styles.cardSearch} key={index}>
-                <View>
-                  <Text style={styles.textTitleCard}>{uppercaseWord(productSearch[key].nameProduct)}</Text>
-                  <Text style={styles.textSubTitleCard}>{productSearch[key].id}</Text>
-                  <Text style={styles.textSubTitleCard}>Stock: {productSearch[key].stock}</Text>
-                </View>
-                <View style={{ justifyContent: 'space-between' }}>
-                  <Text style={styles.textTitleCard}>Rp. {formatNumber(productSearch[key].price)}</Text>
-                  <TouchableOpacity style={styles.buttonCard} onPress={() => onAddHandle(productSearch[key])}>
-                    <Text style={styles.textButtonCard}>Tambah</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={{ borderWidth: 1, marginHorizontal: 20, borderColor: '#BCCEF8' }} />
-            </View>
-          )
-        })
-      }
-      {
-        dataAdd ?
-          dataAdd.map((value, index) => {
+              <TouchableOpacity style={styles.iconClose} onPress={() => setOpen(!open)}>
+                <Image source={Close} resizeMode="cover" style={{ height: 30, width: 30, tintColor: COLORS.white }} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconTorch} onPress={() => onTorch()}>
+                <Image source={flash ? FlashOff : FlashOn} resizeMode="cover" style={{ height: 30, width: 30, tintColor: COLORS.white }} />
+              </TouchableOpacity>
+            </Modal>
+          ) : <View />
+        }
+        {
+          Object.keys(productSearch).map((key, index) => {
             return (
-              <View style={[styles.cardSearch, { flexDirection: 'column' }]} key={index}>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View key={index}>
+                <View style={styles.cardSearch} key={index}>
                   <View>
-                    <Text style={styles.textTitleCard}>{uppercaseWord(value.nameProduct)}</Text>
-                    <Text style={styles.textSubTitleCard}>{uppercaseWord(value.id)}</Text>
+                    <Text style={styles.textTitleCard}>{uppercaseWord(productSearch[key].nameProduct)}</Text>
+                    <Text style={styles.textSubTitleCard}>{productSearch[key].id}</Text>
+                    <Text style={styles.textSubTitleCard}>Stock: {productSearch[key].stock}</Text>
                   </View>
-                  <View>
-                    <Text style={styles.textTitleCard}>Rp. {value.price * value.count}</Text>
-                  </View>
-                </View>
-                <View>
-
-                  <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
-                    <TouchableOpacity onPress={() => {
-                      dataAdd.splice(index,index + 1)
-                      setDataAsync(!dataAsync)
-                    }}>
-                      <Image source={Delete} style={{ width: 22, height: 22, tintColor: COLORS.red }} />
+                  <View style={{ justifyContent: 'space-between' }}>
+                    <Text style={styles.textTitleCard}>Rp. {formatNumber(productSearch[key].price)}</Text>
+                    <TouchableOpacity style={styles.buttonCard} onPress={() => onAddHandle(productSearch[key], 1)}>
+                      <Text style={styles.textButtonCard}>Tambah</Text>
                     </TouchableOpacity>
-                    <View style={{ flexDirection: 'row' }}>
-                      <TouchableOpacity onPress={() => { onDecrement(value) }}>
-                        <Image source={Min} style={{ width: 22, height: 22, tintColor: COLORS.primary }} />
-                      </TouchableOpacity>
-                      <Text>    {value.count}    </Text>
-                      <TouchableOpacity onPress={() => { onIncrement(value) }}>
-                        <Image source={Add} style={{ width: 22, height: 22, tintColor: COLORS.primary }} />
-                      </TouchableOpacity>
-                    </View>
                   </View>
                 </View>
-
+                <View style={{ borderWidth: 1, marginHorizontal: 20, borderColor: '#BCCEF8' }} />
               </View>
             )
           })
-          :
-          <View />
-      }
-    </ScrollView>
+        }
+        {
+          dataAdd ?
+            dataAdd.map((value, index) => {
+              return (
+                <View style={[styles.cardSearch, { flexDirection: 'column' }]} key={index}>
+
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View>
+                      <Text style={styles.textTitleCard}>{uppercaseWord(value.nameProduct)}</Text>
+                      <Text style={styles.textSubTitleCard}>{uppercaseWord(value.id)}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textTitleCard}>Rp. {formatNumber(value.total)}</Text>
+                    </View>
+                  </View>
+                  <View>
+
+                    <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
+                      <TouchableOpacity onPress={() => {
+                        dataAdd.splice(index, index + 1)
+                        setDataAsync(!dataAsync)
+                      }}>
+                        <Image source={Delete} style={{ width: 22, height: 22, tintColor: COLORS.red }} />
+                      </TouchableOpacity>
+                      <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity onPress={() => { onDecrement(value) }}>
+                          <Image source={Min} style={{ width: 22, height: 22, tintColor: COLORS.primary }} />
+                        </TouchableOpacity>
+                        <Text>    {value.count}    </Text>
+                        <TouchableOpacity onPress={() => { onIncrement(value) }}>
+                          <Image source={Add} style={{ width: 22, height: 22, tintColor: COLORS.primary }} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+
+                </View>
+              )
+            })
+            :
+            <View />
+        }
+      </ScrollView>
+      <View style={styles.cardBayar}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: COLORS.black}}>Rp. {formatNumber(amount)}</Text>
+        <TouchableOpacity style={{padding: 10, backgroundColor: COLORS.primary, borderRadius: 10}}>
+          <Text style={{fontSize: 16, color: COLORS.white}}>Bayar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 
 export default TransaksiPage
 
-const CobaAja = async () => {
-  return await Promise.all(
-
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
+    marginBottom: 70
   },
   header: {
     paddingHorizontal: 20,
@@ -330,5 +341,19 @@ const styles = StyleSheet.create({
   textButtonCard: {
     color: COLORS.white,
     fontSize: 12
+  },
+  cardBayar: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: COLORS.white,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 0.3,
+    borderTopColor: COLORS.primary,
   }
 });
