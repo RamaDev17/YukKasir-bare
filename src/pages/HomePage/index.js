@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, StatusBar, ScrollView } from 'react-native'
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Dolar, Inventaris, Laporan, Logo, Product, RiwayatTransaksi, StoreFront, Transaksi } from "../../assets/icons";
+import { Dolar, Inventaris, Laporan, Logo, Print, Product, RiwayatTransaksi, StoreFront, Transaksi } from "../../assets/icons";
 import { Person } from "../../assets/images";
 import { COLORS } from "../../constants";
 
@@ -16,7 +16,7 @@ const HomePage = ({ navigation }) => {
                     <Image source={Logo} resizeMode="cover" style={{ width: 35, height: 35 }} />
                     <Text style={styles.textTitle}>ukKasir</Text>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate("BottomTab", { screen: "ProfilePage" })}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfilePage")}>
                     <Image source={Person} resizeMode="cover" style={{ width: 35, height: 35, borderRadius: 35 / 2 }} />
                 </TouchableOpacity>
             </View>
@@ -61,8 +61,8 @@ const HomePage = ({ navigation }) => {
                         <Text style={styles.textCardMenu}>Riwayat Transaksi</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.cardMenu}>
-                        <Image source={Inventaris} resizeMode="cover" style={{ width: 70, height: 70, tintColor: COLORS.primary }} />
-                        <Text style={styles.textCardMenu}>Inventaris Toko</Text>
+                        <Image source={Print} resizeMode="cover" style={{ width: 70, height: 70, tintColor: COLORS.primary }} />
+                        <Text style={styles.textCardMenu}>Pengaturan Print</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -71,9 +71,13 @@ const HomePage = ({ navigation }) => {
                         <Image source={Laporan} resizeMode="cover" style={{ width: 70, height: 70, tintColor: COLORS.primary }} />
                         <Text style={styles.textCardMenu}>Laporan</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.cardMenu}>
+                        <Image source={Person} resizeMode="cover" style={{ width: 70, height: 70, borderRadius: 50 }} />
+                        <Text style={styles.textCardMenu}>Profil</Text>
+                    </TouchableOpacity>
                 </View>
 
-                <View style={{ marginBottom: 100 }} />
+                <View style={{ marginBottom: 20 }} />
             </ScrollView>
         </View>
     )

@@ -40,7 +40,9 @@ const Routes = () => {
                 <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} options={{ headerShown: false }} />
                 <Stack.Screen name="LoginPage" component={LoginPage} options={{ headerShown: false }} />
                 <Stack.Screen name="RegisterPage" component={RegisterPage} options={{ headerShown: false }} />
-                <Stack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false }} />
+                <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
+                <Stack.Screen name="ProfilePage" component={ProfilePage} options={{ headerShown: false }} />
+                {/* <Stack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false }} /> */}
                 <Stack.Screen name="TransaksiPage" component={TransaksiPage} options={{ headerShown: false }} />
                 <Stack.Screen name="ProductPage" component={ProductPage} options={{headerShown: false}} />
                 <Stack.Screen name="CreateProductPage" component={CreateProduct} options={{headerShown: false}} />

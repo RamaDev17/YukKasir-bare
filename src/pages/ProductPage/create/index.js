@@ -38,7 +38,7 @@ export const CreateProduct = ({ navigation }) => {
 
     const handleBarCodeScanned = (value) => {
         play()
-        setScanned(true);
+        setOpen(false)
         setId(value.data)
     };
 
@@ -125,14 +125,6 @@ export const CreateProduct = ({ navigation }) => {
                             showMarker={true}
                             containerStyle={{backgroundColor: COLORS.white}}
                         />
-                        {scanned &&
-                            <TouchableOpacity style={styles.buttonAgain} onPress={() => {
-                                setOpen(!open)
-                                setScanned(false)
-                            }}>
-                                <Text style={{ color: COLORS.white }}>Tutup</Text>
-                            </TouchableOpacity>
-                        }
 
                         <TouchableOpacity style={styles.iconClose} onPress={() => setOpen(!open)}>
                             <Image source={Close} resizeMode="cover" style={{ height: 30, width: 30, tintColor: COLORS.white }} />

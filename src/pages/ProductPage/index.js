@@ -138,13 +138,13 @@ const ProductPage = ({ navigation }) => {
                                     <Text style={styles.textOpacity}>Stock: {formatNumber(dataProduct[key].stock)}</Text>
                                     <View style={{ flexDirection: 'row' }}>
                                         <TouchableOpacity onPress={() => { navigation.navigate("UpdateProductPage", dataProduct[key]) }}>
-                                            <Image source={Edit} style={{ width: 30, height: 30, tintColor: COLORS.green, marginRight: 10 }} />
+                                            <Image source={Edit} style={{ width: 25, height: 25, tintColor: COLORS.green, marginRight: 10 }} />
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => { 
                                             setAlertDelete(true)
                                             setId(dataProduct[key].id)
                                         }}>
-                                            <Image source={Delete} style={{ width: 30, height: 30, tintColor: COLORS.red }} />
+                                            <Image source={Delete} style={{ width: 25, height: 25, tintColor: COLORS.red }} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     },
     textItemTitle: {
         color: COLORS.black,
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: '500'
     },
     txt: {
@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
     },
     textOpacity: {
         color: COLORS.black,
-        opacity: 0.5
+        opacity: 0.5,
+        fontSize: 12
     }
 });

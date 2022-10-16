@@ -21,6 +21,7 @@ import Edit from './create.png'
 import Add from './add-circle-sharp.png'
 import Delete from './trash.png'
 import Min from './remove-circle.png'
+import Print from './print.png'
 
 export { 
     Ceklis, 
@@ -45,5 +46,6 @@ export {
     Add,
     Edit,
     Delete,
-    Min
+    Min,
+    Print
 }
