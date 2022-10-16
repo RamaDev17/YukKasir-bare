@@ -1,12 +1,8 @@
-import React from "react";
-import { View, Text } from 'react-native'
+import React from 'react';
+import { View, Text } from 'react-native';
 
 const LaporanPage = () => {
-    return (
-        <View>
+  return <View></View>;
+};
 
-        </View>
-    )
-}
-
-export default LaporanPage
+export default LaporanPage;

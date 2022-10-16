@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLORS } from '../../constants';
 
-const ProfilePage = () => {
+const SettingPrintPage = () => {
   return (
     <View style={styles.container}>
-      <Text>ProfilePage</Text>
+      <Text>SettingPrintPage</Text>
     </View>
   );
 };
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfilePage;
+export default SettingPrintPage;

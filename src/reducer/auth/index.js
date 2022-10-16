@@ -1,4 +1,3 @@
-
 import { REGISTER_USER, LOGIN_USER } from '../../actions/authActions';
 
 const initialState = {

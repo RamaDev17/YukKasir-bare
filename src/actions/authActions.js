@@ -7,7 +7,7 @@ import { appFirebase } from '../config/firebase';
 export const REGISTER_USER = 'REGISTER_USER';
 export const LOGIN_USER = 'LOGIN_USER';
 
-appFirebase
+appFirebase;
 
 export const registerUser = (data, password) => {
   return (dispatch) => {
@@ -51,14 +51,13 @@ export const loginUser = (email, password) => {
 
     // write realtime database
 
-
     if ((email, password)) {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
         .then((success) => {
-          const Patch = `users/${success.user.uid}`
-          const db = getDatabase()
-          const starCountRef = ref(db, Patch)
+          const Patch = `users/${success.user.uid}`;
+          const db = getDatabase();
+          const starCountRef = ref(db, Patch);
 
           onValue(starCountRef, (resDB) => {
             if (resDB.val()) {
@@ -73,7 +72,7 @@ export const loginUser = (email, password) => {
               });
 
               //asyn storage
-              storeData('user' ,resDB.val());
+              storeData('user', resDB.val());
             } else {
               dispatch({
                 type: LOGIN_USER,
@@ -85,7 +84,7 @@ export const loginUser = (email, password) => {
               });
               alert('Data User Tidak Ada');
             }
-          })
+          });
         })
         .catch((error) => {
           dispatch({

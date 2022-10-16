@@ -1,15 +1,13 @@
-
-import { CREATE_PRODUCT, GET_PRODUCT } from "../../actions/productActions";
+import { CREATE_PRODUCT, GET_PRODUCT } from '../../actions/productActions';
 
 const initialState = {
   createProductLoading: false,
   createProductResult: false,
   createProductError: false,
-  
+
   getProductLoading: false,
   getProductResult: false,
   getProductError: false,
-
 };
 
 export default function (state = initialState, action) {

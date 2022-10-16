@@ -16,8 +16,8 @@ const BottomBar = ({ state, descriptors, navigation }) => {
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-              ? options.title
-              : route.name;
+            ? options.title
+            : route.name;
 
         const isFocused = state.index === index;
 
@@ -58,7 +58,7 @@ export default BottomBar;
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     right: 0,
     left: 0,
