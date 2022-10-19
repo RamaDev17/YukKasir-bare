@@ -29,6 +29,8 @@ import { DeviceType } from '../../components/FindPrinter';
 // import QRCode from 'react-native-qrcode-svg';
 import { useRef } from 'react';
 import { Buffer } from 'buffer';
+import { Header } from '../../components/Header';
+import { COLORS } from '../../constants';
 
 const printerList: Record<string, any> = {
   ble: BLEPrinter,
@@ -333,6 +335,7 @@ export const PrintPage = ({ route, navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <Header navigation={navigation} name="Setting Printer" />
       {/* Printers option */}
       <View style={styles.section}>
         <Text style={styles.title}>Select printer type: </Text>
@@ -370,7 +373,7 @@ export const PrintPage = ({ route, navigation }: any) => {
         {/* Button Print sample */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: 'blue' }]}
+            style={[styles.button, { backgroundColor: COLORS.green, marginTop: 20 }]}
             onPress={handlePrint}
           >
             {/* <AntIcon name={'printer'} color={'white'} size={18} /> */}
@@ -406,7 +409,10 @@ export const PrintPage = ({ route, navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    // padding: 16,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
   section: {},
   rowDirection: {
@@ -417,13 +423,13 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    height: 40,
+    padding: 17,
     width: deviceWidth / 1.5,
     alignSelf: 'center',
-    backgroundColor: 'green',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5,
+    borderRadius: 50,
   },
   text: {
     color: 'white',
