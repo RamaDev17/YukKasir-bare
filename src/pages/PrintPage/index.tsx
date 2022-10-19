@@ -28,9 +28,10 @@ import { DeviceType } from '../../components/FindPrinter';
 // import AntIcon from 'react-native-vector-icons/AntDesign';
 // import QRCode from 'react-native-qrcode-svg';
 import { useRef } from 'react';
-import { Buffer } from 'buffer';
 import { Header } from '../../components/Header';
 import { COLORS } from '../../constants';
+import { printerStatus } from '../../actions/printerAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 const printerList: Record<string, any> = {
   ble: BLEPrinter,
@@ -54,6 +55,9 @@ const deviceWidth = Dimensions.get('window').width;
 const EscPosEncoder = require('esc-pos-encoder');
 
 export const PrintPage = ({ route, navigation }: any) => {
+  // redux
+  const dispatch = useDispatch();
+
   const [selectedValue, setSelectedValue] = React.useState<keyof typeof printerList>(
     DevicesEnum.net
   );
@@ -126,6 +130,7 @@ export const PrintPage = ({ route, navigation }: any) => {
           case 'ble':
             if (selectedPrinter?.inner_mac_address) {
               await BLEPrinter.connectPrinter(selectedPrinter?.inner_mac_address || '');
+              dispatch(printerStatus());
             }
             break;
           case 'net':
