@@ -109,7 +109,12 @@ const HomePage = ({ navigation }) => {
             />
             <Text style={styles.textCardMenu}>Riwayat Transaksi</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardMenu}>
+          <TouchableOpacity
+            style={styles.cardMenu}
+            onPress={() => {
+              navigation.navigate('PrintPage');
+            }}
+          >
             <Image
               source={Print}
               resizeMode="cover"

@@ -9,7 +9,7 @@ import LaporanPage from './LaporanPage';
 import ProductPage from './ProductPage';
 import { CreateProduct } from './ProductPage/create';
 import { UpdateProduct } from './ProductPage/update';
-import SettingPrintPage from './SettingPrintPage';
+import { PrintPage } from './PrintPage';
 
 export {
   SplashPage,
@@ -23,5 +23,5 @@ export {
   ProductPage,
   CreateProduct,
   UpdateProduct,
-  SettingPrintPage,
+  PrintPage,
 };

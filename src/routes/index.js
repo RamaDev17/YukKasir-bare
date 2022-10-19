@@ -13,6 +13,7 @@ import {
   ProductPage,
   CreateProduct,
   UpdateProduct,
+  PrintPage,
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomBar from '../components/BottomBar';
@@ -75,6 +76,7 @@ const Routes = () => {
           component={UpdateProduct}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="PrintPage" component={PrintPage} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
