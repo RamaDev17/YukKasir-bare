@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../actions/productActions';
 import { uppercaseWord } from '../../utils/uppercaseWord';
 import { formatNumber } from '../../utils/formatNumber';
+import CurrencyInput from 'react-native-currency-input';
 
 let total = 0;
 
@@ -41,6 +42,9 @@ const TransaksiPage = ({ navigation }) => {
 
   const soundScanner = 'soundbarcode.mp3';
   const [play, pause, stop, data] = useSound(soundScanner, { volume: 3 });
+  const [modalVisible, setModalVisible] = useState(false);
+  const [tunai, setTunai] = useState(0);
+  const [kembalian, setKembalian] = useState(0);
 
   const onChangeText = (value) => {
     setLoading(true);
@@ -117,6 +121,10 @@ const TransaksiPage = ({ navigation }) => {
       setDataAsync(!dataAsync);
     }
   };
+
+  useEffect(() => {
+    setKembalian(tunai - amount);
+  }, [tunai]);
 
   return (
     <View style={{ width, height }}>
@@ -249,7 +257,7 @@ const TransaksiPage = ({ navigation }) => {
                         style={{ width: 22, height: 22, tintColor: COLORS.red }}
                       />
                     </TouchableOpacity>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <TouchableOpacity
                         onPress={() => {
                           onDecrement(value);
@@ -257,10 +265,10 @@ const TransaksiPage = ({ navigation }) => {
                       >
                         <Image
                           source={Min}
-                          style={{ width: 22, height: 22, tintColor: COLORS.primary }}
+                          style={{ width: 25, height: 25, tintColor: COLORS.primary }}
                         />
                       </TouchableOpacity>
-                      <Text> {value.count} </Text>
+                      <Text style={{ fontSize: 16 }}> {value.count} </Text>
                       <TouchableOpacity
                         onPress={() => {
                           onIncrement(value);
@@ -268,7 +276,7 @@ const TransaksiPage = ({ navigation }) => {
                       >
                         <Image
                           source={Add}
-                          style={{ width: 22, height: 22, tintColor: COLORS.primary }}
+                          style={{ width: 25, height: 25, tintColor: COLORS.primary }}
                         />
                       </TouchableOpacity>
                     </View>
@@ -287,10 +295,79 @@ const TransaksiPage = ({ navigation }) => {
         </Text>
         <TouchableOpacity
           style={{ padding: 10, backgroundColor: COLORS.primary, borderRadius: 10 }}
+          onPress={() => {
+            if (amount != 0) {
+              setModalVisible(!modalVisible);
+            }
+          }}
         >
           <Text style={{ fontSize: 16, color: COLORS.white }}>Bayar</Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: 'bold' }}>
+              Total Belanja Rp. {formatNumber(amount)}
+            </Text>
+            <View style={{ marginTop: 20 }} />
+            <View style={{ width: '100%' }}>
+              <CurrencyInput
+                value={tunai}
+                onChangeValue={(value) => {
+                  setTunai(value);
+                }}
+                prefix="Rp. "
+                delimiter="."
+                precision={0}
+                onChangeText={(formattedValue) => {}}
+                placeholder="Uang Tunai"
+                style={{
+                  borderWidth: 0.5,
+                  paddingHorizontal: 20,
+                  marginBottom: 20,
+                  borderRadius: 10,
+                  borderColor: COLORS.primary,
+                }}
+              />
+              <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: 'bold' }}>
+                Kembalian Rp. {formatNumber(kembalian)}
+              </Text>
+              <View style={{ marginTop: 20 }} />
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '80%' }}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Batal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => {
+                  if (tunai != 0) {
+                    navigation.navigate('FinalTransaksiPage', {
+                      dataAdd: [...dataAdd],
+                      amount,
+                      tunai,
+                      kembalian,
+                    });
+                  }
+                }}
+              >
+                <Text style={styles.textStyle}>Bayar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -406,7 +483,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     backgroundColor: COLORS.white,
     position: 'absolute',
-    bottom: 0,
+    bottom: 10,
     right: 0,
     left: 0,
     flexDirection: 'row',
@@ -414,5 +491,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderTopWidth: 0.3,
     borderTopColor: COLORS.primary,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '80%',
+  },
+  button: {
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: COLORS.primary,
+  },
+  buttonClose: {
+    backgroundColor: COLORS.red,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });

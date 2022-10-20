@@ -130,7 +130,7 @@ export const PrintPage = ({ route, navigation }: any) => {
           case 'ble':
             if (selectedPrinter?.inner_mac_address) {
               await BLEPrinter.connectPrinter(selectedPrinter?.inner_mac_address || '');
-              dispatch(printerStatus());
+              dispatch(printerStatus(selectedPrinter));
             }
             break;
           case 'net':
@@ -148,6 +148,7 @@ export const PrintPage = ({ route, navigation }: any) => {
               Alert.alert('Connect successfully!', `Connected to ${status.host ?? 'Printers'} !`);
               // setConnected(true);
             } catch (err) {
+              dispatch(printerStatus());
               Alert.alert('Connect failed!', `${err} !`);
             }
             break;
@@ -162,7 +163,8 @@ export const PrintPage = ({ route, navigation }: any) => {
           default:
         }
       } catch (err) {
-        console.warn(err);
+        console.log(err);
+        dispatch(printerStatus());
       } finally {
         setLoading(false);
       }

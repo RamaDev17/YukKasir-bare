@@ -10,6 +10,7 @@ import ProductPage from './ProductPage';
 import { CreateProduct } from './ProductPage/create';
 import { UpdateProduct } from './ProductPage/update';
 import { PrintPage } from './PrintPage';
+import FinalTransaksiPage from './FinalTransaksiPage';
 
 export {
   SplashPage,
@@ -24,4 +25,5 @@ export {
   CreateProduct,
   UpdateProduct,
   PrintPage,
+  FinalTransaksiPage,
 };

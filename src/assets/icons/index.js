@@ -22,6 +22,7 @@ import Add from './add-circle-sharp.png';
 import Delete from './trash.png';
 import Min from './remove-circle.png';
 import Print from './print.png';
+import Setting from './settings_FILL0_wght400_GRAD0_opsz48.png';
 
 export {
   Ceklis,
@@ -48,4 +49,5 @@ export {
   Delete,
   Min,
   Print,
+  Setting,
 };
