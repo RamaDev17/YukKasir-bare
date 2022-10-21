@@ -16,6 +16,7 @@ export const createProduct = (datas) => {
   return (dispatch) => {
     // loading
     dispatchLoading(dispatch, CREATE_PRODUCT);
+    console.log(datas);
 
     if (datas) {
       const newData = {

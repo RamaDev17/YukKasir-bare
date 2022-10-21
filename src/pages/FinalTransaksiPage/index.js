@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import { COLORS } from '../../constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Header } from '../../components/Header';
 import { formatNumber } from '../../utils/formatNumber';
 import { Print, Setting } from '../../assets/icons';
 import { getData } from '../../utils/localStorage';
 import { BLEPrinter, COMMANDS, ColumnAliment } from 'react-native-thermal-receipt-printer-image-qr';
 import { bulan, detik, hari, jam, menit, tahun, tanggal } from '../../utils/date';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { createReport } from '../../actions/reportActions';
+import { createProduct } from '../../actions/productActions';
 
 const FinalTransaksiPage = ({ navigation, route }) => {
   let dataTransaksi = route.params.dataAdd;
@@ -16,55 +28,76 @@ const FinalTransaksiPage = ({ navigation, route }) => {
   let kembalian = route.params.kembalian;
 
   const [user, setUser] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getPrinter = useSelector((state) => state.PrinterReducer.printerResult.data);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getData('user').then((res) => setUser(res));
   }, []);
 
   const handlePrinter = async () => {
-    if (getPrinter.printerType == 'ble') {
-      const BOLD_ON = COMMANDS.TEXT_FORMAT.TXT_BOLD_ON;
-      const BOLD_OFF = COMMANDS.TEXT_FORMAT.TXT_BOLD_OFF;
-      const CENTER = COMMANDS.TEXT_FORMAT.TXT_ALIGN_CT;
-      const OFF_CENTER = COMMANDS.TEXT_FORMAT.TXT_ALIGN_LT;
-      try {
-        const Printer = BLEPrinter;
-        Printer.printText('\n');
-        Printer.printText(`<CB> Toko Ibnu Ali </CB>\n`);
-        Printer.printText(`<C>Sembungsemi, Blambangan</C>`);
-        Printer.printText(`<C>Admin: ${user.username}</C>`);
-        Printer.printText(`<C>${hari}, ${tanggal} ${bulan} ${tahun}</C>`);
-        Printer.printText(`<C>${jam}:${menit}</C>`);
-        Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
-        let columnAliment = [ColumnAliment.LEFT, ColumnAliment.CENTER, ColumnAliment.RIGHT];
-        let columnWidth = [30 - (7 + 1), 1, 7];
-        Object.keys(dataTransaksi).map((key) => {
-          Printer.printText(dataTransaksi[key].nameProduct);
-          const orderList = [
-            `${dataTransaksi[key].count} x ${formatNumber(dataTransaksi[key].price)}`,
-            '',
-            formatNumber(dataTransaksi[key].total),
-          ];
-          Printer.printColumnsText(orderList, columnWidth, columnAliment, ['', '', '']);
-        });
-        Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
-        const totalHarga = ['Total Rp.', '', formatNumber(Amount)];
-        Printer.printColumnsText(totalHarga, columnWidth, columnAliment, ['', '', '']);
-        const bayar = ['Bayar Rp.', '', formatNumber(tunai)];
-        Printer.printColumnsText(bayar, columnWidth, columnAliment, ['', '', '']);
-        const kembali = ['Kembali Rp.', '', formatNumber(kembalian)];
-        Printer.printColumnsText(kembali, columnWidth, columnAliment, ['', '', '']);
-        Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
-        Printer.printText(`<C>Terima Kasih</C>`);
-        Printer.printText('\n');
-      } catch (err) {
-        console.warn(err);
-      }
-    } else {
-      Alert.alert('Periksa koneksi Printer');
+    try {
+      const Printer = BLEPrinter;
+      Printer.printText('\n');
+      Printer.printText(`<CB> Toko Ibnu Ali </CB>\n`);
+      Printer.printText(`<C>Sembungsemi, Blambangan</C>`);
+      Printer.printText(`<C>Admin: ${user.username}</C>`);
+      Printer.printText(`<C>${hari}, ${tanggal} ${bulan} ${tahun}</C>`);
+      Printer.printText(`<C>${jam}:${menit}</C>`);
+      Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
+      let columnAliment = [ColumnAliment.LEFT, ColumnAliment.CENTER, ColumnAliment.RIGHT];
+      let columnWidth = [30 - (7 + 1), 1, 7];
+      Object.keys(dataTransaksi).map((key) => {
+        Printer.printText(dataTransaksi[key].nameProduct);
+        const orderList = [
+          `${dataTransaksi[key].count} x ${formatNumber(dataTransaksi[key].price)}`,
+          '',
+          formatNumber(dataTransaksi[key].total),
+        ];
+        Printer.printColumnsText(orderList, columnWidth, columnAliment, ['', '', '']);
+      });
+      Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
+      const totalHarga = ['Total Rp.', '', formatNumber(Amount)];
+      Printer.printColumnsText(totalHarga, columnWidth, columnAliment, ['', '', '']);
+      const bayar = ['Bayar Rp.', '', formatNumber(tunai)];
+      Printer.printColumnsText(bayar, columnWidth, columnAliment, ['', '', '']);
+      const kembali = ['Kembali Rp.', '', formatNumber(kembalian)];
+      Printer.printColumnsText(kembali, columnWidth, columnAliment, ['', '', '']);
+      Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
+      Printer.printText(`<C>Terima Kasih</C>`);
+      Printer.printText('\n');
+    } catch (err) {
+      console.warn(err);
     }
+    let updateStock;
+    Object.keys(dataTransaksi).map((key) => {
+      const data = dataTransaksi[key];
+      updateStock = {
+        id: data.id,
+        nameProduct: data.nameProduct,
+        price: data.price,
+        stock: data.stock - data.count,
+        category: data.category,
+      };
+      dispatch(createProduct(updateStock));
+    });
+    const newData = {
+      idTransaksi: jam + menit + detik,
+      admin: user.username,
+      date: [hari, bulan, tahun, `${jam}:${menit}`],
+      product: dataTransaksi,
+      total: Amount,
+      bayar: tunai,
+      kembalian,
+    };
+    setLoading(!loading);
+    dispatch(createReport(newData));
+    setTimeout(() => {
+      navigation.replace('HomePage');
+    }, 6000);
   };
 
   return (
@@ -141,12 +174,39 @@ const FinalTransaksiPage = ({ navigation, route }) => {
         <TouchableOpacity
           style={[styles.buttonCetak]}
           onPress={() => {
-            handlePrinter();
+            if (getPrinter) {
+              handlePrinter();
+            } else {
+              setShowAlert(!showAlert);
+            }
           }}
         >
-          <Text style={styles.textButton}>Cetak</Text>
+          {loading ? (
+            <ActivityIndicator size={'large'} color={COLORS.white} />
+          ) : (
+            <Text style={styles.textButton}>Cetak</Text>
+          )}
         </TouchableOpacity>
       </View>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Print Error"
+        message="Cek Koneksi Printer"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="Pengaturan"
+        confirmButtonColor={COLORS.primary}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+          navigation.navigate('PrintPage');
+        }}
+        titleStyle={{ fontSize: 26, fontWeight: 'bold', color: COLORS.red }}
+        confirmButtonTextStyle={{ fontSize: 20 }}
+        messageStyle={{ fontSize: 20, color: COLORS.black }}
+        overlayStyle={{ padding: 30 }}
+      />
     </View>
   );
 };
@@ -193,7 +253,7 @@ const styles = StyleSheet.create({
   buttonCetak: {
     alignItems: 'center',
     paddingHorizontal: 50,
-    paddingVertical: 10,
+    paddingVertical: 20,
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     borderRadius: 30,

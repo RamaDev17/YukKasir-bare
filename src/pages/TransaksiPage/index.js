@@ -92,6 +92,8 @@ const TransaksiPage = ({ navigation }) => {
       count: 1,
       price: data.price,
       total: parseInt(data.price) * count,
+      stock: data.stock,
+      category: data.category,
     };
     setDataAdd((value) => [newData, ...value]);
     setSearchQuery('');
@@ -335,6 +337,7 @@ const TransaksiPage = ({ navigation }) => {
                   marginBottom: 20,
                   borderRadius: 10,
                   borderColor: COLORS.primary,
+                  paddingVertical: 20,
                 }}
               />
               <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: 'bold' }}>
@@ -352,6 +355,7 @@ const TransaksiPage = ({ navigation }) => {
               <TouchableOpacity
                 style={[styles.button, styles.buttonOpen]}
                 onPress={() => {
+                  setModalVisible(!modalVisible);
                   if (tunai != 0) {
                     navigation.navigate('FinalTransaksiPage', {
                       dataAdd: [...dataAdd],
