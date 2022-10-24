@@ -22,6 +22,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import useSound from 'react-native-use-sound';
+import CurrencyInput from 'react-native-currency-input';
 
 export const UpdateProduct = ({ navigation, route }) => {
   const editData = route.params;
@@ -219,37 +220,31 @@ export const UpdateProduct = ({ navigation, route }) => {
           style={styles.input}
         />
         <View style={{ marginTop: 20 }} />
-        <TextInput
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Harga barang :</Text>
+        <View style={{ marginBottom: 10 }} />
+        <CurrencyInput
           value={price}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          placeholderStyle={styles.placeholderStyle}
-          textErrorStyle={styles.textErrorStyle}
-          label="Price"
+          onChangeValue={(value) => setPrice(value)}
+          style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
           placeholder="Price"
-          placeholderTextColor="gray"
-          focusColor={COLORS.primary}
-          onChangeText={(value) => {
-            setPrice(value);
-          }}
+          prefix="Rp. "
+          delimiter="."
+          precision={0}
+          onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
         <View style={{ marginTop: 20 }} />
-        <TextInput
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Stok barang :</Text>
+        <View style={{ marginBottom: 10 }} />
+        <CurrencyInput
           value={stock}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          placeholderStyle={styles.placeholderStyle}
-          textErrorStyle={styles.textErrorStyle}
-          label="Stock"
+          onChangeValue={(value) => setStock(value)}
+          style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
           placeholder="Stock"
-          placeholderTextColor="gray"
-          focusColor={COLORS.primary}
-          onChangeText={(value) => {
-            setStock(value);
-          }}
+          prefix=" "
+          delimiter="."
+          precision={0}
+          onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
       </View>
