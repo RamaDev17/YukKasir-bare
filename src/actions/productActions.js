@@ -1,6 +1,5 @@
-import React from 'react';
 import { dispatchError, dispatchLoading, dispatchSuccess } from '../utils/dispatch';
-import { storeData } from '../utils/localStorage';
+import { mergeData, storeData } from '../utils/localStorage';
 import { getDatabase, onValue, orderByChild, orderByValue, ref, set } from 'firebase/database';
 import { appFirebase } from '../config/firebase';
 import database from '@react-native-firebase/database';
@@ -16,14 +15,14 @@ export const createProduct = (datas) => {
   return (dispatch) => {
     // loading
     dispatchLoading(dispatch, CREATE_PRODUCT);
-    console.log(datas);
 
     if (datas) {
       const newData = {
         id: datas.id.toLowerCase(),
         nameProduct: datas.nameProduct.toLowerCase(),
         category: datas.category.toLowerCase(),
-        price: datas.price,
+        purchase: datas.purchase,
+        selling: datas.selling,
         stock: datas.stock,
       };
 

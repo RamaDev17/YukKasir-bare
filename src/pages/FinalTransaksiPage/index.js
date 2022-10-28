@@ -16,16 +16,21 @@ import { formatNumber } from '../../utils/formatNumber';
 import { Print, Setting } from '../../assets/icons';
 import { getData } from '../../utils/localStorage';
 import { BLEPrinter, COMMANDS, ColumnAliment } from 'react-native-thermal-receipt-printer-image-qr';
-import { bulan, detik, hari, jam, menit, tahun, tanggal } from '../../utils/date';
+import { bulan, hari, tahun, tanggal } from '../../utils/date';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { createReport } from '../../actions/reportActions';
 import { createProduct } from '../../actions/productActions';
+
+let jumlahProfit = 0;
 
 const FinalTransaksiPage = ({ navigation, route }) => {
   let dataTransaksi = route.params.dataAdd;
   let Amount = route.params.amount;
   let tunai = route.params.tunai;
   let kembalian = route.params.kembalian;
+  let date = new Date();
+  let jam = date.getHours();
+  let menit = date.getMinutes();
 
   const [user, setUser] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -36,6 +41,9 @@ const FinalTransaksiPage = ({ navigation, route }) => {
 
   useEffect(() => {
     getData('user').then((res) => setUser(res));
+    Object.keys(dataTransaksi).map((key) => {
+      jumlahProfit = jumlahProfit + dataTransaksi[key].profit;
+    });
   }, []);
 
   const handlePrinter = async () => {
@@ -53,7 +61,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
       Object.keys(dataTransaksi).map((key) => {
         Printer.printText(dataTransaksi[key].nameProduct);
         const orderList = [
-          `${dataTransaksi[key].count} x ${formatNumber(dataTransaksi[key].price)}`,
+          `${dataTransaksi[key].count} x ${formatNumber(dataTransaksi[key].selling)}`,
           '',
           formatNumber(dataTransaksi[key].total),
         ];
@@ -78,20 +86,22 @@ const FinalTransaksiPage = ({ navigation, route }) => {
       updateStock = {
         id: data.id,
         nameProduct: data.nameProduct,
-        price: data.price,
+        purchase: data.purchase,
+        selling: data.selling,
         stock: data.stock - data.count,
         category: data.category,
       };
       dispatch(createProduct(updateStock));
     });
     const newData = {
-      idTransaksi: jam + menit + detik,
+      idTransaksi: date.getTime(),
       admin: user.username,
       date: [hari, bulan, tahun, `${jam}:${menit}`],
       product: dataTransaksi,
       total: Amount,
       bayar: tunai,
       kembalian,
+      jumlahProfit
     };
     setLoading(!loading);
     dispatch(createReport(newData));
@@ -144,7 +154,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
               <StrukProduct
                 name={dataTransaksi[key].nameProduct}
                 count={dataTransaksi[key].count}
-                price={dataTransaksi[key].price}
+                selling={dataTransaksi[key].selling}
                 key={key}
               />
             );
@@ -211,15 +221,15 @@ const FinalTransaksiPage = ({ navigation, route }) => {
   );
 };
 
-const StrukProduct = ({ name, count, price }) => {
+const StrukProduct = ({ name, count, selling }) => {
   return (
     <View style={{ marginTop: 5 }}>
       <Text>{name}</Text>
       <View style={styles.row}>
         <Text>
-          {formatNumber(count)} x {formatNumber(price)}
+          {formatNumber(count)} x {formatNumber(selling)}
         </Text>
-        <Text>{formatNumber(count * parseInt(price))}</Text>
+        <Text>{formatNumber(count * parseInt(selling))}</Text>
       </View>
     </View>
   );

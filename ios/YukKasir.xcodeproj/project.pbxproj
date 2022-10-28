@@ -38,9 +38,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = YukKasir/main.m; sourceTree = "<group>"; };
 		16032D6DBCB84055B00B1A9A /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../src/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		17C6F78810304D848FC43289 /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../src/assets/fonts/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
-		211470C028F8CA5F005F71F7 /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = soundbarcode.mp3; path = ../../../../../Desktop/soundbarcode.mp3; sourceTree = "<group>"; };
-		21AFA3CC28EFC2B400FFA9E0 /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soundbarcode.mp3; sourceTree = "<group>"; };
 		21B779C728F3A94F00766ADB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		21F086842908E877003AAECB /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soundbarcode.mp3; sourceTree = "<group>"; };
 		2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = soundbarcode.mp3; path = ../src/assets/sound/soundbarcode.mp3; sourceTree = "<group>"; };
 		3C7D288ECFB44444861137F2 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		403BA6BC433D51BA7EB20650 /* Pods-YukKasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YukKasir.release.xcconfig"; path = "Target Support Files/Pods-YukKasir/Pods-YukKasir.release.xcconfig"; sourceTree = "<group>"; };
@@ -144,7 +143,6 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				21AFA3CC28EFC2B400FFA9E0 /* soundbarcode.mp3 */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 			);
 			name = Frameworks;
@@ -190,7 +188,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				211470C028F8CA5F005F71F7 /* soundbarcode.mp3 */,
+				21F086842908E877003AAECB /* soundbarcode.mp3 */,
 				13B07FAE1A68108700A75B9A /* YukKasir */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* YukKasirTests */,
@@ -261,9 +259,9 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				21B779C828F3A9C400766ADB /* Setup Firebase Environment GoogleService-Info.plist */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				4E5EB9C96EB141F5D206A677 /* [CP] Embed Pods Frameworks */,
 				B1F75B71C1A272C70CBBF31F /* [CP] Copy Pods Resources */,
 				F3D56A74A4ED4918E82DC344 /* [CP-User] [RNFB] Core Configuration */,
+				A2714B8E4D357B756D25EFB3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -355,7 +353,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/Dev/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release\" ]\nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
 		};
-		4E5EB9C96EB141F5D206A677 /* [CP] Embed Pods Frameworks */ = {
+		A2714B8E4D357B756D25EFB3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -558,6 +556,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P37QZP5SM4;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = YukKasir/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

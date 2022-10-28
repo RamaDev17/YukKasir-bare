@@ -83,6 +83,7 @@ const ProductPage = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const GetProductReducer = useSelector((state) => state.ProductReducer.getProductResult);
+  console.log(GetProductReducer);
 
   // get data product
   useEffect(() => {
@@ -159,7 +160,7 @@ const ProductPage = ({ navigation }) => {
                 </View>
                 <View>
                   <Text style={styles.textItemTitle}>
-                    Rp. {formatNumber(dataProduct[key].price)}
+                    Rp. {formatNumber(dataProduct[key].selling)}
                   </Text>
                 </View>
               </View>

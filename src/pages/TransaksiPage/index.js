@@ -3,7 +3,6 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Linking,
   Text,
   Dimensions,
   Image,
@@ -86,14 +85,18 @@ const TransaksiPage = ({ navigation }) => {
   }, [LoadingProductReducer]);
 
   const onAddHandle = (data, count) => {
+    const sellingTotal = parseInt(data.selling) * count;
+    const purchaseTotal = parseInt(data.purchase) * count;
     const newData = {
       id: data.id,
       nameProduct: data.nameProduct,
       count: 1,
-      price: data.price,
-      total: parseInt(data.price) * count,
+      purchase: data.purchase,
+      selling: data.selling,
+      total: sellingTotal,
       stock: data.stock,
       category: data.category,
+      profit: sellingTotal - purchaseTotal,
     };
     setDataAdd((value) => [newData, ...value]);
     setSearchQuery('');
@@ -105,19 +108,27 @@ const TransaksiPage = ({ navigation }) => {
   }, [dataAsync]);
 
   const onIncrement = (value) => {
+    const sellingTotal = parseInt(value.count + 1) * parseInt(value.selling);
+    const firstProfit = value.selling - value.purchase;
+    const profitTotal = parseInt(value.count + 1) * parseInt(firstProfit);
     const newDataCount = {
       count: value.count + 1,
-      total: parseInt(value.count + 1) * parseInt(value.price),
+      total: sellingTotal,
+      profit: profitTotal,
     };
     Object.assign(value, newDataCount);
     setDataAsync(!dataAsync);
   };
 
   const onDecrement = (value) => {
+    const sellingTotal = parseInt(value.count - 1) * parseInt(value.selling);
+    const firstProfit = value.selling - value.purchase;
+    const profitTotal = parseInt(value.count - 1) * parseInt(firstProfit);
     if (value.count != 1) {
       const newDataCount = {
         count: value.count - 1,
-        total: parseInt(value.count - 1) * parseInt(value.price),
+        total: sellingTotal,
+        profit: profitTotal,
       };
       Object.assign(value, newDataCount);
       setDataAsync(!dataAsync);
@@ -211,7 +222,7 @@ const TransaksiPage = ({ navigation }) => {
                 </View>
                 <View style={{ justifyContent: 'space-between' }}>
                   <Text style={styles.textTitleCard}>
-                    Rp. {formatNumber(productSearch[key].price)}
+                    Rp. {formatNumber(productSearch[key].selling)}
                   </Text>
                   <TouchableOpacity
                     style={styles.buttonCard}

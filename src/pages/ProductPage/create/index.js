@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { TextInput } from 'react-native-element-textinput';
 import { Barcode, Close, FlashOff, FlashOn } from '../../../assets/icons';
@@ -22,12 +23,14 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import useSound from 'react-native-use-sound';
+import CurrencyInput from 'react-native-currency-input';
 
 export const CreateProduct = ({ navigation }) => {
   const [id, setId] = useState('');
   const [nameProduct, setNameProduct] = useState('');
   const [category, setCategory] = useState('');
-  const [price, setPrice] = useState(0);
+  const [purchase, setPurchase] = useState(0);
+  const [selling, setSelling] = useState(0);
   const [stock, setStock] = useState(0);
 
   const [openInput, setOpenInput] = useState(false);
@@ -60,12 +63,13 @@ export const CreateProduct = ({ navigation }) => {
   const CreateProductReducer = useSelector((state) => state.ProductReducer.createProductResult);
 
   const onSubmit = () => {
-    if (id && nameProduct && category && price && stock) {
+    if (id && nameProduct && category && purchase && stock && selling) {
       const newData = {
         id,
         nameProduct,
         category,
-        price,
+        purchase,
+        selling,
         stock,
       };
       dispatch(createProduct(newData));
@@ -155,9 +159,15 @@ export const CreateProduct = ({ navigation }) => {
         <View />
       )}
       {/* end modal camera */}
-      <View>
+
+      <ScrollView style={{ marginTop: 80, width: '100%' }} showsVerticalScrollIndicator={false}>
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{
+            flexDirection: 'row',
+            paddingTop: 10,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
         >
           <TextInput
             value={id}
@@ -178,6 +188,7 @@ export const CreateProduct = ({ navigation }) => {
             <Image source={Barcode} style={{ width: 40, height: 40, tintColor: COLORS.primary }} />
           </TouchableOpacity>
         </View>
+
         <View style={{ marginTop: 20 }} />
         <TextInput
           value={nameProduct}
@@ -194,6 +205,7 @@ export const CreateProduct = ({ navigation }) => {
             setNameProduct(value);
           }}
         />
+
         <View style={{ marginTop: 20 }} />
         <DropDownPicker
           open={openInput}
@@ -204,43 +216,53 @@ export const CreateProduct = ({ navigation }) => {
           setItems={setItems}
           placeholder="Katagori"
           style={styles.input}
+          listMode="SCROLLVIEW"
         />
+
         <View style={{ marginTop: 20 }} />
-        <TextInput
-          value={price}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          placeholderStyle={styles.placeholderStyle}
-          textErrorStyle={styles.textErrorStyle}
-          label="Price"
-          placeholder="Price"
-          placeholderTextColor="gray"
-          focusColor={COLORS.primary}
-          onChangeText={(value) => {
-            setPrice(value);
-          }}
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Harga beli :</Text>
+        <View style={{ marginBottom: 10 }} />
+        <CurrencyInput
+          value={purchase}
+          onChangeValue={(value) => setPurchase(value)}
+          style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
+          placeholder="purchase"
+          prefix="Rp. "
+          delimiter="."
+          precision={0}
+          onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
+
         <View style={{ marginTop: 20 }} />
-        <TextInput
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Harga jual :</Text>
+        <View style={{ marginBottom: 10 }} />
+        <CurrencyInput
+          value={selling}
+          onChangeValue={(value) => setSelling(value)}
+          style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
+          placeholder="Harga jual"
+          prefix="Rp. "
+          delimiter="."
+          precision={0}
+          onChangeText={(formattedValue) => {}}
+          keyboardType="numeric"
+        />
+
+        <View style={{ marginTop: 20 }} />
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Stock barang :</Text>
+        <View style={{ marginBottom: 10 }} />
+        <CurrencyInput
           value={stock}
-          style={styles.input}
-          inputStyle={styles.inputStyle}
-          labelStyle={styles.labelStyle}
-          placeholderStyle={styles.placeholderStyle}
-          textErrorStyle={styles.textErrorStyle}
-          label="Stock"
+          onChangeValue={(value) => setStock(value)}
+          style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
           placeholder="Stock"
-          placeholderTextColor="gray"
-          focusColor={COLORS.primary}
-          onChangeText={(value) => {
-            setStock(value);
-          }}
+          precision={0}
+          onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
-      </View>
-      <View style={{ marginTop: 40 }} />
+      </ScrollView>
+      <View style={{ marginTop: 10 }} />
       <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
         {loading ? (
           <ActivityIndicator color={COLORS.white} />
@@ -287,6 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10,
   },
   textButton: {
     color: COLORS.white,

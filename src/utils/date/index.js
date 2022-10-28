@@ -3,9 +3,6 @@ let tahun = date.getFullYear();
 let bulan = date.getMonth();
 let tanggal = date.getDate();
 let hari = date.getDay();
-let jam = date.getHours();
-let menit = date.getMinutes();
-let detik = date.getSeconds();
 
 switch (hari) {
   case 0:
@@ -69,4 +66,4 @@ switch (bulan) {
     break;
 }
 
-export { date, tahun, bulan, tanggal, hari, jam, menit, detik };
+export { date, tahun, bulan, tanggal, hari };

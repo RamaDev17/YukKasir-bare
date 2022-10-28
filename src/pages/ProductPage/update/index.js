@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { TextInput } from 'react-native-element-textinput';
 import { Barcode, Close, FlashOff, FlashOn } from '../../../assets/icons';
@@ -30,7 +31,8 @@ export const UpdateProduct = ({ navigation, route }) => {
   const [id, setId] = useState(editData.id);
   const [nameProduct, setNameProduct] = useState(editData.nameProduct);
   const [category, setCategory] = useState(editData.category);
-  const [price, setPrice] = useState(editData.price);
+  const [purchase, setPurchase] = useState(editData.purchase);
+  const [selling, setSelling] = useState(editData.selling);
   const [stock, setStock] = useState(editData.stock);
 
   const [openInput, setOpenInput] = useState(false);
@@ -63,12 +65,13 @@ export const UpdateProduct = ({ navigation, route }) => {
   const CreateProductReducer = useSelector((state) => state.ProductReducer.createProductResult);
 
   const onSubmit = () => {
-    if (id && nameProduct && category && price && stock) {
+    if (id && nameProduct && category && purchase && stock && selling) {
       const newData = {
         id,
         nameProduct,
         category,
-        price,
+        purchase,
+        selling,
         stock,
       };
       dispatch(createProduct(newData));
@@ -169,9 +172,14 @@ export const UpdateProduct = ({ navigation, route }) => {
         <View />
       )}
       {/* end modal camera */}
-      <View>
+      <ScrollView style={{ marginTop: 80, width: '100%' }} showsVerticalScrollIndicator={false}>
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: 10,
+          }}
         >
           <TextInput
             value={id}
@@ -192,6 +200,7 @@ export const UpdateProduct = ({ navigation, route }) => {
             showIcon={false}
           />
         </View>
+
         <View style={{ marginTop: 20 }} />
         <TextInput
           value={nameProduct}
@@ -208,6 +217,7 @@ export const UpdateProduct = ({ navigation, route }) => {
             setNameProduct(value);
           }}
         />
+
         <View style={{ marginTop: 20 }} />
         <DropDownPicker
           open={openInput}
@@ -219,20 +229,37 @@ export const UpdateProduct = ({ navigation, route }) => {
           placeholder="Katagori"
           style={styles.input}
         />
+
         <View style={{ marginTop: 20 }} />
-        <Text style={{ fontSize: 16, color: COLORS.black }}>Harga barang :</Text>
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Harga beli :</Text>
         <View style={{ marginBottom: 10 }} />
         <CurrencyInput
-          value={price}
-          onChangeValue={(value) => setPrice(value)}
+          value={purchase}
+          onChangeValue={(value) => setPurchase(value)}
           style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
-          placeholder="Price"
+          placeholder="Harga Beli"
           prefix="Rp. "
           delimiter="."
           precision={0}
           onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
+
+        <View style={{ marginTop: 20 }} />
+        <Text style={{ fontSize: 16, color: COLORS.black }}>Harga jual :</Text>
+        <View style={{ marginBottom: 10 }} />
+        <CurrencyInput
+          value={selling}
+          onChangeValue={(value) => setSelling(value)}
+          style={[styles.input, { paddingVertical: 10, width: width / 1.12 }]}
+          placeholder="Harga Jual"
+          prefix="Rp. "
+          delimiter="."
+          precision={0}
+          onChangeText={(formattedValue) => {}}
+          keyboardType="numeric"
+        />
+
         <View style={{ marginTop: 20 }} />
         <Text style={{ fontSize: 16, color: COLORS.black }}>Stok barang :</Text>
         <View style={{ marginBottom: 10 }} />
@@ -247,7 +274,7 @@ export const UpdateProduct = ({ navigation, route }) => {
           onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
-      </View>
+      </ScrollView>
       <View style={{ marginTop: 40 }} />
       <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
         {loading ? (
@@ -295,6 +322,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10,
   },
   textButton: {
     color: COLORS.white,
