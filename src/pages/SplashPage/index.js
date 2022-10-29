@@ -4,31 +4,25 @@ import { COLORS } from '../../constants/theme';
 import { Logo } from '../../assets/images';
 import * as Animatable from 'react-native-animatable';
 import { getData } from '../../utils/localStorage';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../../actions/productActions';
 
 const SplashPage = ({ navigation }) => {
   const [user, setUser] = useState(false);
   const [onBoarding, setOnBoarding] = useState('onBoarding');
 
-  const dispatch = useDispatch();
-  const GetProductReducer = useSelector((state) => state.ProductReducer.getProductResult);
-
   useEffect(() => {
     getData('user').then((res) => {
       if (res) {
         setUser(true);
-      }
-    });
-    getData('onBoarding').then((res) => {
-      if (res) {
-        setOnBoarding(true);
       } else {
-        setOnBoarding(false);
+        getData('onBoarding').then((res) => {
+          if (res) {
+            setOnBoarding(true);
+          } else {
+            setOnBoarding(false);
+          }
+        });
       }
     });
-
-    dispatch(getProducts());
   }, []);
 
   useEffect(() => {
@@ -45,7 +39,7 @@ const SplashPage = ({ navigation }) => {
         navigation.replace('OnBoardingPage');
       }, 3000);
     }
-  }, [GetProductReducer]);
+  }, [user, onBoarding]);
 
   return (
     <View

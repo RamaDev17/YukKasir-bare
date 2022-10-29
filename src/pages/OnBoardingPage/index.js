@@ -76,7 +76,6 @@ const OnBoardingPage = ({ navigation }) => {
         SkipButtonComponent={Skip}
         onDone={() => {
           navigation.replace('LoginPage');
-          console.log('coba');
           storeData('onBoarding', { onboarding: true });
         }}
         onSkip={() => {

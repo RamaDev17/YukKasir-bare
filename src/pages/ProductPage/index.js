@@ -83,17 +83,12 @@ const ProductPage = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const GetProductReducer = useSelector((state) => state.ProductReducer.getProductResult);
-  console.log(GetProductReducer);
 
   // get data product
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // do something
-      getData('products')
-        .then((res) => {
-          setDataProduct(res);
-        })
-        .catch((err) => console.log(err));
+      dispatch(getProducts());
     });
 
     return unsubscribe;
@@ -277,7 +272,7 @@ const ProductPage = ({ navigation }) => {
           </Animated.View>
         </Animated.View>
         <Animated.View style={[styles.firstContainer]}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconBack}>
+          <TouchableOpacity onPress={() => navigation.replace('HomePage')} style={styles.iconBack}>
             <Image source={ArrowBack} style={{ tintColor: 'black', height: 30, width: 30 }} />
           </TouchableOpacity>
           <Text style={styles.name}>Produk</Text>

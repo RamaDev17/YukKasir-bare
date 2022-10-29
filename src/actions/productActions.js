@@ -12,6 +12,7 @@ const db = getDatabase();
 appFirebase;
 
 export const createProduct = (datas) => {
+  console.log(datas);
   return (dispatch) => {
     // loading
     dispatchLoading(dispatch, CREATE_PRODUCT);
@@ -65,7 +66,6 @@ export const getProducts = (search, barcode) => {
           let data = querySnapsot.val();
           let dataItem = { ...data };
           dispatchSuccess(dispatch, GET_PRODUCT, dataItem);
-          storeData('products', dataItem);
         })
         .catch((err) => {
           alert(err);

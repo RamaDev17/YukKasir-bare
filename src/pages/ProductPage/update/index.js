@@ -10,6 +10,7 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { TextInput } from 'react-native-element-textinput';
 import { Barcode, Close, FlashOff, FlashOn } from '../../../assets/icons';
@@ -95,7 +96,7 @@ export const UpdateProduct = ({ navigation, route }) => {
   }, [loading]);
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <Header navigation={navigation} name="Update Produk" />
       {/* Alert */}
       {openAlert ? (
@@ -274,8 +275,8 @@ export const UpdateProduct = ({ navigation, route }) => {
           onChangeText={(formattedValue) => {}}
           keyboardType="numeric"
         />
+        <View style={{ marginTop: 40 }} />
       </ScrollView>
-      <View style={{ marginTop: 40 }} />
       <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
         {loading ? (
           <ActivityIndicator color={COLORS.white} />
@@ -283,7 +284,7 @@ export const UpdateProduct = ({ navigation, route }) => {
           <Text style={styles.textButton}>Update</Text>
         )}
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
