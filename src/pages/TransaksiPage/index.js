@@ -213,8 +213,8 @@ const TransaksiPage = ({ navigation }) => {
           return (
             <View key={index}>
               <View style={styles.cardSearch} key={index}>
-                <View>
-                  <Text style={styles.textTitleCard}>
+                <View style={{ width: '60%' }}>
+                  <Text style={styles.textTitleCard} numberOfLines={2}>
                     {uppercaseWord(productSearch[key].nameProduct)}
                   </Text>
                   <Text style={styles.textSubTitleCard}>{productSearch[key].id}</Text>
@@ -247,8 +247,10 @@ const TransaksiPage = ({ navigation }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <View>
-                    <Text style={styles.textTitleCard}>{uppercaseWord(value.nameProduct)}</Text>
+                  <View style={{ width: '60%' }}>
+                    <Text style={styles.textTitleCard} numberOfLines={2}>
+                      {uppercaseWord(value.nameProduct)}
+                    </Text>
                     <Text style={styles.textSubTitleCard}>{uppercaseWord(value.id)}</Text>
                   </View>
                   <View>

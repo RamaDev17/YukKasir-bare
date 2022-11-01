@@ -101,15 +101,7 @@ const ProductPage = ({ navigation }) => {
       setLoading(false);
     }
     if (searchQuery == '') {
-      getData('products')
-        .then((res) => {
-          if (res) {
-            setDataProduct(res);
-          } else {
-            setDataProduct(false);
-          }
-        })
-        .catch((err) => console.log(err));
+      dispatch(getProducts());
     }
   }, [searchQuery]);
 
@@ -142,8 +134,8 @@ const ProductPage = ({ navigation }) => {
                   alignItems: 'center',
                 }}
               >
-                <View>
-                  <Text style={styles.textItemTitle}>
+                <View style={{ width: '50%' }}>
+                  <Text style={styles.textItemTitle} numberOfLines={2}>
                     {uppercaseWord(dataProduct[key].nameProduct)}
                   </Text>
                   <Text style={styles.textOpacity}>{dataProduct[key].id}</Text>

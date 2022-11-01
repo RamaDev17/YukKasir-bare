@@ -16,6 +16,7 @@ import {
   PrintPage,
   FinalTransaksiPage,
   RiwayatTransaksiPage,
+  RiwayatTransaksiDetailPage,
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomBar from '../components/BottomBar';
@@ -87,6 +88,11 @@ const Routes = () => {
         <Stack.Screen
           name="RiwayatTransaksiPage"
           component={RiwayatTransaksiPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RiwayatTransaksiDetailPage"
+          component={RiwayatTransaksiDetailPage}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

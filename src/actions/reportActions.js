@@ -25,16 +25,27 @@ export const createReport = (datas) => {
   };
 };
 
-export const getReports = () => {
+export const getReports = (limit) => {
   return (dispatch) => {
     // loading
     dispatchLoading(dispatch, GET_REPORT);
 
     // get realtime database database
-    database()
-      .ref('reports')
-      .on('value', (result) => {
-        dispatchSuccess(dispatch, GET_REPORT, result);
-      });
+    if (limit == true) {
+      database()
+        .ref('reports')
+        .on('value', (result) => {
+          const newData = result.val();
+          dispatchSuccess(dispatch, GET_REPORT, newData);
+        });
+    } else {
+      database()
+        .ref('reports')
+        .limitToLast(limit)
+        .on('value', (result) => {
+          const newData = result.val();
+          dispatchSuccess(dispatch, GET_REPORT, newData);
+        });
+    }
   };
 };

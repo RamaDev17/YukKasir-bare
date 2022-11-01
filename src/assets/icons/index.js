@@ -23,6 +23,7 @@ import Delete from './trash.png';
 import Min from './remove-circle.png';
 import Print from './print.png';
 import Setting from './settings_FILL0_wght400_GRAD0_opsz48.png';
+import Next from './chevron-forward.png';
 
 export {
   Ceklis,
@@ -50,4 +51,5 @@ export {
   Min,
   Print,
   Setting,
+  Next,
 };

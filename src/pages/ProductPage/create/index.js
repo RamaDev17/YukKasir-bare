@@ -83,7 +83,9 @@ export const CreateProduct = ({ navigation }) => {
   useEffect(() => {
     if (CreateProductReducer) {
       dispatch(createProduct(false));
-      setOpenAlert(true);
+      setTimeout(() => {
+        setOpenAlert(true);
+      }, 2000);
     }
   }, [CreateProductReducer]);
 

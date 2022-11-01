@@ -12,6 +12,7 @@ import { UpdateProduct } from './ProductPage/update';
 import { PrintPage } from './PrintPage';
 import FinalTransaksiPage from './FinalTransaksiPage';
 import RiwayatTransaksiPage from './RiwayatTransaksiPage';
+import RiwayatTransaksiDetailPage from './RiwayatDetailPage';
 
 export {
   SplashPage,
@@ -28,4 +29,5 @@ export {
   PrintPage,
   FinalTransaksiPage,
   RiwayatTransaksiPage,
+  RiwayatTransaksiDetailPage,
 };

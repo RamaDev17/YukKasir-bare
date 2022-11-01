@@ -21,58 +21,45 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { createReport } from '../../actions/reportActions';
 import { createProduct } from '../../actions/productActions';
 
-let jumlahProfit = 0;
+const RiwayatTransaksiDetailPage = ({ navigation, route }) => {
+  const riwayat = route.params;
+  const date = riwayat.date;
+  const dateSplit = date.split(' ');
+  const products = riwayat.product;
 
-const FinalTransaksiPage = ({ navigation, route }) => {
-  let dataTransaksi = route.params.dataAdd;
-  let Amount = route.params.amount;
-  let tunai = route.params.tunai;
-  let kembalian = route.params.kembalian;
-  let date = new Date();
-  let jam = date.getHours();
-  let menit = date.getMinutes();
-
-  const [user, setUser] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const getPrinter = useSelector((state) => state.PrinterReducer.printerResult.data);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    getData('user').then((res) => setUser(res));
-    Object.keys(dataTransaksi).map((key) => {
-      jumlahProfit = jumlahProfit + dataTransaksi[key].profit;
-    });
-  }, []);
 
   const handlePrinter = async () => {
     try {
+      setLoading(true);
       const Printer = BLEPrinter;
       Printer.printText('\n');
       Printer.printText(`<CB> Toko Ibnu Ali </CB>\n`);
       Printer.printText(`<C>Sembungsemi, Blambangan</C>`);
-      Printer.printText(`<C>Admin: ${user.username}</C>`);
-      Printer.printText(`<C>${hari}, ${tanggal} ${bulan} ${tahun}</C>`);
-      Printer.printText(`<C>${jam}:${menit}</C>`);
+      Printer.printText(`<C>Admin: ${riwayat.admin}</C>`);
+      Printer.printText(`<C>${dateSplit[1]}, ${dateSplit[2]} ${dateSplit[3]}</C>`);
+      Printer.printText(`<C>${dateSplit[0]}</C>`);
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
       let columnAliment = [ColumnAliment.LEFT, ColumnAliment.CENTER, ColumnAliment.RIGHT];
       let columnWidth = [30 - (10 + 1), 1, 10];
-      Object.keys(dataTransaksi).map((key) => {
-        Printer.printText(dataTransaksi[key].nameProduct);
+      Object.keys(products).map((key) => {
+        Printer.printText(products[key].nameProduct);
         const orderList = [
-          `${dataTransaksi[key].count} x ${formatNumber(dataTransaksi[key].selling)}`,
+          `${products[key].count} x ${formatNumber(products[key].selling)}`,
           '',
-          formatNumber(dataTransaksi[key].total),
+          formatNumber(products[key].total),
         ];
         Printer.printColumnsText(orderList, columnWidth, columnAliment, ['', '', '']);
       });
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
-      const totalHarga = ['Total Rp.', '', formatNumber(Amount)];
+      const totalHarga = ['Total Rp.', '', formatNumber(parseInt(riwayat.total))];
       Printer.printColumnsText(totalHarga, columnWidth, columnAliment, ['', '', '']);
-      const bayar = ['Bayar Rp.', '', formatNumber(tunai)];
+      const bayar = ['Bayar Rp.', '', formatNumber(parseInt(riwayat.bayar))];
       Printer.printColumnsText(bayar, columnWidth, columnAliment, ['', '', '']);
-      const kembali = ['Kembali Rp.', '', formatNumber(kembalian)];
+      const kembali = ['Kembali Rp.', '', formatNumber(parseInt(riwayat.kembalian))];
       Printer.printColumnsText(kembali, columnWidth, columnAliment, ['', '', '']);
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
       Printer.printText(`<C>Terima Kasih</C>`);
@@ -80,39 +67,15 @@ const FinalTransaksiPage = ({ navigation, route }) => {
     } catch (err) {
       console.warn(err);
     }
-    let updateStock;
-    Object.keys(dataTransaksi).map((key) => {
-      const data = dataTransaksi[key];
-      updateStock = {
-        id: data.id,
-        nameProduct: data.nameProduct,
-        purchase: data.purchase,
-        selling: data.selling,
-        stock: data.stock - data.count,
-        category: data.category,
-      };
-      dispatch(createProduct(updateStock));
-    });
-    const newData = {
-      idTransaksi: date.getTime(),
-      admin: user.username,
-      date: `${jam}:${menit} ${tanggal} ${bulan} ${tahun}`,
-      product: dataTransaksi,
-      total: Amount,
-      bayar: tunai,
-      kembalian,
-      jumlahProfit,
-    };
-    setLoading(!loading);
-    dispatch(createReport(newData));
     setTimeout(() => {
-      navigation.replace('HomePage');
-    }, 4000);
+      setLoading(false);
+      navigation.replace('RiwayatTransaksiPage');
+    }, 2000);
   };
 
   return (
     <View style={styles.container}>
-      <Header name={'Transaksi'} navigation={navigation} />
+      <Header navigation={navigation} name="Detail Transaksi" />
       <ScrollView>
         {getPrinter ? (
           <View style={styles.status}>
@@ -142,19 +105,20 @@ const FinalTransaksiPage = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         )}
+        {/* riwayat transaksi */}
         <View style={styles.struk}>
           <Text style={styles.textAlign}>Toko Ibnu Ali</Text>
           <Text style={styles.textAlign}>Sembungsemi, Blambangan</Text>
-          <Text style={styles.textAlign}>Admin: {user.username}</Text>
-          <Text style={styles.textAlign}>{`${hari}, ${tanggal} ${bulan} ${tahun}`}</Text>
-          <Text style={styles.textAlign}>{`${jam}:${menit}`}</Text>
+          <Text style={styles.textAlign}>Admin: {riwayat.admin}</Text>
+          <Text style={styles.textAlign}>{`${dateSplit[1]}, ${dateSplit[2]} ${dateSplit[3]}`}</Text>
+          <Text style={styles.textAlign}>{`${dateSplit[0]}`}</Text>
           <Text style={styles.textAlign}>=============================</Text>
-          {Object.keys(dataTransaksi).map((key) => {
+          {Object.keys(products).map((key) => {
             return (
               <StrukProduct
-                name={dataTransaksi[key].nameProduct}
-                count={dataTransaksi[key].count}
-                selling={dataTransaksi[key].selling}
+                name={products[key].nameProduct}
+                count={products[key].count}
+                selling={products[key].selling}
                 key={key}
               />
             );
@@ -164,21 +128,22 @@ const FinalTransaksiPage = ({ navigation, route }) => {
           <View style={{ marginTop: 5 }} />
           <View style={styles.row}>
             <Text>Total Rp.</Text>
-            <Text>{formatNumber(parseInt(Amount))}</Text>
+            <Text>{formatNumber(parseInt(riwayat.total))}</Text>
           </View>
           <View style={styles.row}>
             <Text>Bayar Rp.</Text>
-            <Text>{formatNumber(parseInt(tunai))}</Text>
+            <Text>{formatNumber(parseInt(riwayat.bayar))}</Text>
           </View>
           <View style={styles.row}>
             <Text>Kembali Rp.</Text>
-            <Text>{formatNumber(parseInt(kembalian))}</Text>
+            <Text>{formatNumber(parseInt(riwayat.kembalian))}</Text>
           </View>
           <View style={{ marginTop: 5 }} />
           <Text style={styles.textAlign}>=============================</Text>
           <View style={{ marginTop: 5 }} />
           <Text style={styles.textAlign}>Terima Kasih</Text>
         </View>
+
         <View style={{ marginBottom: 80 }} />
       </ScrollView>
       <View style={styles.floating}>
@@ -283,4 +248,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FinalTransaksiPage;
+export default RiwayatTransaksiDetailPage;

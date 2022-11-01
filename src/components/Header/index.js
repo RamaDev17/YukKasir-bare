@@ -4,11 +4,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { ArrowBack } from '../../assets/icons';
 import { COLORS } from '../../constants';
 
-export const Header = ({ navigation, name }) => {
+export const Header = ({ navigation, name, replace }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{name}</Text>
-      <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => {
+          replace ? navigation.replace('HomePage') : navigation.goBack();
+        }}
+      >
         {/* <Image source={ArrowBack} style={{ height: 30, width: 30, tintColor: COLORS.black }} /> */}
         <Icon name="arrow-back" size={30} color={COLORS.black} />
       </TouchableOpacity>
