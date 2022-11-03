@@ -10,22 +10,20 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { COLORS } from '../../constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Header } from '../../components/Header';
 import { formatNumber } from '../../utils/formatNumber';
 import { Print, Setting } from '../../assets/icons';
-import { getData } from '../../utils/localStorage';
 import { BLEPrinter, COMMANDS, ColumnAliment } from 'react-native-thermal-receipt-printer-image-qr';
-import { bulan, hari, tahun, tanggal } from '../../utils/date';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { createReport } from '../../actions/reportActions';
-import { createProduct } from '../../actions/productActions';
 
 const RiwayatTransaksiDetailPage = ({ navigation, route }) => {
   const riwayat = route.params;
   const date = riwayat.date;
   const dateSplit = date.split(' ');
   const products = riwayat.product;
+  const dateTransaksi = `${dateSplit[1]}, ${dateSplit[2]} ${dateSplit[3]}`;
+  const dateHours = `${dateSplit[0]}`;
 
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,14 +32,13 @@ const RiwayatTransaksiDetailPage = ({ navigation, route }) => {
 
   const handlePrinter = async () => {
     try {
-      setLoading(true);
       const Printer = BLEPrinter;
       Printer.printText('\n');
       Printer.printText(`<CB> Toko Ibnu Ali </CB>\n`);
       Printer.printText(`<C>Sembungsemi, Blambangan</C>`);
       Printer.printText(`<C>Admin: ${riwayat.admin}</C>`);
-      Printer.printText(`<C>${dateSplit[1]}, ${dateSplit[2]} ${dateSplit[3]}</C>`);
-      Printer.printText(`<C>${dateSplit[0]}</C>`);
+      Printer.printText(`<C>${dateTransaksi}</C>`);
+      Printer.printText(`<C>${dateHours}</C>`);
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
       let columnAliment = [ColumnAliment.LEFT, ColumnAliment.CENTER, ColumnAliment.RIGHT];
       let columnWidth = [30 - (10 + 1), 1, 10];
@@ -67,10 +64,11 @@ const RiwayatTransaksiDetailPage = ({ navigation, route }) => {
     } catch (err) {
       console.warn(err);
     }
+    setLoading(true);
     setTimeout(() => {
       setLoading(false);
       navigation.replace('RiwayatTransaksiPage');
-    }, 2000);
+    }, 4000);
   };
 
   return (

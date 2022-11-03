@@ -49,6 +49,7 @@ const RiwayatTransaksiPage = ({ navigation }) => {
           listMode="SCROLLVIEW"
           dropDownContainerStyle={{ borderColor: COLORS.primary }}
         />
+        <View style={{ marginTop: 10 }} />
         {Object.keys(result).map((key) => {
           const riwayat = result[key];
           const date = riwayat.date.split(' ');
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: 15,
-    marginTop: 20,
+    marginVertical: 10,
     marginHorizontal: 5,
     backgroundColor: COLORS.white,
     shadowColor: COLORS.primary,
