@@ -95,6 +95,7 @@ const Routes = () => {
           component={RiwayatTransaksiDetailPage}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="LaporanPage" component={LaporanPage} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

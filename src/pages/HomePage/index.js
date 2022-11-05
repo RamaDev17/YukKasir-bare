@@ -128,7 +128,10 @@ const HomePage = ({ navigation }) => {
         </View>
 
         <View style={styles.row1}>
-          <TouchableOpacity style={styles.cardMenu}>
+          <TouchableOpacity
+            style={styles.cardMenu}
+            onPress={() => navigation.navigate('LaporanPage')}
+          >
             <Image
               source={Laporan}
               resizeMode="cover"

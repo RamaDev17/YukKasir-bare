@@ -29,11 +29,11 @@ export const getReports = (limit) => {
   return (dispatch) => {
     // loading
     dispatchLoading(dispatch, GET_REPORT);
-
     // get realtime database database
-    if (limit == true) {
+    if (limit) {
       database()
         .ref('reports')
+        .limitToLast(limit)
         .on('value', (result) => {
           const newData = result.val();
           dispatchSuccess(dispatch, GET_REPORT, newData);
@@ -41,7 +41,6 @@ export const getReports = (limit) => {
     } else {
       database()
         .ref('reports')
-        .limitToLast(limit)
         .on('value', (result) => {
           const newData = result.val();
           dispatchSuccess(dispatch, GET_REPORT, newData);

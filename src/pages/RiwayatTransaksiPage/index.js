@@ -18,8 +18,6 @@ const RiwayatTransaksiPage = ({ navigation }) => {
     { label: 'Semua Transaksi', value: true },
   ]);
 
-  console.log(category);
-
   const dispatch = useDispatch();
   const result = useSelector((state) => state.ReportReducer.getreportResult);
 
@@ -31,6 +29,10 @@ const RiwayatTransaksiPage = ({ navigation }) => {
 
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    dispatch(getReports(category));
+  }, [category]);
 
   return (
     <View style={styles.container}>
