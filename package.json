@@ -39,6 +39,7 @@
     "react-native-screens": "^3.18.0",
     "react-native-sound": "^0.11.2",
     "react-native-svg": "^13.3.0",
+    "react-native-table-component": "^1.2.2",
     "react-native-thermal-receipt-printer-image-qr": "^0.1.10",
     "react-native-use-sound": "^1.2.2",
     "react-native-vector-icons": "^9.2.0",

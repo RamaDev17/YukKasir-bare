@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   Dolar,
+  Graph,
   Inventaris,
   Laporan,
   Logo,
@@ -133,11 +134,11 @@ const HomePage = ({ navigation }) => {
             onPress={() => navigation.navigate('LaporanPage')}
           >
             <Image
-              source={Laporan}
+              source={Graph}
               resizeMode="cover"
               style={{ width: 70, height: 70, tintColor: COLORS.primary }}
             />
-            <Text style={styles.textCardMenu}>Laporan</Text>
+            <Text style={styles.textCardMenu}>Profit</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardMenu}>
             <Image

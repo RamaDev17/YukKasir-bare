@@ -10,18 +10,36 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { tahun as tahunNow, bulan as bulanNow } from '../../utils/date';
 import { nFormatter } from '../../utils/formatter';
 import { formatNumber } from 'react-native-currency-input';
+import CardGraph from '../../components/CardGraph';
 
 let tahun = [];
 let itemTahunArray = [];
 let bulan = [];
 let dataProfitMentah = [];
+const CekBulan = () => {
+  let result = 0;
+  if (
+    bulanNow == 'Juli' ||
+    bulanNow == 'Agustus' ||
+    bulanNow == 'September' ||
+    bulanNow == 'Oktober' ||
+    bulanNow == 'November' ||
+    bulanNow == 'Desember'
+  ) {
+    result = 2;
+  } else {
+    result = 1;
+  }
+
+  return result;
+};
 
 const LaporanPage = ({ navigation }) => {
   const [reportBulan, setReportBulan] = useState([]);
   const [reportTahun, setReportTahun] = useState([]);
   // dropdown picker Bulan
   const [openInput, setOpenInput] = useState(false);
-  const [categoryBulan, setCategoryBulan] = useState();
+  const [categoryBulan, setCategoryBulan] = useState(CekBulan());
   const [itemBulan, setItemBulan] = useState([
     { label: 'Januari - Juni', value: 1 },
     { label: 'Juli - Desember', value: 2 },
@@ -149,6 +167,7 @@ const LaporanPage = ({ navigation }) => {
       });
     } else {
       Object.keys(dataProfitMentah).map((key) => {
+        console.log('1');
         const data = dataProfitMentah[key];
         if (
           data.bulan == 'Juli' ||
@@ -159,6 +178,7 @@ const LaporanPage = ({ navigation }) => {
           data.bulan == 'Desember'
         ) {
           if (data.tahun == categoryTahun) {
+            console.log('2');
             if (data.bulan == 'Juli') {
               setjuli((oldarray) => [...oldarray, data.profit]);
             } else if (data.bulan == 'Agustus') {
@@ -169,6 +189,7 @@ const LaporanPage = ({ navigation }) => {
               setoktober((oldarray) => [...oldarray, data.profit]);
             } else if (data.bulan == 'November') {
               setnovember((oldarray) => [...oldarray, data.profit]);
+              console.log('3');
             } else if (data.bulan == 'Desember') {
               setdesember((oldarray) => [...oldarray, data.profit]);
             }
@@ -176,7 +197,7 @@ const LaporanPage = ({ navigation }) => {
         }
       });
     }
-  }, [categoryBulan, categoryTahun]);
+  }, [categoryBulan, categoryTahun, reportBulan]);
 
   useEffect(() => {
     if (categoryBulan == 1) {
@@ -226,84 +247,113 @@ const LaporanPage = ({ navigation }) => {
     return total;
   };
 
+  console.log(november);
+
   return (
     <View style={styles.container}>
       <Header name="Laporan Transaksi" navigation={navigation} />
-      <View style={{ marginTop: 77 }} />
-      <View
-        style={[styles.row, { marginBottom: 30, justifyContent: 'space-between', zIndex: 100 }]}
-      >
-        <DropDownPicker
-          open={openInput}
-          value={categoryBulan}
-          items={itemBulan}
-          setOpen={setOpenInput}
-          setValue={setCategoryBulan}
-          setItems={setItemBulan}
-          placeholder="Pilih rentang bulan"
-          style={[styles.input]}
-          listMode="SCROLLVIEW"
-          dropDownContainerStyle={{ borderColor: COLORS.primary }}
-          containerStyle={{ width: '50%' }}
-        />
-        <DropDownPicker
-          open={openInputTahun}
-          value={categoryTahun}
-          items={itemTahun}
-          setOpen={setOpenInputTahun}
-          setValue={setCategoryTahun}
-          setItems={setItemTahun}
-          placeholder="Tahun"
-          style={[styles.input]}
-          listMode="SCROLLVIEW"
-          dropDownContainerStyle={{ borderColor: COLORS.primary }}
-          containerStyle={{ width: '40%' }}
-        />
-      </View>
-      <LineChart
-        data={{
-          labels,
-          datasets: [
-            {
-              data: dataset,
-            },
-          ],
-        }}
-        width={Dimensions.get('window').width - 40} // from react-native
-        onDataPointClick={({ value, getColor }) =>
-          showMessage({
-            message: `${value}K`,
-            description: 'You selected this value',
-            backgroundColor: COLORS.white,
-            color: COLORS.black,
-          })
-        }
-        height={250}
-        yAxisSuffix="k"
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={{
-          backgroundColor: '#e26a00',
-          backgroundGradientFrom: '#fb8c00',
-          backgroundGradientTo: '#ffa726',
-          decimalPlaces: 0, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: '#ffa726',
-          },
-        }}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-      />
+      <View style={{ marginTop: 90 }} />
       <FlashMessage duration={2000} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={[styles.row, { marginBottom: 15, justifyContent: 'space-between', zIndex: 100 }]}
+        >
+          <DropDownPicker
+            open={openInput}
+            value={categoryBulan}
+            items={itemBulan}
+            setOpen={setOpenInput}
+            setValue={setCategoryBulan}
+            setItems={setItemBulan}
+            placeholder="Pilih rentang bulan"
+            style={[styles.input]}
+            listMode="SCROLLVIEW"
+            dropDownContainerStyle={{ borderColor: COLORS.primary }}
+            containerStyle={{ width: '50%' }}
+          />
+          <DropDownPicker
+            open={openInputTahun}
+            value={categoryTahun}
+            items={itemTahun}
+            setOpen={setOpenInputTahun}
+            setValue={setCategoryTahun}
+            setItems={setItemTahun}
+            placeholder="Tahun"
+            style={[styles.input]}
+            listMode="SCROLLVIEW"
+            dropDownContainerStyle={{ borderColor: COLORS.primary }}
+            containerStyle={{ width: '40%' }}
+          />
+        </View>
+        <LineChart
+          data={{
+            labels,
+            datasets: [
+              {
+                data: dataset,
+              },
+            ],
+          }}
+          width={Dimensions.get('window').width - 40} // from react-native
+          onDataPointClick={({ value, getColor }) =>
+            showMessage({
+              message: `Rp. ${value}`,
+              backgroundColor: COLORS.primary,
+              color: COLORS.white,
+              style: {
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderBottomLeftRadius: 15,
+                borderBottomRightRadius: 15,
+              },
+            })
+          }
+          height={200}
+          yAxisSuffix="k"
+          yAxisInterval={1} // optional, defaults to 1
+          chartConfig={{
+            backgroundColor: '#e26a00',
+            backgroundGradientFrom: '#fb8c00',
+            backgroundGradientTo: '#ffa726',
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForDots: {
+              r: '6',
+              strokeWidth: '2',
+              stroke: '#ffa726',
+            },
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+          }}
+        />
+        <View style={{ marginBottom: 15 }} />
+        {categoryBulan == 1 ? (
+          <View>
+            <CardGraph profit={numArray(januari)} bulan="Januari" tahun={categoryTahun} />
+            <CardGraph profit={numArray(februari)} bulan="Februari" tahun={categoryTahun} />
+            <CardGraph profit={numArray(maret)} bulan="Maret" tahun={categoryTahun} />
+            <CardGraph profit={numArray(april)} bulan="April" tahun={categoryTahun} />
+            <CardGraph profit={numArray(mei)} bulan="Mei" tahun={categoryTahun} />
+            <CardGraph profit={numArray(juni)} bulan="Juni" tahun={categoryTahun} />
+          </View>
+        ) : (
+          <View>
+            <CardGraph profit={numArray(juli)} bulan="Juli" tahun={categoryTahun} />
+            <CardGraph profit={numArray(agustus)} bulan="Agustus" tahun={categoryTahun} />
+            <CardGraph profit={numArray(september)} bulan="September" tahun={categoryTahun} />
+            <CardGraph profit={numArray(oktober)} bulan="Oktober" tahun={categoryTahun} />
+            <CardGraph profit={numArray(november)} bulan="November" tahun={categoryTahun} />
+            <CardGraph profit={numArray(desember)} bulan="Desember" tahun={categoryTahun} />
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -312,7 +362,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   row: {
     flexDirection: 'row',
@@ -324,6 +374,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.primary,
     width: '100%',
+  },
+  card: {
+    padding: 10,
   },
 });
 
