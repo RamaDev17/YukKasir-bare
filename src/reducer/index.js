@@ -4,6 +4,11 @@ import ProductReducer from './product';
 import PrinterReducer from './printer';
 import ReportReducer from './report';
 
-const rootReducer = combineReducers({ AuthReducer, ProductReducer, PrinterReducer, ReportReducer });
+const rootReducer = combineReducers({
+  AuthReducer,
+  ProductReducer,
+  PrinterReducer,
+  ReportReducer,
+});
 
 export default rootReducer;

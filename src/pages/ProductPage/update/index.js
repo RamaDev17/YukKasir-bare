@@ -41,6 +41,8 @@ export const UpdateProduct = ({ navigation, route }) => {
     { label: 'Buku', value: 'buku' },
     { label: 'Pakaian', value: 'pakaian' },
     { label: 'Herbal', value: 'herbal' },
+    { label: 'Parfum', value: 'parfum' },
+    { label: 'Lainnya...', value: 'lainnya' },
   ]);
 
   const [open, setOpen] = useState(false);
@@ -229,6 +231,7 @@ export const UpdateProduct = ({ navigation, route }) => {
           setItems={setItems}
           placeholder="Katagori"
           style={styles.input}
+          listMode="SCROLLVIEW"
         />
 
         <View style={{ marginTop: 20 }} />

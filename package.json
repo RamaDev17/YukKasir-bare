@@ -30,6 +30,7 @@
     "react-native-dropdown-picker": "^5.4.2",
     "react-native-element-textinput": "^2.0.1",
     "react-native-flash-message": "^0.3.1",
+    "react-native-fs": "^2.20.0",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-permissions": "^3.6.1",
     "react-native-ping": "^1.2.7",
@@ -45,7 +46,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.4",
     "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

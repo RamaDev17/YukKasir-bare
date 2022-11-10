@@ -39,6 +39,8 @@ export const CreateProduct = ({ navigation }) => {
     { label: 'Buku', value: 'buku' },
     { label: 'Pakaian', value: 'pakaian' },
     { label: 'Herbal', value: 'herbal' },
+    { label: 'Parfum', value: 'parfum' },
+    { label: 'Lainnya...', value: 'lainnya' },
   ]);
 
   const [open, setOpen] = useState(false);

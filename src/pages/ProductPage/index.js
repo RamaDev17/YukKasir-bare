@@ -89,6 +89,7 @@ const ProductPage = ({ navigation }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       // do something
       dispatch(getProducts());
+      setSearchQuery(null);
     });
 
     return unsubscribe;
