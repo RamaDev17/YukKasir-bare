@@ -142,14 +142,14 @@ const HomePage = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.cardMenu}
-            onPress={() => navigation.navigate('ProfilePage')}
+            onPress={() => navigation.navigate('LaporanPenjualanPage')}
           >
             <Image
-              source={Person}
+              source={Laporan}
               resizeMode="cover"
-              style={{ width: 70, height: 70, borderRadius: 50 }}
+              style={{ width: 70, height: 70, borderRadius: 50, tintColor: COLORS.primary }}
             />
-            <Text style={styles.textCardMenu}>Profile</Text>
+            <Text style={styles.textCardMenu}>Laporan Penjualan</Text>
           </TouchableOpacity>
         </View>
 

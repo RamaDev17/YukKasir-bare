@@ -17,6 +17,7 @@ import {
   FinalTransaksiPage,
   RiwayatTransaksiPage,
   RiwayatTransaksiDetailPage,
+  LaporanPenjualanPage,
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomBar from '../components/BottomBar';
@@ -93,6 +94,11 @@ const Routes = () => {
         <Stack.Screen
           name="RiwayatTransaksiDetailPage"
           component={RiwayatTransaksiDetailPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LaporanPenjualanPage"
+          component={LaporanPenjualanPage}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="LaporanPage" component={LaporanPage} options={{ headerShown: false }} />

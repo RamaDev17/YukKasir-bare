@@ -13,6 +13,7 @@ import { PrintPage } from './PrintPage';
 import FinalTransaksiPage from './FinalTransaksiPage';
 import RiwayatTransaksiPage from './RiwayatTransaksiPage';
 import RiwayatTransaksiDetailPage from './RiwayatDetailPage';
+import LaporanPenjualanPage from './LaporanPenjualanPage';
 
 export {
   SplashPage,
@@ -30,4 +31,5 @@ export {
   FinalTransaksiPage,
   RiwayatTransaksiPage,
   RiwayatTransaksiDetailPage,
+  LaporanPenjualanPage,
 };

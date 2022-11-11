@@ -20,6 +20,7 @@ import { bulan, hari, tahun, tanggal } from '../../utils/date';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { createReport } from '../../actions/reportActions';
 import { createProduct } from '../../actions/productActions';
+import { createPenjualan, getPenjualan } from '../../actions/penjualanActions';
 
 let jumlahProfit = 0;
 
@@ -35,16 +36,39 @@ const FinalTransaksiPage = ({ navigation, route }) => {
   const [user, setUser] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [penjualan, setPenjualan] = useState([]);
 
   const getPrinter = useSelector((state) => state.PrinterReducer.printerResult.data);
   const dispatch = useDispatch();
+  const getPenjualanResult = useSelector((state) => state.PenjualanReducer.getPenjualanResult);
 
   useEffect(() => {
-    getData('user').then((res) => setUser(res));
-    Object.keys(dataTransaksi).map((key) => {
-      jumlahProfit = jumlahProfit + dataTransaksi[key].profit;
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      getData('user').then((res) => setUser(res));
+      Object.keys(dataTransaksi).map((key) => {
+        jumlahProfit = jumlahProfit + dataTransaksi[key].profit;
+      });
+      dispatch(getPenjualan());
     });
-  }, []);
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    Object.keys(getPenjualanResult).map((key) => {
+      const data = getPenjualanResult[key];
+      const newData = {
+        id: data.id,
+        category: data.category,
+        count: data.count,
+        nameProduct: data.nameProduct,
+        purchase: data.purchase,
+        selling: data.selling,
+      };
+      setPenjualan((oldArray) => [...oldArray, newData]);
+    });
+  }, [getPenjualanResult]);
 
   const handlePrinter = async () => {
     try {
@@ -92,6 +116,42 @@ const FinalTransaksiPage = ({ navigation, route }) => {
         category: data.category,
       };
       dispatch(createProduct(updateStock));
+      if (getPenjualanResult) {
+        for (let i = 0; i < penjualan.length; i++) {
+          if (penjualan[i].nameProduct == data.nameProduct) {
+            const newData = {
+              id: data.id,
+              nameProduct: data.nameProduct,
+              purchase: data.purchase,
+              selling: data.selling,
+              count: data.count + penjualan[i].count,
+              category: data.category,
+            };
+            dispatch(createPenjualan(newData));
+            i = penjualan.length + 100;
+          } else {
+            const newData = {
+              id: data.id,
+              nameProduct: data.nameProduct,
+              purchase: data.purchase,
+              selling: data.selling,
+              count: data.count,
+              category: data.category,
+            };
+            dispatch(createPenjualan(newData));
+          }
+        }
+      } else {
+        const newData = {
+          id: data.id,
+          nameProduct: data.nameProduct,
+          purchase: data.purchase,
+          selling: data.selling,
+          count: data.count,
+          category: data.category,
+        };
+        dispatch(createPenjualan(newData));
+      }
     });
     const newData = {
       idTransaksi: date.getTime(),
