@@ -50,10 +50,17 @@ const LaporanPenjualanPage = ({ navigation }) => {
 
   const exportDataToExcel = () => {
     // Created Sample data
-    let sample_data_to_export = [
-      { id: '1', name: 'First User' },
-      { id: '2', name: 'Second User' },
-    ];
+    let sample_data_to_export = [];
+
+    body.map((value) => {
+      sample_data_to_export.push({
+        No: value[0],
+        ID: value[1],
+        Product: value[2],
+        Kategori: value[3],
+        'Total Penjualan': value[4],
+      });
+    });
 
     let wb = XLSX.utils.book_new();
     let ws = XLSX.utils.json_to_sheet(sample_data_to_export);
@@ -61,19 +68,32 @@ const LaporanPenjualanPage = ({ navigation }) => {
     const wbout = XLSX.write(wb, { type: 'binary', bookType: 'xlsx' });
 
     // Write generated excel to Storage
-    RNFS.writeFile(RNFS.DocumentDirectoryPath + `/Penjualan-${tahun}`, wbout, 'ascii')
-      .then((r) => {
-        Alert.alert(
-          'Berhasil',
-          `File berhasil disimpan di ${RNFS.DocumentDirectoryPath}/Penjualan-${tahun}`
-        );
-      })
-      .catch((e) => {
-        console.log('Error', e);
-      });
-
-    console.log(RNFS.DocumentDirectoryPath);
+    if (Platform.OS == 'ios') {
+      RNFS.writeFile(RNFS.DocumentDirectoryPath + `/Penjualan-${tahun}.xlsx`, wbout, 'ascii')
+        .then((r) => {
+          Alert.alert(
+            'Berhasil',
+            `File berhasil disimpan di ${RNFS.DocumentDirectoryPath}/Penjualan-${tahun}`
+          );
+        })
+        .catch((e) => {
+          console.log('Error', e);
+        });
+    } else {
+      RNFS.writeFile(RNFS.ExternalStorageDirectoryPath + `/Penjualan-${tahun}.xlsx`, wbout, 'ascii')
+        .then((r) => {
+          Alert.alert(
+            'Berhasil',
+            `File berhasil disimpan di ${RNFS.ExternalStorageDirectoryPath}/Penjualan-${tahun}`
+          );
+        })
+        .catch((e) => {
+          console.log('Error', e);
+        });
+    }
   };
+
+  console.log(body);
 
   const handleClick = async () => {
     if (Platform.OS == 'android') {
@@ -128,10 +148,7 @@ const LaporanPenjualanPage = ({ navigation }) => {
             widthArr={widthArr}
             data={head}
             style={styles.head}
-            textStyle={[
-              styles.text,
-              { color: COLORS.white, fontWeight: 'bold', textAlign: 'center' },
-            ]}
+            textStyle={{ color: COLORS.white, fontWeight: 'bold', textAlign: 'center', margin: 6 }}
           />
           <Rows
             widthArr={widthArr}

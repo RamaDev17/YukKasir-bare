@@ -13,7 +13,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { Background } from '../../assets/images';
+import { Background, RegisterImage } from '../../assets/images';
 import { COLORS } from '../../constants';
 import { Eye, EyeOff, Email, ArrowBack } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +27,7 @@ const RegisterPage = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [vertifikasiPassword, setVertifikasiPassword] = useState('');
   const [visibel, setVisibel] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -42,6 +43,7 @@ const RegisterPage = ({ navigation }) => {
   const onSubmit = () => {
     if ((username, email, password, vertifikasiPassword)) {
       if (password === vertifikasiPassword) {
+        setLoading(true);
         const datas = {
           username,
           email,
@@ -58,18 +60,22 @@ const RegisterPage = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <ImageBackground source={Background} resizeMode="cover" style={styles.imageBackground}>
-        <Text style={styles.textBackground}>Registrasi</Text>
-      </ImageBackground>
       <TouchableOpacity
         style={styles.iconBack}
         onPress={() => {
           navigation.goBack();
         }}
       >
-        <Image source={ArrowBack} resizeMode="cover" style={{ width: 30, height: 30 }} />
+        <Image
+          source={ArrowBack}
+          resizeMode="cover"
+          style={{ width: 30, height: 30, tintColor: COLORS.black }}
+        />
       </TouchableOpacity>
       <ScrollView>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
+          <Image source={RegisterImage} style={{ width: 100, height: 200 }} />
+        </View>
         <View style={styles.form}>
           <TextInput
             value={username}
@@ -172,7 +178,7 @@ const RegisterPage = ({ navigation }) => {
               onSubmit();
             }}
           >
-            {LoadingReducer ? (
+            {loading ? (
               <ActivityIndicator color={COLORS.white} />
             ) : (
               <Text style={styles.textButton}>Registrasi</Text>
@@ -218,9 +224,11 @@ const styles = StyleSheet.create({
   },
   iconBack: {
     padding: 10,
+    backgroundColor: COLORS.white,
     position: 'absolute',
-    top: 40,
+    top: 20,
     left: 20,
+    zIndex: 100,
   },
   input: {
     height: 55,

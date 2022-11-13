@@ -13,7 +13,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { Background } from '../../assets/images';
+import { Background, LoginImage, RegisterImage } from '../../assets/images';
 import { COLORS } from '../../constants';
 import { Eye, EyeOff } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,10 +48,10 @@ const LoginPage = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar translucent={true} backgroundColor="transparent" />
-      <ImageBackground source={Background} resizeMode="cover" style={styles.imageBackground}>
-        <Text style={styles.textBackground}>Login</Text>
-      </ImageBackground>
       <ScrollView>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
+          <Image source={LoginImage} style={{ width: 100, height: 200 }} />
+        </View>
         <View style={styles.form}>
           <TextInput
             value={email}
