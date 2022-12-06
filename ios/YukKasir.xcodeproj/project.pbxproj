@@ -10,6 +10,8 @@
 		00E356F31AD99517003FC87E /* YukKasirTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* YukKasirTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		215C6510293E3E82003BAE9A /* soundbarcode.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */; };
+		21DC658F293E372E00036656 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		BD102FC739DD182CCFE9F4EC /* Pods_YukKasir.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E493B27C813117D2D3B90ADA /* Pods_YukKasir.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +41,7 @@
 		16032D6DBCB84055B00B1A9A /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../src/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		17C6F78810304D848FC43289 /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../src/assets/fonts/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
 		21B779C728F3A94F00766ADB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		21F086842908E877003AAECB /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soundbarcode.mp3; sourceTree = "<group>"; };
+		21F086842908E877003AAECB /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = soundbarcode.mp3; path = "../../../../../../../../Documents/TugasAkhir/Aplikasi/YukKasir-bare/ios/soundbarcode.mp3"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = soundbarcode.mp3; path = ../src/assets/sound/soundbarcode.mp3; sourceTree = "<group>"; };
 		3C7D288ECFB44444861137F2 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		403BA6BC433D51BA7EB20650 /* Pods-YukKasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YukKasir.release.xcconfig"; path = "Target Support Files/Pods-YukKasir/Pods-YukKasir.release.xcconfig"; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+				21DC658E293E371F00036656 /* Resources */,
 				21B779C828F3A9C400766ADB /* Setup Firebase Environment GoogleService-Info.plist */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				B1F75B71C1A272C70CBBF31F /* [CP] Copy Pods Resources */,
@@ -313,6 +316,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21DC658E293E371F00036656 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				215C6510293E3E82003BAE9A /* soundbarcode.mp3 in Resources */,
+				21DC658F293E372E00036656 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

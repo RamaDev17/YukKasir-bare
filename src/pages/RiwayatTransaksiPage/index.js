@@ -15,7 +15,7 @@ const RiwayatTransaksiPage = ({ navigation }) => {
     { label: '25 Transaksi  Terakhir', value: 25 },
     { label: '10 Transaksi  Terakhir', value: 10 },
     { label: '5 Transaksi  Terakhir', value: 5 },
-    { label: 'Semua Transaksi', value: true },
+    { label: 'Semua Transaksi', value: false },
   ]);
 
   const dispatch = useDispatch();

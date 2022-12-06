@@ -31,7 +31,7 @@ const ProfilePage = ({ navigation }) => {
         {
           text: 'Ok',
           onPress: () => {
-            navigation.navigate('LoginPage');
+            navigation.replace('LoginPage');
           },
         },
       ]);
