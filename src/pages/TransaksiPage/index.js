@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Modal,
+  TextInput,
 } from 'react-native';
 import { Add, Barcode, Close, Delete, FlashOff, FlashOn, Min } from '../../assets/icons';
 import { COLORS } from '../../constants';
@@ -127,6 +128,22 @@ const TransaksiPage = ({ navigation }) => {
     if (value.count != 1) {
       const newDataCount = {
         count: value.count - 1,
+        total: sellingTotal,
+        profit: profitTotal,
+      };
+      Object.assign(value, newDataCount);
+      setDataAsync(!dataAsync);
+    }
+  };
+
+  const onChangeInputNumber = (count, value) => {
+    console.log(count);
+    const sellingTotal = parseInt(count) * parseInt(value.selling);
+    const firstProfit = value.selling - value.purchase;
+    const profitTotal = parseInt(count) * parseInt(firstProfit);
+    if (count != '') {
+      const newDataCount = {
+        count: parseInt(count),
         total: sellingTotal,
         profit: profitTotal,
       };
@@ -283,7 +300,17 @@ const TransaksiPage = ({ navigation }) => {
                           style={{ width: 25, height: 25, tintColor: COLORS.primary }}
                         />
                       </TouchableOpacity>
-                      <Text style={{ fontSize: 16 }}> {value.count} </Text>
+                      {/* <Text style={{ fontSize: 16 }}> {value.count} </Text> */}
+                      <TextInput
+                        value={value.count.toString()}
+                        style={styles.inputCount}
+                        keyboardType="numeric"
+                        textAlign="center"
+                        onChangeText={(text) => {
+                          onChangeInputNumber(text, value);
+                        }}
+                        selectTextOnFocus={true}
+                      />
                       <TouchableOpacity
                         onPress={() => {
                           onIncrement(value);
@@ -551,5 +578,13 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  inputCount: {
+    width: 30,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 0.5,
+    borderBottomColor: COLORS.primary,
   },
 });

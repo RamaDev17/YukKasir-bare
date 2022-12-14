@@ -60,7 +60,6 @@ export const getProducts = (search, barcode) => {
     } else {
       database()
         .ref('products')
-        .orderByChild('selling')
         .once('value', (querySnapsot) => {
           // hasil
           let data = querySnapsot.val();

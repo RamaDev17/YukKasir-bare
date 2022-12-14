@@ -8,11 +8,22 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
+  Modal,
+  Dimensions,
 } from 'react-native';
 import SearchBar from 'react-native-platform-searchbar';
 import * as Animatible from 'react-native-animatable';
 import { COLORS, SIZES } from '../../constants';
-import { ArrowBack, Delete, Edit, Add } from '../../assets/icons';
+import {
+  ArrowBack,
+  Delete,
+  Edit,
+  Add,
+  Barcode,
+  Close,
+  FlashOff,
+  FlashOn,
+} from '../../assets/icons';
 import { formatNumber } from '../../utils/formatNumber';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { getData } from '../../utils/localStorage';
@@ -20,6 +31,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../actions/productActions';
 import database from '@react-native-firebase/database';
 import { uppercaseWord } from '../../utils/uppercaseWord';
+import useSound from 'react-native-use-sound';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
+
+const { width, height } = Dimensions.get('window');
 
 // Search animasi
 const headerHeight = 120;
@@ -34,6 +50,26 @@ const ProductPage = ({ navigation }) => {
   const [alertDelete, setAlertDelete] = useState(false);
   const [dataProduct, setDataProduct] = useState([]);
   const [id, setId] = useState('');
+  const [open, setOpen] = useState(false);
+  const [flash, setFlash] = useState(false);
+  const [barcode, setBarcode] = useState(false);
+
+  // Handle ScanBarcode
+  const soundScanner = 'soundbarcode.mp3';
+  const [play, pause, stop, data] = useSound(soundScanner);
+
+  const handleBarCodeScanned = (value) => {
+    play();
+    setOpen(false);
+    setSearchQuery(value.data);
+    setBarcode(true);
+  };
+
+  const onTorch = () => {
+    setFlash(!flash);
+  };
+
+  // End Handle ScanBarcode
 
   const onChangeText = useCallback(
     (value) => {
@@ -98,11 +134,13 @@ const ProductPage = ({ navigation }) => {
   // search data product
   useEffect(() => {
     if (searchQuery && dataProduct) {
-      dispatch(getProducts(searchQuery));
+      dispatch(getProducts(searchQuery, barcode));
       setLoading(false);
+      setBarcode(false);
     }
     if (searchQuery == '') {
       dispatch(getProducts());
+      setBarcode(false);
     }
   }, [searchQuery]);
 
@@ -117,109 +155,118 @@ const ProductPage = ({ navigation }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingTop: headerHeight, backgroundColor: COLORS.white }}
-        onScroll={onScroll}
+        scrollEventThrottle={onScroll}
       >
         {dataProduct ? (
-          Object.keys(dataProduct).map((key, index) => (
-            <Animatible.View
-              style={styles.item}
-              key={index}
-              animation="fadeInUp"
-              delay={index * 100}
-              useNativeDriver
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <View style={{ width: '50%' }}>
-                  <Text style={styles.textItemTitle} numberOfLines={2}>
-                    {uppercaseWord(dataProduct[key].nameProduct)}
-                  </Text>
-                  <Text style={styles.textOpacity}>{dataProduct[key].id}</Text>
-                </View>
-                <View>
-                  <Text style={styles.textItemTitle}>
-                    {uppercaseWord(dataProduct[key].category)}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.textItemTitle}>
-                    Rp. {formatNumber(dataProduct[key].selling)}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Text style={styles.textOpacity}>
-                  Stock: {formatNumber(dataProduct[key].stock)}
-                </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('UpdateProductPage', dataProduct[key]);
+          Object.keys(dataProduct)
+            .sort()
+            .map((key, index) => {
+              return (
+                <Animatible.View
+                  style={styles.item}
+                  key={index}
+                  animation="fadeInUp"
+                  delay={index * 100}
+                  useNativeDriver
+                >
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
                   >
-                    <Image
-                      source={Edit}
-                      style={{ width: 25, height: 25, tintColor: COLORS.green, marginRight: 10 }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setAlertDelete(true);
-                      setId(dataProduct[key].id);
+                    <View style={{ width: '50%' }}>
+                      <Text style={styles.textItemTitle} numberOfLines={2}>
+                        {uppercaseWord(dataProduct[key].nameProduct)}
+                      </Text>
+                      <Text style={styles.textOpacity}>{dataProduct[key].id}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textItemTitle}>
+                        {uppercaseWord(dataProduct[key].category)}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.textItemTitle}>
+                        Rp. {formatNumber(dataProduct[key].selling)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      marginTop: 10,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
                   >
-                    <Image
-                      source={Delete}
-                      style={{ width: 25, height: 25, tintColor: COLORS.red }}
+                    <Text style={styles.textOpacity}>
+                      Stock: {formatNumber(dataProduct[key].stock)}
+                    </Text>
+                    <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('UpdateProductPage', dataProduct[key]);
+                        }}
+                      >
+                        <Image
+                          source={Edit}
+                          style={{
+                            width: 25,
+                            height: 25,
+                            tintColor: COLORS.green,
+                            marginRight: 10,
+                          }}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setAlertDelete(true);
+                          setId(dataProduct[key].id);
+                        }}
+                      >
+                        <Image
+                          source={Delete}
+                          style={{ width: 25, height: 25, tintColor: COLORS.red }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  {alertDelete ? (
+                    <AwesomeAlert
+                      show={alertDelete}
+                      showProgress={false}
+                      title="Hapus Produk"
+                      titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                      message="Yakin data mau dihapus ?"
+                      messageStyle={{ fontSize: 20 }}
+                      closeOnTouchOutside={true}
+                      closeOnHardwareBackPress={false}
+                      showConfirmButton={true}
+                      showCancelButton={true}
+                      confirmText="Hapus"
+                      cancelText="Batal"
+                      confirmButtonColor={COLORS.primary}
+                      confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                      cancelButtonColor={COLORS.red}
+                      cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                      contentContainerStyle={{ padding: 20 }}
+                      onConfirmPressed={async () => {
+                        await database().ref(`/products/${id}`).remove();
+                        dispatch(getProducts());
+                        navigation.replace('ProductPage');
+                      }}
+                      onCancelPressed={() => {
+                        setAlertDelete(false);
+                      }}
                     />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              {alertDelete ? (
-                <AwesomeAlert
-                  show={alertDelete}
-                  showProgress={false}
-                  title="Hapus Produk"
-                  titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                  message="Yakin data mau dihapus ?"
-                  messageStyle={{ fontSize: 20 }}
-                  closeOnTouchOutside={true}
-                  closeOnHardwareBackPress={false}
-                  showConfirmButton={true}
-                  showCancelButton={true}
-                  confirmText="Hapus"
-                  cancelText="Batal"
-                  confirmButtonColor={COLORS.primary}
-                  confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                  cancelButtonColor={COLORS.red}
-                  cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                  contentContainerStyle={{ padding: 20 }}
-                  onConfirmPressed={async () => {
-                    await database().ref(`/products/${id}`).remove();
-                    dispatch(getProducts());
-                    navigation.replace('ProductPage');
-                  }}
-                  onCancelPressed={() => {
-                    setAlertDelete(false);
-                  }}
-                />
-              ) : (
-                <View />
-              )}
-            </Animatible.View>
-          ))
+                  ) : (
+                    <View />
+                  )}
+                </Animatible.View>
+              );
+            })
         ) : (
           <View
             style={{
@@ -256,6 +303,12 @@ const ProductPage = ({ navigation }) => {
               )}
             </SearchBar>
 
+            <TouchableOpacity style={{ flex: 1, marginLeft: 10 }} onPress={() => setOpen(true)}>
+              <Image
+                source={Barcode}
+                style={{ width: 30, height: 30, tintColor: COLORS.primary }}
+              />
+            </TouchableOpacity>
             <TouchableOpacity
               style={{ flex: 1, marginLeft: 10 }}
               onPress={() => navigation.navigate('CreateProductPage')}
@@ -271,6 +324,47 @@ const ProductPage = ({ navigation }) => {
           <Text style={styles.name}>Produk</Text>
         </Animated.View>
       </View>
+      {/* modal camera */}
+      {open ? (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={open}
+          onRequestClose={() => {
+            setOpen(!open);
+          }}
+          statusBarTranslucent={true}
+        >
+          <QRCodeScanner
+            onRead={handleBarCodeScanned}
+            flashMode={
+              flash ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off
+            }
+            cameraStyle={{ width, height }}
+            fadeIn={true}
+            showMarker={true}
+            containerStyle={{ backgroundColor: COLORS.white }}
+          />
+
+          <TouchableOpacity style={styles.iconClose} onPress={() => setOpen(!open)}>
+            <Image
+              source={Close}
+              resizeMode="cover"
+              style={{ height: 30, width: 30, tintColor: COLORS.white }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconTorch} onPress={() => onTorch()}>
+            <Image
+              source={flash ? FlashOff : FlashOn}
+              resizeMode="cover"
+              style={{ height: 30, width: 30, tintColor: COLORS.white }}
+            />
+          </TouchableOpacity>
+        </Modal>
+      ) : (
+        <View />
+      )}
+      {/* end modal camera */}
     </View>
   );
 };
@@ -359,5 +453,25 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     opacity: 0.5,
     fontSize: 12,
+  },
+  iconClose: {
+    position: 'absolute',
+    top: 30,
+    left: 20,
+    padding: 10,
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+  },
+  iconTorch: {
+    position: 'absolute',
+    top: 30,
+    right: 20,
+    padding: 10,
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
   },
 });

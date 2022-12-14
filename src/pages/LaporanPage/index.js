@@ -251,7 +251,7 @@ const LaporanPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header name="Laporan Transaksi" navigation={navigation} />
+      <Header name="Profit Transaksi" navigation={navigation} />
       <View style={{ marginTop: 90 }} />
       <FlashMessage duration={2000} />
       <ScrollView showsVerticalScrollIndicator={false}>
