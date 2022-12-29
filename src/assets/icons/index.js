@@ -25,6 +25,7 @@ import Print from './print.png';
 import Setting from './settings_FILL0_wght400_GRAD0_opsz48.png';
 import Next from './chevron-forward.png';
 import Graph from './monitoring_FILL0_wght400_GRAD0_opsz48.png';
+import Export from './export_notes_FILL0_wght400_GRAD0_opsz48.png';
 
 export {
   Ceklis,
@@ -54,4 +55,5 @@ export {
   Setting,
   Next,
   Graph,
+  Export,
 };

@@ -167,7 +167,6 @@ const LaporanPage = ({ navigation }) => {
       });
     } else {
       Object.keys(dataProfitMentah).map((key) => {
-        console.log('1');
         const data = dataProfitMentah[key];
         if (
           data.bulan == 'Juli' ||
@@ -178,7 +177,6 @@ const LaporanPage = ({ navigation }) => {
           data.bulan == 'Desember'
         ) {
           if (data.tahun == categoryTahun) {
-            console.log('2');
             if (data.bulan == 'Juli') {
               setjuli((oldarray) => [...oldarray, data.profit]);
             } else if (data.bulan == 'Agustus') {
@@ -189,7 +187,6 @@ const LaporanPage = ({ navigation }) => {
               setoktober((oldarray) => [...oldarray, data.profit]);
             } else if (data.bulan == 'November') {
               setnovember((oldarray) => [...oldarray, data.profit]);
-              console.log('3');
             } else if (data.bulan == 'Desember') {
               setdesember((oldarray) => [...oldarray, data.profit]);
             }
@@ -246,8 +243,6 @@ const LaporanPage = ({ navigation }) => {
     }
     return total;
   };
-
-  console.log(november);
 
   return (
     <View style={styles.container}>

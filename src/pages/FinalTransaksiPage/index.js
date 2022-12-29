@@ -156,6 +156,8 @@ const FinalTransaksiPage = ({ navigation, route }) => {
     const newData = {
       idTransaksi: date.getTime(),
       admin: user.username,
+      bulan,
+      tahun,
       date: `${jam}:${menit} ${tanggal} ${bulan} ${tahun}`,
       product: dataTransaksi,
       total: Amount,

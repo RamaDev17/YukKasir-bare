@@ -12,7 +12,6 @@ const db = getDatabase();
 appFirebase;
 
 export const createProduct = (datas) => {
-  console.log(datas);
   return (dispatch) => {
     // loading
     dispatchLoading(dispatch, CREATE_PRODUCT);

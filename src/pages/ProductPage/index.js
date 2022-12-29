@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
   Dimensions,
+  Platform,
 } from 'react-native';
 import SearchBar from 'react-native-platform-searchbar';
 import * as Animatible from 'react-native-animatable';
@@ -155,7 +156,8 @@ const ProductPage = ({ navigation }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingTop: headerHeight, backgroundColor: COLORS.white }}
-        scrollEventThrottle={onScroll}
+        scrollEventThrottle={Platform.OS == 'ios' ? onScroll : undefined}
+        onScroll={Platform.OS == 'android' ? onScroll : undefined}
       >
         {dataProduct ? (
           Object.keys(dataProduct)

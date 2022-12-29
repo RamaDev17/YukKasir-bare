@@ -28,8 +28,6 @@ import { COLORS } from '../../constants';
 const HomePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle={'dark-content'} />
-
       {/* Header */}
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>

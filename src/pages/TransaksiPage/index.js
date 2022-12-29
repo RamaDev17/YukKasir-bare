@@ -137,7 +137,6 @@ const TransaksiPage = ({ navigation }) => {
   };
 
   const onChangeInputNumber = (count, value) => {
-    console.log(count);
     const sellingTotal = parseInt(count) * parseInt(value.selling);
     const firstProfit = value.selling - value.purchase;
     const profitTotal = parseInt(count) * parseInt(firstProfit);
