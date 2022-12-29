@@ -82,12 +82,16 @@ export const PrintPage = ({ navigation }) => {
           };
         }
       });
-      await connect();
+      await connect().then(() => {
+        Alert.alert("", "Printer Bluetooth berhasil terkoneksi")
+      });
     }
   };
 
   const closeConnectPrinter = async () => {
-    await BLEPrinter.closeConn();
+    await BLEPrinter.closeConn().then(() => {
+      Alert.alert("", "Printer Bluetooth berhasil diputus")
+    });
   };
 
   const testPrinter = async () => {
@@ -132,20 +136,20 @@ export const PrintPage = ({ navigation }) => {
           {loadingConnect ? (
             <ActivityIndicator color={COLORS.white} />
           ) : (
-            <Text style={styles.textButton}>Connect</Text>
+            <Text style={styles.textButton}>Sambungkan</Text>
           )}
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: COLORS.red }]}
           onPress={() => closeConnectPrinter()}
         >
-          <Text style={styles.textButton}>Disconnect</Text>
+          <Text style={styles.textButton}>Putuskan Sambungan</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: COLORS.green }]}
           onPress={() => testPrinter()}
         >
-          <Text style={styles.textButton}>Test print</Text>
+          <Text style={styles.textButton}>Tes print</Text>
         </TouchableOpacity>
       </View>
       <AwesomeAlert

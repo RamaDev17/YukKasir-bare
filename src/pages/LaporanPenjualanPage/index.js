@@ -9,6 +9,7 @@ import {
   Platform,
   Alert,
   Image,
+  Dimensions,
 } from 'react-native';
 import { Header } from '../../components/Header';
 import { COLORS, SIZES } from '../../constants';
@@ -21,6 +22,7 @@ import { getReports } from '../../actions/reportActions';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { tahun as tahunNow, bulan as bulanNow } from '../../utils/date';
 import { Export } from '../../assets/icons';
+import { formatNumber } from 'react-native-currency-input';
 
 const LaporanPenjualanPage = ({ navigation }) => {
   const [product, setProduct] = useState([]);
@@ -111,86 +113,108 @@ const LaporanPenjualanPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header name={'Laporan Penjualan'} navigation={navigation} />
-      {Platform.OS == 'ios' ? (
-        <View style={[styles.row, { marginTop: 85, zIndex: 100 }]}>
-          <DropDownPicker
-            open={openInputBulan}
-            setOpen={setOpenInputBulan}
-            items={itemBulan}
-            setItems={setItemBulan}
-            value={valueBulan}
-            setValue={setValueBulan}
-            placeholder="Pilih Bulan"
-            containerStyle={{ width: '50%' }}
-            style={[styles.input]}
-            listMode="SCROLLVIEW"
-            dropDownContainerStyle={{ borderColor: COLORS.black }}
-          />
-          <View style={{ width: '10%' }} />
-          <DropDownPicker
-            open={openInputTahun}
-            setOpen={setOpenInputTahun}
-            items={categoryTahun}
-            setItems={setCategoryTahun}
-            value={valueTahun}
-            setValue={setValueTahun}
-            placeholder="Pilih Tahun"
-            containerStyle={{ width: '40%' }}
-            style={[styles.input]}
-            listMode="SCROLLVIEW"
-            dropDownContainerStyle={{ borderColor: COLORS.black }}
-          />
-        </View>
-      ) : (
-        <View style={[styles.row, { marginTop: 85 }]}>
-          <DropDownPicker
-            open={openInputBulan}
-            setOpen={setOpenInputBulan}
-            items={itemBulan}
-            setItems={setItemBulan}
-            value={valueBulan}
-            setValue={setValueBulan}
-            placeholder="Pilih Bulan"
-            containerStyle={{ width: '50%' }}
-            style={[styles.input]}
-            listMode="SCROLLVIEW"
-            dropDownContainerStyle={{ borderColor: COLORS.black }}
-          />
-          <View style={{ width: '10%' }} />
-          <DropDownPicker
-            open={openInputTahun}
-            setOpen={setOpenInputTahun}
-            items={categoryTahun}
-            setItems={setCategoryTahun}
-            value={valueTahun}
-            setValue={setValueTahun}
-            placeholder="Pilih Tahun"
-            containerStyle={{ width: '40%' }}
-            style={[styles.input]}
-            listMode="SCROLLVIEW"
-            dropDownContainerStyle={{ borderColor: COLORS.black }}
-          />
-        </View>
-      )}
-      {productFix.length != 0 ? (
-        <View style={{ marginTop: 20 }}>
-          <TabelPenjualan data={productFix} />
-        </View>
-      ) : (
-        <View style={styles.center}>
-          <Text>Data Kosong</Text>
-        </View>
-      )}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {Platform.OS == 'ios' ? (
+          <View style={[styles.row, { marginTop: 85, zIndex: 100 }]}>
+            <DropDownPicker
+              open={openInputBulan}
+              setOpen={setOpenInputBulan}
+              items={itemBulan}
+              setItems={setItemBulan}
+              value={valueBulan}
+              setValue={setValueBulan}
+              placeholder="Pilih Bulan"
+              containerStyle={{ width: '50%' }}
+              style={[styles.input]}
+              listMode="SCROLLVIEW"
+              dropDownContainerStyle={{ borderColor: COLORS.black }}
+            />
+            <View style={{ width: '10%' }} />
+            <DropDownPicker
+              open={openInputTahun}
+              setOpen={setOpenInputTahun}
+              items={categoryTahun}
+              setItems={setCategoryTahun}
+              value={valueTahun}
+              setValue={setValueTahun}
+              placeholder="Pilih Tahun"
+              containerStyle={{ width: '40%' }}
+              style={[styles.input]}
+              listMode="SCROLLVIEW"
+              dropDownContainerStyle={{ borderColor: COLORS.black }}
+            />
+          </View>
+        ) : (
+          <View style={[styles.row, { marginTop: 85 }]}>
+            <DropDownPicker
+              open={openInputBulan}
+              setOpen={setOpenInputBulan}
+              items={itemBulan}
+              setItems={setItemBulan}
+              value={valueBulan}
+              setValue={setValueBulan}
+              placeholder="Pilih Bulan"
+              containerStyle={{ width: '50%' }}
+              style={[styles.input]}
+              listMode="SCROLLVIEW"
+              dropDownContainerStyle={{ borderColor: COLORS.black }}
+            />
+            <View style={{ width: '10%' }} />
+            <DropDownPicker
+              open={openInputTahun}
+              setOpen={setOpenInputTahun}
+              items={categoryTahun}
+              setItems={setCategoryTahun}
+              value={valueTahun}
+              setValue={setValueTahun}
+              placeholder="Pilih Tahun"
+              containerStyle={{ width: '40%' }}
+              style={[styles.input]}
+              listMode="SCROLLVIEW"
+              dropDownContainerStyle={{ borderColor: COLORS.black }}
+            />
+          </View>
+        )}
+        {productFix.length != 0 ? (
+          <View style={{ marginTop: 20 }}>
+            <TabelPenjualan data={productFix} />
+          </View>
+        ) : (
+          <View style={styles.center}>
+            <Text>Data Kosong</Text>
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 };
 
 const TabelPenjualan = ({ data }) => {
   // tabel
-  const [head, setHead] = useState(['No', 'Id', 'Product', 'Kategori', 'Tot Pen']);
+  const [head, setHead] = useState([
+    'No',
+    'Id',
+    'Product',
+    'Kategori',
+    'Total Penjualan',
+    'Harga Beli',
+    'Harga Jual',
+    'Laba per Item',
+    'Total Laba',
+  ]);
   const [body, setBody] = useState([]);
-  const width = (SIZES.width - 40) / 22;
-  const widthArr = [width * 2.5, width * 4, width * 9, width * 4, width * 2.5];
+  const width = SIZES.width / 22;
+  const widthArr = [
+    width * 2.5,
+    width * 4,
+    width * 10,
+    width * 4,
+    width * 4,
+    width * 5,
+    width * 5,
+    width * 5,
+    width * 5,
+  ];
 
   let result = [];
 
@@ -215,9 +239,20 @@ const TabelPenjualan = ({ data }) => {
     if (body.length == 0) {
       Object.keys(result).map((key, index) => {
         const data = result[key];
+        console.log(data);
         setBody((oldArray) => [
           ...oldArray,
-          [index + 1, data.id, data.nameProduct, data.category, data.count],
+          [
+            index + 1,
+            data.id,
+            data.nameProduct,
+            data.category,
+            data.count,
+            `Rp. ${formatNumber(data.hargaBeli)}`,
+            `Rp. ${formatNumber(data.hargaJual)}`,
+            `Rp. ${formatNumber(data.hargaJual - data.hargaBeli)}`,
+            `Rp. ${formatNumber(data.profit)}`,
+          ],
         ]);
       });
     }
@@ -234,6 +269,10 @@ const TabelPenjualan = ({ data }) => {
         Product: value[2],
         Kategori: value[3],
         'Total Penjualan': value[4],
+        'Harga Beli': value[5],
+        'Harga Jual': value[6],
+        'Laba per Item': value[7],
+        'Total Laba ': value[8],
       });
     });
 
@@ -321,9 +360,8 @@ const TabelPenjualan = ({ data }) => {
       </TouchableOpacity>
 
       <View style={{ marginTop: 20 }} />
-
-      <ScrollView>
-        <Table borderStyle={{ borderWidth: 0.3, borderColor: COLORS.primary }}>
+      <ScrollView horizontal={true}>
+        <Table borderStyle={{ borderWidth: 0.5, borderColor: COLORS.primary }}>
           <Row
             widthArr={widthArr}
             data={head}
@@ -336,8 +374,8 @@ const TabelPenjualan = ({ data }) => {
             );
           })}
         </Table>
-        <View style={{ marginBottom: 350 }} />
       </ScrollView>
+      <View style={{ marginBottom: 20 }} />
     </View>
   );
 };
@@ -386,7 +424,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   center: {
-    flex: 1,
+    height: Dimensions.get('window').height - 200,
     justifyContent: 'center',
     alignItems: 'center',
   },

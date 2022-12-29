@@ -22,6 +22,7 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomBar from '../components/BottomBar';
 import { COLORS } from '../constants';
+import { Platform } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -99,9 +100,16 @@ const Routes = () => {
         <Stack.Screen
           name="LaporanPenjualanPage"
           component={LaporanPenjualanPage}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, orientation: 'all' }}
         />
-        <Stack.Screen name="LaporanPage" component={LaporanPage} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="LaporanPage"
+          component={LaporanPage}
+          options={{
+            headerShown: false,
+            orientation: Platform.OS == 'android' ? 'all' : 'portrait',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -255,7 +255,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
           }}
         >
           {loading ? (
-            <ActivityIndicator size={'large'} color={COLORS.white} />
+            <ActivityIndicator style={{height: 22, width: 22}} color={COLORS.white} />
           ) : (
             <Text style={styles.textButton}>Cetak</Text>
           )}

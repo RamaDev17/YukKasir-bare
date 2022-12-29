@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReports } from '../../actions/reportActions';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { tahun as tahunNow, bulan as bulanNow } from '../../utils/date';
-import { nFormatter } from '../../utils/formatter';
 import { formatNumber } from 'react-native-currency-input';
 import CardGraph from '../../components/CardGraph';
 
@@ -65,6 +64,7 @@ const LaporanPage = ({ navigation }) => {
   const [desember, setdesember] = useState([]);
   // dataset
   const [dataset, setDataset] = useState([0, 0, 0, 0, 0, 0]);
+  const [orientation, setOrientation] = useState('portrait');
 
   const dispatch = useDispatch();
   const result = useSelector((state) => state.ReportReducer.getreportResult);
@@ -77,6 +77,22 @@ const LaporanPage = ({ navigation }) => {
 
     return unsubscribe;
   }, [navigation]);
+
+  // handle orientation
+  function handleOrientationChange({ window }) {
+    if (window.width > window.height) {
+      setOrientation('landscape');
+    } else {
+      setOrientation('portrait');
+    }
+  }
+
+  useEffect(() => {
+    const unsubscribe = Dimensions.addEventListener('change', handleOrientationChange);
+    return () => unsubscribe();
+  }, []);
+
+  // end handle orientation
 
   useEffect(() => {
     dataProfitMentah = [];
@@ -289,7 +305,11 @@ const LaporanPage = ({ navigation }) => {
               },
             ],
           }}
-          width={Dimensions.get('window').width - 40} // from react-native
+          width={
+            orientation == 'portrait'
+              ? Dimensions.get('window').width - 40
+              : Dimensions.get('window').width
+          } // from react-native
           onDataPointClick={({ value, getColor }) =>
             showMessage({
               message: `Rp. ${value}`,
