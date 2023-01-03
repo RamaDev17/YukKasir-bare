@@ -12,7 +12,7 @@ import {
   TextInput,
 } from 'react-native';
 import { Add, Barcode, Close, Delete, FlashOff, FlashOn, Min } from '../../assets/icons';
-import { COLORS } from '../../constants';
+import { COLORS, SIZES } from '../../constants';
 const { width, height } = Dimensions.get('window');
 import SearchBar from 'react-native-platform-searchbar';
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -252,7 +252,7 @@ const TransaksiPage = ({ navigation }) => {
             </View>
           );
         })}
-        {dataAdd ? (
+        {dataAdd.length != 0 ? (
           dataAdd.map((value, index) => {
             return (
               <View style={[styles.cardSearch, { flexDirection: 'column' }]} key={index}>
@@ -327,7 +327,11 @@ const TransaksiPage = ({ navigation }) => {
             );
           })
         ) : (
-          <View />
+          <View
+            style={{ height: SIZES.height - 300, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text>Silahkan scan barcode atau tulis product di pencarian</Text>
+          </View>
         )}
       </ScrollView>
       <View style={styles.cardBayar}>
@@ -402,6 +406,10 @@ const TransaksiPage = ({ navigation }) => {
                       tunai,
                       kembalian,
                     });
+                    setDataAdd([]);
+                    setAmount(0);
+                    setTunai(0);
+                    setKembalian(0);
                   }
                 }}
               >

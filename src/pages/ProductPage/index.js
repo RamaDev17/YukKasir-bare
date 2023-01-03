@@ -54,6 +54,7 @@ const ProductPage = ({ navigation }) => {
   const [open, setOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [barcode, setBarcode] = useState(false);
+  const [productAscending, setproductAscending] = useState([]);
 
   // Handle ScanBarcode
   const soundScanner = 'soundbarcode.mp3';
@@ -151,6 +152,28 @@ const ProductPage = ({ navigation }) => {
     }
   }, [GetProductReducer]);
 
+  useEffect(() => {
+    setproductAscending([]);
+    const keys = Object.keys(dataProduct);
+
+    // Urutkan keys berdasarkan nama produk
+    keys.sort((a, b) => {
+      if (dataProduct[a].nameProduct < dataProduct[b].nameProduct) {
+        return -1;
+      }
+      if (dataProduct[a].nameProduct > dataProduct[b].nameProduct) {
+        return 1;
+      }
+      return 0;
+    });
+
+    keys.forEach((key) => {
+      setproductAscending((oldArray) => [...oldArray, dataProduct[key]]);
+    });
+  }, [dataProduct]);
+
+  console.log(productAscending);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -159,116 +182,114 @@ const ProductPage = ({ navigation }) => {
         scrollEventThrottle={Platform.OS == 'ios' ? onScroll : undefined}
         onScroll={Platform.OS == 'android' ? onScroll : undefined}
       >
-        {dataProduct ? (
-          Object.keys(dataProduct)
-            .sort()
-            .map((key, index) => {
-              return (
-                <Animatible.View
-                  style={styles.item}
-                  key={index}
-                  animation="fadeInUp"
-                  delay={index * 100}
-                  useNativeDriver
+        {productAscending ? (
+          Object.keys(productAscending).map((key, index) => {
+            return (
+              <Animatible.View
+                style={styles.item}
+                key={index}
+                animation="fadeInUp"
+                delay={index * 100}
+                useNativeDriver
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
                 >
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <View style={{ width: '50%' }}>
-                      <Text style={styles.textItemTitle} numberOfLines={2}>
-                        {uppercaseWord(dataProduct[key].nameProduct)}
-                      </Text>
-                      <Text style={styles.textOpacity}>{dataProduct[key].id}</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textItemTitle}>
-                        {uppercaseWord(dataProduct[key].category)}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.textItemTitle}>
-                        Rp. {formatNumber(dataProduct[key].selling)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Text style={styles.textOpacity}>
-                      Stock: {formatNumber(dataProduct[key].stock)}
+                  <View style={{ width: '50%' }}>
+                    <Text style={styles.textItemTitle} numberOfLines={2}>
+                      {uppercaseWord(productAscending[key].nameProduct)}
                     </Text>
-                    <View style={{ flexDirection: 'row' }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate('UpdateProductPage', dataProduct[key]);
-                        }}
-                      >
-                        <Image
-                          source={Edit}
-                          style={{
-                            width: 25,
-                            height: 25,
-                            tintColor: COLORS.green,
-                            marginRight: 10,
-                          }}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setAlertDelete(true);
-                          setId(dataProduct[key].id);
-                        }}
-                      >
-                        <Image
-                          source={Delete}
-                          style={{ width: 25, height: 25, tintColor: COLORS.red }}
-                        />
-                      </TouchableOpacity>
-                    </View>
+                    <Text style={styles.textOpacity}>{productAscending[key].id}</Text>
                   </View>
-                  {alertDelete ? (
-                    <AwesomeAlert
-                      show={alertDelete}
-                      showProgress={false}
-                      title="Hapus Produk"
-                      titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                      message="Yakin data mau dihapus ?"
-                      messageStyle={{ fontSize: 20 }}
-                      closeOnTouchOutside={true}
-                      closeOnHardwareBackPress={false}
-                      showConfirmButton={true}
-                      showCancelButton={true}
-                      confirmText="Hapus"
-                      cancelText="Batal"
-                      confirmButtonColor={COLORS.primary}
-                      confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                      cancelButtonColor={COLORS.red}
-                      cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                      contentContainerStyle={{ padding: 20 }}
-                      onConfirmPressed={async () => {
-                        await database().ref(`/products/${id}`).remove();
-                        dispatch(getProducts());
-                        navigation.replace('ProductPage');
+                  <View>
+                    <Text style={styles.textItemTitle}>
+                      {uppercaseWord(productAscending[key].category)}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textItemTitle}>
+                      Rp. {formatNumber(productAscending[key].selling)}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    marginTop: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.textOpacity}>
+                    Stock: {formatNumber(productAscending[key].stock)}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('UpdateProductPage', productAscending[key]);
                       }}
-                      onCancelPressed={() => {
-                        setAlertDelete(false);
+                    >
+                      <Image
+                        source={Edit}
+                        style={{
+                          width: 25,
+                          height: 25,
+                          tintColor: COLORS.green,
+                          marginRight: 10,
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setAlertDelete(true);
+                        setId(productAscending[key].id);
                       }}
-                    />
-                  ) : (
-                    <View />
-                  )}
-                </Animatible.View>
-              );
-            })
+                    >
+                      <Image
+                        source={Delete}
+                        style={{ width: 25, height: 25, tintColor: COLORS.red }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {alertDelete ? (
+                  <AwesomeAlert
+                    show={alertDelete}
+                    showProgress={false}
+                    title="Hapus Produk"
+                    titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                    message="Yakin data mau dihapus ?"
+                    messageStyle={{ fontSize: 20 }}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showConfirmButton={true}
+                    showCancelButton={true}
+                    confirmText="Hapus"
+                    cancelText="Batal"
+                    confirmButtonColor={COLORS.primary}
+                    confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                    cancelButtonColor={COLORS.red}
+                    cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+                    contentContainerStyle={{ padding: 20 }}
+                    onConfirmPressed={async () => {
+                      await database().ref(`/products/${id}`).remove();
+                      dispatch(getProducts());
+                      navigation.replace('ProductPage');
+                    }}
+                    onCancelPressed={() => {
+                      setAlertDelete(false);
+                    }}
+                  />
+                ) : (
+                  <View />
+                )}
+              </Animatible.View>
+            );
+          })
         ) : (
           <View
             style={{

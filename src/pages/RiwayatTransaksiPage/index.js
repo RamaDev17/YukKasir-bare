@@ -52,37 +52,38 @@ const RiwayatTransaksiPage = ({ navigation }) => {
           dropDownContainerStyle={{ borderColor: COLORS.primary }}
         />
         <View style={{ marginTop: 10 }} />
-        {Object.keys(result).map((key) => {
-          const riwayat = result[key];
-          const date = riwayat.date.split(' ');
-          return (
-            <TouchableOpacity
-              key={key}
-              style={styles.card}
-              onPress={() => navigation.navigate('RiwayatTransaksiDetailPage', riwayat)}
-            >
-              <View style={[styles.row, { alignItems: 'center' }]}>
-                <View style={{ flex: 3 }}>
-                  <Text style={styles.text}>{`${date[1]} ${date[2]} ${date[3]}`}</Text>
-                  <Text style={[styles.text, styles.textblur]}>{`${riwayat.idTransaksi}`}</Text>
-                  <Text style={[styles.text, styles.textblur]}>{`${riwayat.admin}`}</Text>
+        {result &&
+          Object.keys(result).map((key) => {
+            const riwayat = result[key];
+            const date = riwayat.date.split(' ');
+            return (
+              <TouchableOpacity
+                key={key}
+                style={styles.card}
+                onPress={() => navigation.navigate('RiwayatTransaksiDetailPage', riwayat)}
+              >
+                <View style={[styles.row, { alignItems: 'center' }]}>
+                  <View style={{ flex: 3 }}>
+                    <Text style={styles.text}>{`${date[1]} ${date[2]} ${date[3]}`}</Text>
+                    <Text style={[styles.text, styles.textblur]}>{`${riwayat.idTransaksi}`}</Text>
+                    <Text style={[styles.text, styles.textblur]}>{`${riwayat.admin}`}</Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.row,
+                      { flex: 2, alignItems: 'center', justifyContent: 'flex-end' },
+                    ]}
+                  >
+                    <Text style={styles.text}>Rp. {formatNumber(riwayat.total)}</Text>
+                    <Image
+                      source={Next}
+                      style={{ width: 25, height: 25, tintColor: COLORS.primary }}
+                    />
+                  </View>
                 </View>
-                <View
-                  style={[
-                    styles.row,
-                    { flex: 2, alignItems: 'center', justifyContent: 'flex-end' },
-                  ]}
-                >
-                  <Text style={styles.text}>Rp. {formatNumber(riwayat.total)}</Text>
-                  <Image
-                    source={Next}
-                    style={{ width: 25, height: 25, tintColor: COLORS.primary }}
-                  />
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              </TouchableOpacity>
+            );
+          })}
       </ScrollView>
     </View>
   );
