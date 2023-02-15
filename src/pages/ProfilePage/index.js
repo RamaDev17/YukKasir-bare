@@ -8,9 +8,11 @@ import { getAuth, signOut } from 'firebase/auth';
 import { appFirebase } from '../../config/firebase';
 import { useDispatch } from 'react-redux';
 import { loginUser, registerUser } from '../../actions/authActions';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState('');
+  const [alert, setAlert] = useState(false)
 
   useEffect(() => {
     getData('user').then((value) => {
@@ -31,7 +33,10 @@ const ProfilePage = ({ navigation }) => {
         {
           text: 'Ok',
           onPress: () => {
-            navigation.replace('LoginPage');
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'LoginPage' }]
+            });
           },
         },
       ]);
@@ -39,6 +44,33 @@ const ProfilePage = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
+      {
+        alert && (
+          <AwesomeAlert
+            show={alert}
+            showProgress={false}
+            title="Keluar"
+            titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+            message="Yakin mau keluar aplikasi ?"
+            messageStyle={{ fontSize: 20 }}
+            closeOnTouchOutside={true}
+            closeOnHardwareBackPress={false}
+            showConfirmButton={true}
+            showCancelButton={true}
+            confirmText="Iya"
+            cancelText="Batal"
+            confirmButtonColor={COLORS.primary}
+            confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+            cancelButtonColor={COLORS.red}
+            cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+            contentContainerStyle={{ padding: 20 }}
+            onConfirmPressed={async () => { logout() }}
+            onCancelPressed={() => {
+              setAlert(false);
+            }}
+          />
+        )
+      }
       <Header navigation={navigation} name="Profile" />
       <View style={{ marginTop: 80 }} />
       <Image source={ProfileImage} style={{ width: 100, height: 200 }} />
@@ -47,7 +79,7 @@ const ProfilePage = ({ navigation }) => {
         <View style={{ height: 20 }} />
         <Text style={styles.text}>{`Username : ${user.username}`}</Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => logout()}>
+      <TouchableOpacity style={styles.button} onPress={() => setAlert(true)}>
         <Text style={styles.textButton}>Keluar</Text>
       </TouchableOpacity>
     </View>

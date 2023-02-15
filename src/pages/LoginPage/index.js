@@ -33,7 +33,7 @@ const LoginPage = ({ navigation }) => {
 
   useEffect(() => {
     if (LoginReducer) {
-      navigation.replace('HomePage');
+      navigation.replace('BottomTab');
     }
   }, [LoginReducer]);
 

@@ -14,6 +14,8 @@ import FinalTransaksiPage from './FinalTransaksiPage';
 import RiwayatTransaksiPage from './RiwayatTransaksiPage';
 import RiwayatTransaksiDetailPage from './RiwayatDetailPage';
 import LaporanPenjualanPage from './LaporanPenjualanPage';
+import HelpPage from './HelpPage';
+import HelpPdfPage from './HelpPdfPage';
 
 export {
   SplashPage,
@@ -32,4 +34,6 @@ export {
   RiwayatTransaksiPage,
   RiwayatTransaksiDetailPage,
   LaporanPenjualanPage,
+  HelpPage,
+  HelpPdfPage
 };

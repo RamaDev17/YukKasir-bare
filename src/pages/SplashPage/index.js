@@ -28,7 +28,7 @@ const SplashPage = ({ navigation }) => {
   useEffect(() => {
     if (user) {
       setTimeout(() => {
-        navigation.replace('HomePage');
+        navigation.replace('BottomTab');
       }, 3000);
     } else if (onBoarding && onBoarding != 'onBoarding') {
       setTimeout(() => {

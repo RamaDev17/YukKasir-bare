@@ -10,6 +10,13 @@
 		00E356F31AD99517003FC87E /* YukKasirTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* YukKasirTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		214EBC25298E75C00051042E /* profit.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC1E298E75BF0051042E /* profit.pdf */; };
+		214EBC26298E75C00051042E /* laporan.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC1F298E75BF0051042E /* laporan.pdf */; };
+		214EBC27298E75C00051042E /* transaksi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC20298E75BF0051042E /* transaksi.pdf */; };
+		214EBC28298E75C00051042E /* tambahProduk.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC21298E75C00051042E /* tambahProduk.pdf */; };
+		214EBC29298E75C00051042E /* printer.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC22298E75C00051042E /* printer.pdf */; };
+		214EBC2A298E75C00051042E /* updateProduk.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC23298E75C00051042E /* updateProduk.pdf */; };
+		214EBC2B298E75C00051042E /* deleteProduk.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC24298E75C00051042E /* deleteProduk.pdf */; };
 		215C6510293E3E82003BAE9A /* soundbarcode.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */; };
 		2180AFB329474A7C00001ACE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		21DC658F293E372E00036656 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -41,8 +48,15 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = YukKasir/main.m; sourceTree = "<group>"; };
 		16032D6DBCB84055B00B1A9A /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../src/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		17C6F78810304D848FC43289 /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../src/assets/fonts/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
+		214EBC1E298E75BF0051042E /* profit.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = profit.pdf; path = ../src/assets/pdf/profit.pdf; sourceTree = "<group>"; };
+		214EBC1F298E75BF0051042E /* laporan.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = laporan.pdf; path = ../src/assets/pdf/laporan.pdf; sourceTree = "<group>"; };
+		214EBC20298E75BF0051042E /* transaksi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = transaksi.pdf; path = ../src/assets/pdf/transaksi.pdf; sourceTree = "<group>"; };
+		214EBC21298E75C00051042E /* tambahProduk.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = tambahProduk.pdf; path = ../src/assets/pdf/tambahProduk.pdf; sourceTree = "<group>"; };
+		214EBC22298E75C00051042E /* printer.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = printer.pdf; path = ../src/assets/pdf/printer.pdf; sourceTree = "<group>"; };
+		214EBC23298E75C00051042E /* updateProduk.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = updateProduk.pdf; path = ../src/assets/pdf/updateProduk.pdf; sourceTree = "<group>"; };
+		214EBC24298E75C00051042E /* deleteProduk.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = deleteProduk.pdf; path = ../src/assets/pdf/deleteProduk.pdf; sourceTree = "<group>"; };
+		2157BCAC29650923008BB2BC /* YukKasir.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = YukKasir.entitlements; path = YukKasir/YukKasir.entitlements; sourceTree = "<group>"; };
 		21B779C728F3A94F00766ADB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		21F086842908E877003AAECB /* soundbarcode.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = soundbarcode.mp3; path = "../../../../../../../../Documents/TugasAkhir/Aplikasi/YukKasir-bare/ios/soundbarcode.mp3"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = soundbarcode.mp3; path = ../src/assets/sound/soundbarcode.mp3; sourceTree = "<group>"; };
 		3C7D288ECFB44444861137F2 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		403BA6BC433D51BA7EB20650 /* Pods-YukKasir.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YukKasir.release.xcconfig"; path = "Target Support Files/Pods-YukKasir/Pods-YukKasir.release.xcconfig"; sourceTree = "<group>"; };
@@ -107,6 +121,7 @@
 		13B07FAE1A68108700A75B9A /* YukKasir */ = {
 			isa = PBXGroup;
 			children = (
+				2157BCAC29650923008BB2BC /* YukKasir.entitlements */,
 				21B779C428F3A8ED00766ADB /* Firebase */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -191,7 +206,13 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				21F086842908E877003AAECB /* soundbarcode.mp3 */,
+				214EBC24298E75C00051042E /* deleteProduk.pdf */,
+				214EBC1F298E75BF0051042E /* laporan.pdf */,
+				214EBC22298E75C00051042E /* printer.pdf */,
+				214EBC1E298E75BF0051042E /* profit.pdf */,
+				214EBC21298E75C00051042E /* tambahProduk.pdf */,
+				214EBC20298E75BF0051042E /* transaksi.pdf */,
+				214EBC23298E75C00051042E /* updateProduk.pdf */,
 				13B07FAE1A68108700A75B9A /* YukKasir */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* YukKasirTests */,
@@ -323,6 +344,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				214EBC25298E75C00051042E /* profit.pdf in Resources */,
+				214EBC26298E75C00051042E /* laporan.pdf in Resources */,
+				214EBC27298E75C00051042E /* transaksi.pdf in Resources */,
+				214EBC28298E75C00051042E /* tambahProduk.pdf in Resources */,
+				214EBC29298E75C00051042E /* printer.pdf in Resources */,
+				214EBC2A298E75C00051042E /* updateProduk.pdf in Resources */,
+				214EBC2B298E75C00051042E /* deleteProduk.pdf in Resources */,
 				2180AFB329474A7C00001ACE /* LaunchScreen.storyboard in Resources */,
 				215C6510293E3E82003BAE9A /* soundbarcode.mp3 in Resources */,
 				21DC658F293E372E00036656 /* Images.xcassets in Resources */,
@@ -523,6 +551,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = YukKasir/YukKasir.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -553,6 +582,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = YukKasir/YukKasir.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

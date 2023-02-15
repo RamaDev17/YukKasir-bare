@@ -11,7 +11,7 @@ export const Header = ({ navigation, name, replace }) => {
       <TouchableOpacity
         style={styles.icon}
         onPress={() => {
-          replace ? navigation.replace('HomePage') : navigation.goBack();
+          replace ? navigation.replace('BottomTab') : navigation.goBack();
         }}
       >
         {/* <Image source={ArrowBack} style={{ height: 30, width: 30, tintColor: COLORS.black }} /> */}

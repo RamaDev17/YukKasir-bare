@@ -18,6 +18,8 @@ import {
   RiwayatTransaksiPage,
   RiwayatTransaksiDetailPage,
   LaporanPenjualanPage,
+  HelpPage,
+  HelpPdfPage
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomBar from '../components/BottomBar';
@@ -40,8 +42,7 @@ const BottomTab = () => {
   return (
     <Tab.Navigator tabBar={(props) => <BottomBar {...props} />}>
       <Tab.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
-      <Tab.Screen name="LaporanPage" component={LaporanPage} options={{ headerShown: false }} />
-      <Tab.Screen name="ProfilePage" component={ProfilePage} options={{ headerShown: false }} />
+      <Tab.Screen name="HelpPage" component={HelpPage} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 };
@@ -62,9 +63,9 @@ const Routes = () => {
           component={RegisterPage}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false }} />
         <Stack.Screen name="ProfilePage" component={ProfilePage} options={{ headerShown: false }} />
-        {/* <Stack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false }} /> */}
         <Stack.Screen
           name="TransaksiPage"
           component={TransaksiPage}
@@ -108,6 +109,13 @@ const Routes = () => {
           options={{
             headerShown: false,
             orientation: Platform.OS == 'android' ? 'all' : 'portrait',
+          }}
+        />
+        <Stack.Screen
+          name="HelpPdfPage"
+          component={HelpPdfPage}
+          options={{
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

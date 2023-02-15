@@ -182,7 +182,7 @@ const ProductPage = ({ navigation }) => {
         scrollEventThrottle={Platform.OS == 'ios' ? onScroll : undefined}
         onScroll={Platform.OS == 'android' ? onScroll : undefined}
       >
-        {productAscending ? (
+        {productAscending.length !== 0 ? (
           Object.keys(productAscending).map((key, index) => {
             return (
               <Animatible.View
@@ -291,14 +291,7 @@ const ProductPage = ({ navigation }) => {
             );
           })
         ) : (
-          <View
-            style={{
-              width: SIZES.width,
-              height: SIZES.height / 1.15,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <View style={styles.dataZonk}>
             <Text>Data Kosong</Text>
           </View>
         )}
@@ -341,7 +334,7 @@ const ProductPage = ({ navigation }) => {
           </Animated.View>
         </Animated.View>
         <Animated.View style={[styles.firstContainer]}>
-          <TouchableOpacity onPress={() => navigation.replace('HomePage')} style={styles.iconBack}>
+          <TouchableOpacity onPress={() => navigation.replace('BottomTab')} style={styles.iconBack}>
             <Image source={ArrowBack} style={{ tintColor: 'black', height: 30, width: 30 }} />
           </TouchableOpacity>
           <Text style={styles.name}>Produk</Text>
@@ -397,7 +390,7 @@ export default ProductPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 10,
+    backgroundColor: COLORS.white
   },
   item: {
     padding: 10,
@@ -425,6 +418,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 2,
     paddingHorizontal: 15,
+    paddingTop: 10,
     justifyContent: 'center',
   },
   searchContainer: {
@@ -460,6 +454,7 @@ const styles = StyleSheet.create({
   iconBack: {
     position: 'absolute',
     left: 10,
+    top: 10,
     padding: 10,
     zIndex: 100,
   },
@@ -497,4 +492,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
   },
+  dataZonk: {
+    width: SIZES.width,
+    height: SIZES.height - 120,
+    backgroundColor: COLORS.white,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });

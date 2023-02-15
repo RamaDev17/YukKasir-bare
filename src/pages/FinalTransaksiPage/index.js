@@ -22,10 +22,9 @@ import { createReport } from '../../actions/reportActions';
 import { createProduct } from '../../actions/productActions';
 import { createPenjualan, getPenjualan } from '../../actions/penjualanActions';
 
-let jumlahProfit = 0;
-
 const FinalTransaksiPage = ({ navigation, route }) => {
   let dataTransaksi = route.params.dataAdd;
+  // console.log(dataTransaksi);
   let Amount = route.params.amount;
   let tunai = route.params.tunai;
   let kembalian = route.params.kembalian;
@@ -37,6 +36,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   const [penjualan, setPenjualan] = useState([]);
+  const [jumlahProfit, setJumlahProfit] = useState(0);
 
   const getPrinter = useSelector((state) => state.PrinterReducer.printerResult.data);
   const dispatch = useDispatch();
@@ -46,14 +46,18 @@ const FinalTransaksiPage = ({ navigation, route }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       // do something
       getData('user').then((res) => setUser(res));
+      setJumlahProfit(0)
       Object.keys(dataTransaksi).map((key) => {
-        jumlahProfit = jumlahProfit + dataTransaksi[key].profit;
+        setJumlahProfit(oldValue => oldValue + dataTransaksi[key].profit)
+        // console.log(dataTransaksi[key].profit);
       });
       dispatch(getPenjualan());
     });
 
     return unsubscribe;
   }, [navigation]);
+
+  // console.log(jumlahProfit);
 
   useEffect(() => {
     Object.keys(getPenjualanResult).map((key) => {
@@ -168,7 +172,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
     setLoading(!loading);
     dispatch(createReport(newData));
     setTimeout(() => {
-      navigation.replace('HomePage');
+      navigation.replace('BottomTab');
     }, 4000);
   };
 

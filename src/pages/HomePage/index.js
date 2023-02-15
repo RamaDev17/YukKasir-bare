@@ -24,6 +24,7 @@ import {
 } from '../../assets/icons';
 import { Person } from '../../assets/images';
 import { COLORS } from '../../constants';
+import IconF from 'react-native-vector-icons/Ionicons'
 
 const HomePage = ({ navigation }) => {
   return (
@@ -131,11 +132,12 @@ const HomePage = ({ navigation }) => {
             style={styles.cardMenu}
             onPress={() => navigation.navigate('LaporanPage')}
           >
-            <Image
+            {/* <Image
               source={Graph}
               resizeMode="cover"
               style={{ width: 70, height: 70, tintColor: COLORS.primary }}
-            />
+            /> */}
+            <IconF name="analytics-outline" size={70} color={COLORS.primary} />
             <Text style={styles.textCardMenu}>Profit</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -151,7 +153,7 @@ const HomePage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ marginBottom: 20 }} />
+        <View style={{ marginBottom: 80 }} />
       </ScrollView>
     </View>
   );

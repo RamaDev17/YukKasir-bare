@@ -98,7 +98,7 @@ export const CreateProduct = ({ navigation }) => {
   }, [loading]);
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView behavior="height" style={styles.container}>
       <Header navigation={navigation} name="Tambah Produk" />
       {/* Alert */}
       {openAlert ? (

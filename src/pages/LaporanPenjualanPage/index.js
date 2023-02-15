@@ -239,7 +239,7 @@ const TabelPenjualan = ({ data }) => {
     if (body.length == 0) {
       Object.keys(result).map((key, index) => {
         const data = result[key];
-        console.log(data);
+        // console.log(data);
         setBody((oldArray) => [
           ...oldArray,
           [

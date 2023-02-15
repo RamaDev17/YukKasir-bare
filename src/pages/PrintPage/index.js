@@ -97,7 +97,9 @@ export const PrintPage = ({ navigation }) => {
   const testPrinter = async () => {
     const Printer = BLEPrinter;
     try {
+      Printer.printText('');
       Printer.printText('\n<C>Printer berhasil tersambung</C>\n');
+      Printer.printText('');
     } catch (err) {
       console.warn(err);
     }

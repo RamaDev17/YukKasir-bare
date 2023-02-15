@@ -98,7 +98,7 @@ export const UpdateProduct = ({ navigation, route }) => {
   }, [loading]);
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView behavior="height" style={styles.container}>
       <Header navigation={navigation} name="Update Produk" />
       {/* Alert */}
       {openAlert ? (

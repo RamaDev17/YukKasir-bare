@@ -49,8 +49,11 @@ const RegisterPage = ({ navigation }) => {
           email,
         };
         dispatch(registerUser(datas, password));
+        setTimeout(() => {
+          setLoading(false)
+        }, 4000)
       } else {
-        Alert.alert('Gagal', 'Password dan Ulangi Password harus sama');
+        Alert.alert('Gagal', 'Password dan Kofirmasi Password harus sama');
       }
     } else {
       Alert.alert('Gagal', 'Form harus diisi semua');
