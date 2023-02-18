@@ -116,7 +116,10 @@ export const CreateProduct = ({ navigation }) => {
           confirmButtonColor={COLORS.primary}
           confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
           onConfirmPressed={() => {
-            navigation.replace('ProductPage');
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'BottomTab' }]
+            });
           }}
           contentContainerStyle={{ padding: 20 }}
         />

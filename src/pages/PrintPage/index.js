@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { BLEPrinter } from 'react-native-thermal-receipt-printer-image-qr';
+import { BLEPrinter, COMMANDS, ColumnAliment } from 'react-native-thermal-receipt-printer-image-qr';
 import { Header } from '../../components/Header';
 import { COLORS } from '../../constants';
 import Loading from '../../components/Loading';
@@ -100,6 +100,40 @@ export const PrintPage = ({ navigation }) => {
       Printer.printText('');
       Printer.printText('\n<C>Printer berhasil tersambung</C>\n');
       Printer.printText('');
+      // const BOLD_ON = COMMANDS.TEXT_FORMAT.TXT_BOLD_ON;
+      // const BOLD_OFF = COMMANDS.TEXT_FORMAT.TXT_BOLD_OFF;
+      // let orderList = [
+      //   ["1. Skirt Palas Labuh Muslimah Fashion", "x2", "500$"],
+      //   ["2. BLOUSE ROPOL VIRAL MUSLIMAH FASHION", "x4222", "500$"],
+      //   [
+      //     "3. Women Crew Neck Button Down Ruffle Collar Loose Blouse",
+      //     "x1",
+      //     "30000000000000$",
+      //   ],
+      //   ["4. Retro Buttons Up Full Sleeve Loose", "x10", "200$"],
+      //   ["5. Retro Buttons Up", "x10", "200$"],
+      // ];
+      
+      // let columnAlignment = [
+      //   ColumnAliment.LEFT,
+      //   ColumnAliment.CENTER,
+      //   ColumnAliment.RIGHT,
+      // ];
+      // let columnWidth = [46 - (7 + 12), 7, 12];
+      // const header = ["Product list", "Qty", "Price"];
+      // Printer.printColumnsText(header, columnWidth, columnAlignment, [
+      //   `${BOLD_ON}`,
+      //   "",
+      //   "",
+      // ]);
+      // for (let i in orderList) {
+      //   Printer.printColumnsText(orderList[i], columnWidth, columnAlignment, [
+      //     `${BOLD_OFF}`,
+      //     "",
+      //     "",
+      //   ]);
+      // }
+      // Printer.printBill(`${CENTER}Thank you\n`);
     } catch (err) {
       console.warn(err);
     }

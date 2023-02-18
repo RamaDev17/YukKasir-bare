@@ -33,7 +33,7 @@ const RiwayatTransaksiPage = ({ navigation }) => {
   useEffect(() => {
     dispatch(getReports(category));
   }, [category]);
-
+// console.log(result);
   return (
     <View style={styles.container}>
       <Header navigation={navigation} name="Riwayat Transaksi" replace={true} />
@@ -53,7 +53,7 @@ const RiwayatTransaksiPage = ({ navigation }) => {
         />
         <View style={{ marginTop: 10 }} />
         {result &&
-          Object.keys(result).map((key) => {
+          Object.keys(result).sort((a, b) => a - b).map((key) => {
             const riwayat = result[key];
             const date = riwayat.date.split(' ');
             return (

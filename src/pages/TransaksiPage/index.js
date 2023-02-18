@@ -155,6 +155,8 @@ const TransaksiPage = ({ navigation }) => {
     setKembalian(tunai - amount);
   }, [tunai]);
 
+  console.log(productSearch);
+
   return (
     <View style={{ width, height }}>
       <Header name="Transaksi" navigation={navigation} />
@@ -225,33 +227,38 @@ const TransaksiPage = ({ navigation }) => {
         ) : (
           <View />
         )}
-        {Object.keys(productSearch).map((key, index) => {
-          return (
-            <View key={index}>
-              <View style={styles.cardSearch} key={index}>
-                <View style={{ width: '60%' }}>
-                  <Text style={styles.textTitleCard} numberOfLines={2}>
-                    {uppercaseWord(productSearch[key].nameProduct)}
-                  </Text>
-                  <Text style={styles.textSubTitleCard}>{productSearch[key].id}</Text>
-                  <Text style={styles.textSubTitleCard}>Stock: {productSearch[key].stock}</Text>
+        {
+          productSearch.length !== 0 || productSearch == ""
+            ?
+            Object.keys(productSearch).map((key, index) => {
+              return (
+                <View key={index}>
+                  <View style={styles.cardSearch} key={index}>
+                    <View style={{ width: '60%' }}>
+                      <Text style={styles.textTitleCard} numberOfLines={2}>
+                        {uppercaseWord(productSearch[key].nameProduct)}
+                      </Text>
+                      <Text style={styles.textSubTitleCard}>{productSearch[key].id}</Text>
+                      <Text style={styles.textSubTitleCard}>Stock: {productSearch[key].stock}</Text>
+                    </View>
+                    <View style={{ justifyContent: 'space-between' }}>
+                      <Text style={styles.textTitleCard}>
+                        Rp. {formatNumber(productSearch[key].selling)}
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.buttonCard}
+                        onPress={() => onAddHandle(productSearch[key], 1)}
+                      >
+                        <Text style={styles.textButtonCard}>Tambah</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{ borderWidth: 1, marginHorizontal: 20, borderColor: '#BCCEF8' }} />
                 </View>
-                <View style={{ justifyContent: 'space-between' }}>
-                  <Text style={styles.textTitleCard}>
-                    Rp. {formatNumber(productSearch[key].selling)}
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.buttonCard}
-                    onPress={() => onAddHandle(productSearch[key], 1)}
-                  >
-                    <Text style={styles.textButtonCard}>Tambah</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={{ borderWidth: 1, marginHorizontal: 20, borderColor: '#BCCEF8' }} />
-            </View>
-          );
-        })}
+              );
+            })
+            : <></>
+        }
         {dataAdd.length != 0 ? (
           dataAdd.map((value, index) => {
             return (
@@ -372,7 +379,7 @@ const TransaksiPage = ({ navigation }) => {
                 prefix="Rp. "
                 delimiter="."
                 precision={0}
-                onChangeText={(formattedValue) => {}}
+                onChangeText={(formattedValue) => { }}
                 placeholder="Uang Tunai"
                 style={{
                   borderWidth: 0.5,

@@ -19,6 +19,7 @@
 		214EBC2B298E75C00051042E /* deleteProduk.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 214EBC24298E75C00051042E /* deleteProduk.pdf */; };
 		215C6510293E3E82003BAE9A /* soundbarcode.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */; };
 		2180AFB329474A7C00001ACE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		218C7E9B29A0D9BB000FACDE /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 218C7E9A29A0D9BB000FACDE /* main.jsbundle */; };
 		21DC658F293E372E00036656 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		BD102FC739DD182CCFE9F4EC /* Pods_YukKasir.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E493B27C813117D2D3B90ADA /* Pods_YukKasir.framework */; };
 /* End PBXBuildFile section */
@@ -56,6 +57,7 @@
 		214EBC23298E75C00051042E /* updateProduk.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = updateProduk.pdf; path = ../src/assets/pdf/updateProduk.pdf; sourceTree = "<group>"; };
 		214EBC24298E75C00051042E /* deleteProduk.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = deleteProduk.pdf; path = ../src/assets/pdf/deleteProduk.pdf; sourceTree = "<group>"; };
 		2157BCAC29650923008BB2BC /* YukKasir.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = YukKasir.entitlements; path = YukKasir/YukKasir.entitlements; sourceTree = "<group>"; };
+		218C7E9A29A0D9BB000FACDE /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		21B779C728F3A94F00766ADB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2A6C28EAB2BB4F41A9236463 /* soundbarcode.mp3 */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = soundbarcode.mp3; path = ../src/assets/sound/soundbarcode.mp3; sourceTree = "<group>"; };
 		3C7D288ECFB44444861137F2 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				218C7E9A29A0D9BB000FACDE /* main.jsbundle */,
 				214EBC24298E75C00051042E /* deleteProduk.pdf */,
 				214EBC1F298E75BF0051042E /* laporan.pdf */,
 				214EBC22298E75C00051042E /* printer.pdf */,
@@ -344,6 +347,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				218C7E9B29A0D9BB000FACDE /* main.jsbundle in Resources */,
 				214EBC25298E75C00051042E /* profit.pdf in Resources */,
 				214EBC26298E75C00051042E /* laporan.pdf in Resources */,
 				214EBC27298E75C00051042E /* transaksi.pdf in Resources */,
