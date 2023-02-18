@@ -7025,10 +7025,10 @@ react-native-table-component@^1.2.2:
   resolved "https://registry.yarnpkg.com/react-native-table-component/-/react-native-table-component-1.2.2.tgz#1c9bdcd8f1fd7edf10d1e93ebc3b7877ecd74def"
   integrity sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw==
 
-react-native-thermal-receipt-printer-image-qr@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/react-native-thermal-receipt-printer-image-qr/-/react-native-thermal-receipt-printer-image-qr-0.1.10.tgz#66bbd710b5243dccc7f8c9d01698beed9c7df1c3"
-  integrity sha512-JtNZFMqb2qlNqschn7EUoPSv/HLl+/F3rGypS/2ye2eCN0G4zZl8PyUY6XYm40WJwzx//t8bVoNRmgD8tQbBdw==
+react-native-thermal-receipt-printer-image-qr@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/react-native-thermal-receipt-printer-image-qr/-/react-native-thermal-receipt-printer-image-qr-0.1.11.tgz#f452c1c4b4833ceda4e490dd778861e487d7fbcd"
+  integrity sha512-caPU5L395VTFfIUJ1/Fm9QUMTCb81VaGuy96Hrmg3fEhaPS/8Vxs8PfR39zgeR6nd/xFYRJFqKgsIQ+KP1BSXw==
   dependencies:
     buffer "^5.6.0"
     iconv-lite "^0.6.2"

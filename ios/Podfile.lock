@@ -312,7 +312,7 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-thermal-receipt-printer-image-qr (0.1.10):
+  - react-native-thermal-receipt-printer-image-qr (0.1.11):
     - React
   - React-perflogger (0.70.2)
   - React-RCTActionSheet (0.70.2):
@@ -381,8 +381,6 @@ PODS:
     - React-logger (= 0.70.2)
     - React-perflogger (= 0.70.2)
   - RNCAsyncStorage (1.17.10):
-    - React-Core
-  - RNCPicker (2.4.8):
     - React-Core
   - RNFBApp (15.7.0):
     - Firebase/CoreOnly (= 9.6.0)
@@ -467,7 +465,6 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - RNFS (from `../node_modules/react-native-fs`)
@@ -605,8 +602,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
-  RNCPicker:
-    :path: "../node_modules/@react-native-picker/picker"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBDatabase:
@@ -680,7 +675,7 @@ SPEC CHECKSUMS:
   react-native-pdf: 33c622cbdf776a649929e8b9d1ce2d313347c4fa
   react-native-ping: 3c7e1da0c871cd69877d48c999d12090eebbac5e
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
-  react-native-thermal-receipt-printer-image-qr: 75f7c1ee0e7861c7d4809b781835dbb6c90ce0f1
+  react-native-thermal-receipt-printer-image-qr: 2f7139b5aa6eee5f3d4a0b647e1a48b53aafa9ef
   React-perflogger: 6009895616a455781293950bbd63d53cfc7ffbc5
   React-RCTActionSheet: 5e90aa5712af18bfc86c2c6d97d4dbe0e5451c1d
   React-RCTAnimation: 50c44d6501f8bfb2fe885e544501f8798b4ff3d6
@@ -694,7 +689,6 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 80065f60af4f4b05603661070c8622bb3740bf16
   ReactCommon: 1209130f460e4aa9d255ddc75fa0a827ebf93dfb
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
-  RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNFBApp: c3c9e694e9d34c14250a069916eb05785c5f3c32
   RNFBDatabase: a19d52aa6ef167f0e9306dc2781547b1a6a0b311
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688

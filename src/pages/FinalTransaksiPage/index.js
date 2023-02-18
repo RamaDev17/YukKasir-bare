@@ -15,7 +15,7 @@ import { Header } from '../../components/Header';
 import { formatNumber } from '../../utils/formatNumber';
 import { Print, Setting } from '../../assets/icons';
 import { getData } from '../../utils/localStorage';
-import { BLEPrinter, COMMANDS, ColumnAliment } from 'react-native-thermal-receipt-printer-image-qr';
+import { BLEPrinter, COMMANDS, ColumnAlignment } from 'react-native-thermal-receipt-printer-image-qr';
 import { bulan, hari, tahun, tanggal } from '../../utils/date';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { createReport } from '../../actions/reportActions';
@@ -84,7 +84,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
       Printer.printText(`<C>${hari}, ${tanggal} ${bulan} ${tahun}</C>`);
       Printer.printText(`<C>${jam}:${menit}</C>`);
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
-      let columnAliment = [ColumnAliment.LEFT, ColumnAliment.CENTER, ColumnAliment.RIGHT];
+      let columnAligment = [ColumnAlignment.LEFT, ColumnAlignment.CENTER, ColumnAlignment.RIGHT];
       let columnWidth = [30 - (10 + 1), 1, 10];
       Object.keys(dataTransaksi).map((key) => {
         Printer.printText(dataTransaksi[key].nameProduct);
@@ -93,15 +93,15 @@ const FinalTransaksiPage = ({ navigation, route }) => {
           '',
           formatNumber(dataTransaksi[key].total),
         ];
-        Printer.printColumnsText(orderList, columnWidth, columnAliment, ['', '', '']);
+        Printer.printColumnsText(orderList, columnWidth, columnAligment, ['', '', '']);
       });
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
       const totalHarga = ['Total Rp.', '', formatNumber(Amount)];
-      Printer.printColumnsText(totalHarga, columnWidth, columnAliment, ['', '', '']);
+      Printer.printColumnsText(totalHarga, columnWidth, columnAligment, ['', '', '']);
       const bayar = ['Bayar Rp.', '', formatNumber(tunai)];
-      Printer.printColumnsText(bayar, columnWidth, columnAliment, ['', '', '']);
+      Printer.printColumnsText(bayar, columnWidth, columnAligment, ['', '', '']);
       const kembali = ['Kembali Rp.', '', formatNumber(kembalian)];
-      Printer.printColumnsText(kembali, columnWidth, columnAliment, ['', '', '']);
+      Printer.printColumnsText(kembali, columnWidth, columnAligment, ['', '', '']);
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
       Printer.printText(`<C>Terima Kasih</C>`);
       Printer.printText('\n');
