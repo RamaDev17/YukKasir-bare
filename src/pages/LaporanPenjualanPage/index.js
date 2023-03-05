@@ -177,7 +177,7 @@ const LaporanPenjualanPage = ({ navigation }) => {
         )}
         {productFix.length != 0 ? (
           <View style={{ marginTop: 20 }}>
-            <TabelPenjualan data={productFix} />
+            <TabelPenjualan data={productFix} valueBulan={valueBulan} valueTahun={valueTahun} />
           </View>
         ) : (
           <View style={styles.center}>
@@ -189,7 +189,7 @@ const LaporanPenjualanPage = ({ navigation }) => {
   );
 };
 
-const TabelPenjualan = ({ data }) => {
+const TabelPenjualan = ({ data, valueBulan, valueTahun }) => {
   // tabel
   const [head, setHead] = useState([
     'No',
@@ -283,22 +283,22 @@ const TabelPenjualan = ({ data }) => {
 
     // Write generated excel to Storage
     if (Platform.OS == 'ios') {
-      RNFS.writeFile(RNFS.DocumentDirectoryPath + `/Penjualan-${tahun}.xlsx`, wbout, 'ascii')
+      RNFS.writeFile(RNFS.DocumentDirectoryPath + `/Penjualan-${valueBulan}-${valueTahun}.xlsx`, wbout, 'ascii')
         .then((r) => {
           Alert.alert(
             'Berhasil',
-            `File berhasil disimpan di ${RNFS.DocumentDirectoryPath}/Penjualan-${tahun}`
+            `File berhasil disimpan di ${RNFS.DocumentDirectoryPath}/Penjualan-${valueBulan}-${valueTahun}`
           );
         })
         .catch((e) => {
           console.log('Error', e);
         });
     } else {
-      RNFS.writeFile(RNFS.ExternalStorageDirectoryPath + `/Penjualan-${tahun}.xlsx`, wbout, 'ascii')
+      RNFS.writeFile(RNFS.ExternalStorageDirectoryPath + `/Penjualan-${valueBulan}-${valueTahun}.xlsx`, wbout, 'ascii')
         .then((r) => {
           Alert.alert(
             'Berhasil',
-            `File berhasil disimpan di ${RNFS.ExternalStorageDirectoryPath}/Penjualan-${tahun}`
+            `File berhasil disimpan di ${RNFS.ExternalStorageDirectoryPath}/Penjualan-${valueBulan}-${valueTahun}`
           );
         })
         .catch((e) => {

@@ -35,6 +35,7 @@ const HelpPage = ({navigation}) => {
                         <Text style={styles.textCard}>085867635654</Text>
                     </View>
                 </View>
+                <View style={{marginBottom: 100}} />
             </ScrollView>
             {/* <Pdf
                 trustAllCerts={false}

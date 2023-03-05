@@ -180,10 +180,10 @@ const ProductPage = ({ navigation }) => {
         <FlatList
           data={productAscending}
           keyExtractor={item => item.id}
-          style={{ paddingTop: 130 }}
+          style={{ marginTop: 110 }}
           showsVerticalScrollIndicator={false}
-          scrollEventThrottle={Platform.OS == 'ios' ? onScroll : undefined}
-          onScroll={Platform.OS == 'android' ? onScroll : undefined}
+          // scrollEventThrottle={Platform.OS == 'ios' ? onScroll : undefined}
+          // onScroll={Platform.OS == 'android' ? onScroll : undefined}
           renderItem={({ item }) =>
             <View
               style={styles.item}
