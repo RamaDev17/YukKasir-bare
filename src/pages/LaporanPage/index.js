@@ -8,8 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReports } from '../../actions/reportActions';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { tahun as tahunNow, bulan as bulanNow } from '../../utils/date';
-import { formatNumber } from 'react-native-currency-input';
+// import { formatNumber } from 'react-native-currency-input';
 import CardGraph from '../../components/CardGraph';
+import { formatNumber } from '../../utils/formatNumber';
 
 let tahun = [];
 let itemTahunArray = [];
@@ -255,6 +256,19 @@ const LaporanPage = ({ navigation }) => {
       for (let i = 0; i < array.length; i++) {
         total += array[i];
       }
+      // total = formatNumber(total);
+    }
+    return total;
+  };
+
+  const numArray1 = (array) => {
+    let total = 0;
+    if (array.length == 0) {
+      total = 0;
+    } else {
+      for (let i = 0; i < array.length; i++) {
+        total += array[i];
+      }
       total = formatNumber(total);
     }
     return total;
@@ -351,21 +365,21 @@ const LaporanPage = ({ navigation }) => {
         <View style={{ marginBottom: 15 }} />
         {categoryBulan == 1 ? (
           <View>
-            <CardGraph profit={numArray(januari)} bulan="Januari" tahun={categoryTahun} />
-            <CardGraph profit={numArray(februari)} bulan="Februari" tahun={categoryTahun} />
-            <CardGraph profit={numArray(maret)} bulan="Maret" tahun={categoryTahun} />
-            <CardGraph profit={numArray(april)} bulan="April" tahun={categoryTahun} />
-            <CardGraph profit={numArray(mei)} bulan="Mei" tahun={categoryTahun} />
-            <CardGraph profit={numArray(juni)} bulan="Juni" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(januari)} bulan="Januari" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(februari)} bulan="Februari" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(maret)} bulan="Maret" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(april)} bulan="April" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(mei)} bulan="Mei" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(juni)} bulan="Juni" tahun={categoryTahun} />
           </View>
         ) : (
           <View>
-            <CardGraph profit={numArray(juli)} bulan="Juli" tahun={categoryTahun} />
-            <CardGraph profit={numArray(agustus)} bulan="Agustus" tahun={categoryTahun} />
-            <CardGraph profit={numArray(september)} bulan="September" tahun={categoryTahun} />
-            <CardGraph profit={numArray(oktober)} bulan="Oktober" tahun={categoryTahun} />
-            <CardGraph profit={numArray(november)} bulan="November" tahun={categoryTahun} />
-            <CardGraph profit={numArray(desember)} bulan="Desember" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(juli)} bulan="Juli" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(agustus)} bulan="Agustus" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(september)} bulan="September" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(oktober)} bulan="Oktober" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(november)} bulan="November" tahun={categoryTahun} />
+            <CardGraph profit={numArray1(desember)} bulan="Desember" tahun={categoryTahun} />
           </View>
         )}
       </ScrollView>
