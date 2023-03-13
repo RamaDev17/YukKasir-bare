@@ -252,43 +252,43 @@ const ProductPage = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
               </View>
-              {alertDelete ? (
-                <AwesomeAlert
-                  show={alertDelete}
-                  showProgress={false}
-                  title="Hapus Produk"
-                  titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                  message="Yakin data mau dihapus ?"
-                  messageStyle={{ fontSize: 20 }}
-                  closeOnTouchOutside={true}
-                  closeOnHardwareBackPress={false}
-                  showConfirmButton={true}
-                  showCancelButton={true}
-                  confirmText="Hapus"
-                  cancelText="Batal"
-                  confirmButtonColor={COLORS.primary}
-                  confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                  cancelButtonColor={COLORS.red}
-                  cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
-                  contentContainerStyle={{ padding: 20 }}
-                  onConfirmPressed={async () => {
-                    await database().ref(`/products/${id}`).remove();
-                    dispatch(getProducts());
-                    navigation.replace('ProductPage');
-                  }}
-                  onCancelPressed={() => {
-                    setAlertDelete(false);
-                  }}
-                />
-              ) : (
-                <View />
-              )}
             </View>}
         />
       ) : (
         <View style={styles.dataZonk}>
           <Text>Data Kosong</Text>
         </View>
+      )}
+      {alertDelete ? (
+        <AwesomeAlert
+          show={alertDelete}
+          showProgress={false}
+          title="Hapus Produk"
+          titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+          message="Yakin data mau dihapus ?"
+          messageStyle={{ fontSize: 20 }}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showConfirmButton={true}
+          showCancelButton={true}
+          confirmText="Hapus"
+          cancelText="Batal"
+          confirmButtonColor={COLORS.primary}
+          confirmButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+          cancelButtonColor={COLORS.red}
+          cancelButtonTextStyle={{ color: COLORS.white, fontSize: 18 }}
+          contentContainerStyle={{ padding: 20 }}
+          onConfirmPressed={async () => {
+            await database().ref(`/products/${id}`).remove();
+            dispatch(getProducts());
+            navigation.replace('ProductPage');
+          }}
+          onCancelPressed={() => {
+            setAlertDelete(false);
+          }}
+        />
+      ) : (
+        <View />
       )}
       <View style={[styles.header]}>
         <Animated.View style={[styles.searchContainer, { transform: [{ translateY }] }]}>
