@@ -8,8 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReports } from '../../actions/reportActions';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { tahun as tahunNow, bulan as bulanNow } from '../../utils/date';
-import { formatNumber } from 'react-native-currency-input';
+// import { formatNumber } from 'react-native-currency-input';
 import CardGraph from '../../components/CardGraph';
+import { formatNumber } from '../../utils/formatNumber';
 
 let tahun = [];
 let itemTahunArray = [];

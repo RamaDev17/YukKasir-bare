@@ -3,6 +3,7 @@ import { getDatabase, onValue, ref, set } from 'firebase/database';
 import { storeData } from '../utils/localStorage';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { appFirebase } from '../config/firebase';
+import { firebase } from '@react-native-firebase/auth';
 
 export const REGISTER_USER = 'REGISTER_USER';
 export const LOGIN_USER = 'LOGIN_USER';
@@ -15,8 +16,7 @@ export const registerUser = (data, password) => {
     dispatchLoading(dispatch, REGISTER_USER);
     // firebase
     if ((data, password)) {
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, data.email, password)
+      firebase.auth().createUserWithEmailAndPassword(data.email, password)
         .then((res) => {
           // ambil uid buat data baru
           let dataBaru = {
@@ -28,6 +28,16 @@ export const registerUser = (data, password) => {
           set(ref(db, '/users/' + res.user.uid), dataBaru);
           //   berhasil register
           dispatchSuccess(dispatch, REGISTER_USER, dataBaru);
+          firebase.auth().currentUser.sendEmailVerification({
+            handleCodeInApp: true,
+            url: 'https://rnyukkasir.firebaseapp.com'
+          })
+            .then(() => {
+
+              alert('Verification email sent')
+            }).catch(err => {
+              console.log(err);
+            })
         })
         .catch((err) => {
           dispatchError(dispatch, err.message);
@@ -54,37 +64,49 @@ export const loginUser = (email, password) => {
     if ((email, password)) {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
-        .then((success) => {
-          const Patch = `users/${success.user.uid}`;
+        .then((userCredential) => {
+          const Patch = `users/${userCredential.user.uid}`;
           const db = getDatabase();
           const starCountRef = ref(db, Patch);
 
-          onValue(starCountRef, (resDB) => {
-            if (resDB.val()) {
-              //SUCCESS
-              dispatch({
-                type: LOGIN_USER,
-                payload: {
-                  loading: true,
-                  data: resDB.val(),
-                  errorMessage: false,
-                },
-              });
+          if (userCredential.user.emailVerified) {
+            onValue(starCountRef, (resDB) => {
+              if (resDB.val()) {
+                //SUCCESS
+                dispatch({
+                  type: LOGIN_USER,
+                  payload: {
+                    loading: true,
+                    data: resDB.val(),
+                    errorMessage: false,
+                  },
+                });
 
-              //asyn storage
-              storeData('user', resDB.val());
-            } else {
-              dispatch({
-                type: LOGIN_USER,
-                payload: {
-                  loading: false,
-                  data: false,
-                  errorMessage: 'Data User Tidak Ada',
-                },
-              });
-              alert('Data User Tidak Ada');
-            }
-          });
+                //asyn storage
+                storeData('user', resDB.val());
+              } else {
+                dispatch({
+                  type: LOGIN_USER,
+                  payload: {
+                    loading: false,
+                    data: false,
+                    errorMessage: 'Data User Tidak Ada',
+                  },
+                });
+                alert('Data User Tidak Ada');
+              }
+            });
+          } else {
+            alert('Email belum terverifikasi!!')
+            dispatch({
+              type: LOGIN_USER,
+              payload: {
+                loading: false,
+                data: false,
+                errorMessage: 'Email belum terverifikasi!!',
+              },
+            });
+          }
         })
         .catch((error) => {
           dispatch({

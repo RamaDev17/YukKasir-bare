@@ -28,6 +28,7 @@ const FinalTransaksiPage = ({ navigation, route }) => {
   let Amount = route.params.amount;
   let tunai = route.params.tunai;
   let kembalian = route.params.kembalian;
+  let discount = route.params.discount;
   let date = new Date();
   let jam = date.getHours();
   let menit = date.getMinutes();
@@ -96,6 +97,8 @@ const FinalTransaksiPage = ({ navigation, route }) => {
         Printer.printColumnsText(orderList, columnWidth, columnAligment, ['', '', '']);
       });
       Printer.printText(`<C>${COMMANDS.HORIZONTAL_LINE.HR_58MM}</C>`);
+      const discountHarga = ['Discount', '', `${formatNumber(discount)} %`];
+      Printer.printColumnsText(discountHarga, columnWidth, columnAligment, ['', '', '']);
       const totalHarga = ['Total Rp.', '', formatNumber(Amount)];
       Printer.printColumnsText(totalHarga, columnWidth, columnAligment, ['', '', '']);
       const bayar = ['Bayar Rp.', '', formatNumber(tunai)];
@@ -228,6 +231,10 @@ const FinalTransaksiPage = ({ navigation, route }) => {
           <View style={{ marginTop: 5 }} />
           <Text style={styles.textAlign}>=============================</Text>
           <View style={{ marginTop: 5 }} />
+          <View style={styles.row}>
+            <Text>Discount</Text>
+            <Text>{formatNumber(parseInt(discount))} %</Text>
+          </View>
           <View style={styles.row}>
             <Text>Total Rp.</Text>
             <Text>{formatNumber(parseInt(Amount))}</Text>

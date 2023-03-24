@@ -24,8 +24,7 @@ import { getProducts } from '../../actions/productActions';
 import { uppercaseWord } from '../../utils/uppercaseWord';
 import { formatNumber } from '../../utils/formatNumber';
 import CurrencyInput from 'react-native-currency-input';
-
-let total = 0;
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const TransaksiPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState(0);
@@ -39,12 +38,25 @@ const TransaksiPage = ({ navigation }) => {
   const [dataAdd, setDataAdd] = useState([]);
   const [dataAsync, setDataAsync] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [total, setTotal] = useState(0)
 
   const soundScanner = 'soundbarcode.mp3';
   const [play, pause, stop, data] = useSound(soundScanner, { volume: 3 });
   const [modalVisible, setModalVisible] = useState(false);
   const [tunai, setTunai] = useState(0);
   const [kembalian, setKembalian] = useState(0);
+  const [openDiscount, setOpenDiscount] = useState(false)
+  const [discount, setDiscount] = useState(null)
+  const [items, setItems] = useState([
+    { label: '0%', value: 0 },
+    { label: '5%', value: 5 },
+    { label: '8%', value: 8 },
+    { label: '10%', value: 10 },
+    { label: '13%', value: 13 },
+    { label: '15%', value: 15 },
+    { label: '18%', value: 18 },
+    { label: '20%', value: 20 },
+  ])
 
   const onChangeText = (value) => {
     setLoading(true);
@@ -106,6 +118,7 @@ const TransaksiPage = ({ navigation }) => {
 
   useEffect(() => {
     setAmount(dataAdd.reduce((n, { total }) => n + total, 0));
+    setTotal(dataAdd.reduce((n, { total }) => n + total, 0))
   }, [dataAsync]);
 
   const onIncrement = (value) => {
@@ -152,10 +165,17 @@ const TransaksiPage = ({ navigation }) => {
   };
 
   useEffect(() => {
-    setKembalian(tunai - amount);
+    setKembalian(tunai - total);
   }, [tunai]);
 
-  console.log(productSearch);
+  useEffect(() => {
+    setTotal(amount)
+
+    let resultDiskon = Number(amount) * Number(discount) / 100
+
+    setTotal(amount - resultDiskon)
+    setKembalian(tunai - (amount - resultDiskon));
+  }, [discount]);
 
   return (
     <View style={{ width, height }}>
@@ -367,7 +387,7 @@ const TransaksiPage = ({ navigation }) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: 'bold' }}>
-              Total Belanja Rp. {formatNumber(amount)}
+              Total Belanja Rp. {formatNumber(total)}
             </Text>
             <View style={{ marginTop: 20 }} />
             <View style={{ width: '100%' }}>
@@ -382,14 +402,30 @@ const TransaksiPage = ({ navigation }) => {
                 onChangeText={(formattedValue) => { }}
                 placeholder="Uang Tunai"
                 style={{
-                  borderWidth: 0.5,
-                  paddingHorizontal: 20,
-                  marginBottom: 20,
+                  borderWidth: 1,
+                  paddingHorizontal: 15,
+                  marginBottom: 10,
                   borderRadius: 10,
                   borderColor: COLORS.primary,
-                  paddingVertical: 20,
+                  paddingVertical: 15,
                 }}
               />
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ color: COLORS.black, fontSize: 18, marginBottom: 5 }}>Diskon:</Text>
+                <DropDownPicker
+                  open={openDiscount}
+                  value={discount}
+                  items={items}
+                  setOpen={setOpenDiscount}
+                  setValue={setDiscount}
+                  setItems={setItems}
+                  placeholder="Pilih Diskon"
+                  style={[styles.input]}
+                  listMode="SCROLLVIEW"
+                  dropDownContainerStyle={{ borderColor: COLORS.primary }}
+                  containerStyle={{ width: '100%' }}
+                />
+              </View>
               <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: 'bold' }}>
                 Kembalian Rp. {formatNumber(kembalian)}
               </Text>
@@ -409,14 +445,16 @@ const TransaksiPage = ({ navigation }) => {
                   if (tunai != 0) {
                     navigation.navigate('FinalTransaksiPage', {
                       dataAdd: [...dataAdd],
-                      amount,
+                      amount: total,
                       tunai,
                       kembalian,
+                      discount
                     });
                     setDataAdd([]);
                     setAmount(0);
                     setTunai(0);
                     setKembalian(0);
+                    setTotal(0)
                   }
                 }}
               >
@@ -600,5 +638,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 0.5,
     borderBottomColor: COLORS.primary,
+  },
+  input: {
+    height: 55,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    width: '100%',
   },
 });
