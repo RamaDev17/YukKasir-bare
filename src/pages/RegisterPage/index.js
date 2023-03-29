@@ -30,6 +30,8 @@ const RegisterPage = ({ navigation }) => {
   const [vertifikasiPassword, setVertifikasiPassword] = useState('');
   const [visibel, setVisibel] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [colorInputEmail, setColorInputEmail] = useState('#ddd')
+  const [colorInputPassword, setColorInputPassword] = useState('#ddd')
 
   const dispatch = useDispatch();
 
@@ -44,6 +46,8 @@ const RegisterPage = ({ navigation }) => {
 
   const onSubmit = async () => {
     setLoading(true)
+    setColorInputEmail('#ddd')
+    setColorInputPassword('#ddd')
     const emailValid = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=5eb7899ad09242369581b5064ec6b8bd&email=${email}`)
     if ((username, email, password, vertifikasiPassword)) {
       if (password === vertifikasiPassword) {
@@ -60,12 +64,14 @@ const RegisterPage = ({ navigation }) => {
           }, 4000)
 
         } else {
-          Alert.alert('Gagal', 'Email harus terdaftar di platform email');
           setLoading(false)
+          setColorInputEmail(COLORS.red)
+          Alert.alert('Gagal', 'Email harus terdaftar di platform email');
         }
       } else {
-        Alert.alert('Gagal', 'Password dan Kofirmasi Password harus sama');
         setLoading(false)
+        setColorInputPassword(COLORS.red)
+        Alert.alert('Gagal', 'Password dan Kofirmasi Password harus sama');
       }
     } else {
       Alert.alert('Gagal', 'Form harus diisi semua');
@@ -95,7 +101,7 @@ const RegisterPage = ({ navigation }) => {
         <View style={styles.form}>
           <TextInput
             value={username}
-            style={styles.input}
+            style={[styles.input, {borderColor: '#ddd'}]}
             inputStyle={styles.inputStyle}
             labelStyle={styles.labelStyle}
             placeholderStyle={styles.placeholderStyle}
@@ -111,7 +117,7 @@ const RegisterPage = ({ navigation }) => {
           <View style={{ marginTop: 30 }} />
           <TextInput
             value={email}
-            style={styles.input}
+            style={[styles.input, {borderColor: colorInputEmail}]}
             inputStyle={styles.inputStyle}
             labelStyle={styles.labelStyle}
             placeholderStyle={styles.placeholderStyle}
@@ -127,7 +133,7 @@ const RegisterPage = ({ navigation }) => {
           <View style={{ marginTop: 30 }} />
           <TextInput
             value={password}
-            style={styles.input}
+            style={[styles.input, {borderColor: colorInputPassword}]}
             inputStyle={styles.inputStyle}
             labelStyle={styles.labelStyle}
             placeholderStyle={styles.placeholderStyle}
@@ -159,7 +165,7 @@ const RegisterPage = ({ navigation }) => {
           <View style={{ marginTop: 30 }} />
           <TextInput
             value={vertifikasiPassword}
-            style={styles.input}
+            style={[styles.input, {borderColor: colorInputPassword}]}
             inputStyle={styles.inputStyle}
             labelStyle={styles.labelStyle}
             placeholderStyle={styles.placeholderStyle}
@@ -251,7 +257,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#DDDDDD',
     width: '100%',
   },
   inputStyle: { fontSize: 16 },
