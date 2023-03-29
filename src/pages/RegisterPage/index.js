@@ -18,6 +18,8 @@ import { COLORS } from '../../constants';
 import { Eye, EyeOff, Email, ArrowBack } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
+import { async } from '@firebase/util';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,23 +42,34 @@ const RegisterPage = ({ navigation }) => {
     }
   }, [RegisterReducer]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    setLoading(true)
+    const emailValid = await axios.get(`https://emailvalidation.abstractapi.com/v1/?api_key=5eb7899ad09242369581b5064ec6b8bd&email=${email}`)
     if ((username, email, password, vertifikasiPassword)) {
       if (password === vertifikasiPassword) {
-        setLoading(true);
-        const datas = {
-          username,
-          email,
-        };
-        dispatch(registerUser(datas, password));
-        setTimeout(() => {
+        if (emailValid.data.is_smtp_valid.value) {
+          setLoading(true);
+          const datas = {
+            username,
+            email,
+          };
+          dispatch(registerUser(datas, password))
+
+          setTimeout(() => {
+            setLoading(false)
+          }, 4000)
+
+        } else {
+          Alert.alert('Gagal', 'Email harus terdaftar di platform email');
           setLoading(false)
-        }, 4000)
+        }
       } else {
         Alert.alert('Gagal', 'Password dan Kofirmasi Password harus sama');
+        setLoading(false)
       }
     } else {
       Alert.alert('Gagal', 'Form harus diisi semua');
+      setLoading(false)
     }
   };
 

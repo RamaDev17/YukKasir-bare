@@ -33,8 +33,8 @@ export const registerUser = (data, password) => {
             url: 'https://rnyukkasir.firebaseapp.com'
           })
             .then(() => {
-
               alert('Verification email sent')
+              dispatchSuccess(dispatch, REGISTER_USER, false);
             }).catch(err => {
               console.log(err);
             })
